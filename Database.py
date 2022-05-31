@@ -173,4 +173,9 @@ class Database:
 
         return Database.execute_db(query_make_move)
 
+    @staticmethod
+    def check_players(id_game):
+        query_check_game = "select Players from GAMES_1000 where IdG = " + str(id_game)
+        results = Database.select_db(query_check_game)
+        return results
 

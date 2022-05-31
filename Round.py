@@ -20,9 +20,6 @@ class Round:
 
         self.deal_cards(dealing_player_id)
 
-    #   licytacja
-    #   gra
-
     @property
     def bidding(self):
         return self.__bidding

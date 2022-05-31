@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
-import Player
+from Player import Player
 import Round
 from Database import Database
 from GUIGame import Desk
@@ -115,7 +115,7 @@ class GameGUI(tk.Frame):
         if len(check_game_values) != 0:
             players, rounds = check_game_values[0]
             if rounds == 0:
-                if players < 2:
+                if players < 3:
                     Database.join_game(id_game)
                     self.close_start_window()
                     self.start_game(id_game, players)
@@ -126,12 +126,12 @@ class GameGUI(tk.Frame):
         else:
             messagebox.showinfo("Information", "The game with ID = %s does not exists" % id_game)
 
-    def start_game(self, id_game, players):
+    def start_game(self, id_game, id_player):
         self.__game.id_game = id_game
-        for i in range(0, players):
-            self.__game.add_player_to_game(i)
-        self.__game.add_player_to_game(players)
-        self.__game.id_player = players
+        for i in range(0, id_player):
+            self.__game.add_player_to_game(Player(i))
+        self.__game.add_player_to_game(Player(id_player))
+        self.__game.id_player = id_player
         desk = Desk(self.__game)
 
     def close_start_window(self):

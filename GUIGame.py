@@ -1,65 +1,101 @@
 import sys
 import pygame
 
+from Player import Player
 from Database import Database
 from PlayerRound import PlayerRound
 from pygame.locals import *
 from GUISettings import *
 from Round import RoundGUI, Round
+from ControlPanel import *
 
 
 class Desk:
 
     display_surface: pygame.display
+    all_sprites: pygame.sprite.Group()
+    event_list: []
+    frame_per_sec: pygame.time.Clock()
 
     def __init__(self, game):
         pygame.init()
-        vec = pygame.math.Vector2  # 2 for two dimensional
-        FramePerSec = pygame.time.Clock()
-        self.display_surface = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("1000")
-        all_sprites = pygame.sprite.Group()
+        self.prepare_game()
 
         # TESTOWANIE
-        for i in range(0, 3):
-            if game.players[i] is not None:
-                game.add_player_to_game(i)
+        for i in range(len(game.players), 3):
+            game.add_player_to_game(Player(i))
 
-        player_round0_1 = PlayerRound(game.players[0])
-        player_round1_1 = PlayerRound(game.players[1])
-        player_round2_1 = PlayerRound(game.players[2])
-        roundgui = RoundGUI()
-
-        round1 = Round([player_round0_1, player_round1_1, player_round2_1], 0)
-        player_round0_1.sort_card()
-        player_cards_gui = roundgui.create_cards_gui(player_round0_1.cards, all_sprites)
-        oponent1_cards_gui = roundgui.create_cards_gui(player_round1_1.cards, all_sprites)
-        oponent2_cards_gui = roundgui.create_cards_gui(player_round2_1.cards, all_sprites)
-        prikup_cards_gui = roundgui.create_cards_gui(round1.bidding.prikup, all_sprites)
+        cards_gui = self.create_cards(game, 0)
 
         while True:
-            event_list = pygame.event.get()
-            for event in event_list:
+            self.event_list = pygame.event.get()
+            for event in self.event_list:
                 if event.type == QUIT:
-                    Database.leave_game(game.id_game)
-                    pygame.quit()
-                    sys.exit()
+                    Desk.quit(game)
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
+                    self.card_clicked()
+            while waiting_for_players_phase:
+                self.waiting_for_players_view()
+            while bidding_phase:
+                ...
+            while game_phase:
+                while player0_phase:
+                    ...
+                while player1_phase:
+                    ...
+                while player2_phase:
+                    ...
+            self.display_cards(game, end_bidding_phase, cards_gui)
 
-                    clicked_sprites = [s for s in all_sprites if s.rect.collidepoint(pos)]
-                    if len(clicked_sprites) != 0:
-                        clicked_sprites[len(clicked_sprites)-1].update(event_list)
-                        pygame.display.update()
+    def prepare_game(self):
+        vec = pygame.math.Vector2  # 2 for two dimensional
+        self.frame_per_sec = pygame.time.Clock()
+        self.display_surface = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("1000")
+        self.all_sprites = pygame.sprite.Group()
 
-            self.display_surface.fill(BACKGROUND_COLOR)
+    def create_cards(self, game, dealing_player):
+        # Tworzymy rundy graczy
+        player0_round = PlayerRound(game.players[game.id_player])
+        player1_round = PlayerRound(game.players[(game.id_player + 1) % 3])
+        player2_round = PlayerRound(game.players[(game.id_player + 2) % 3])
+        # Zaczynamy rundę z 3 graczami, ze wskazanym graczem rozdającym
+        game_round = Round([player0_round, player1_round, player2_round], dealing_player)
+        player0_round.sort_card()
+        # tworzymy karty
+        player_cards_gui = RoundGUI.create_cards_gui(player0_round.cards, self.all_sprites)
+        oponent1_cards_gui = RoundGUI.create_cards_gui(player1_round.cards, self.all_sprites)
+        oponent2_cards_gui = RoundGUI.create_cards_gui(player2_round.cards, self.all_sprites)
+        prikup_cards_gui = RoundGUI.create_cards_gui(game_round.bidding.prikup, self.all_sprites)
 
-            roundgui.display_player_cards(player_cards_gui)
-            roundgui.display_bidding_cards(prikup_cards_gui, False)
-            roundgui.display_oponent_cards(oponent1_cards_gui, 0)
-            roundgui.display_oponent_cards(oponent2_cards_gui, 1)
+        return player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, prikup_cards_gui
 
-            all_sprites.draw(self.display_surface)
+    def display_cards(self, game, hidden_bidding, cards):
+        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, prikup_cards_gui = cards
+        # rozkładamy karty
+        RoundGUI.display_player_cards(player_cards_gui)
+        RoundGUI.display_bidding_cards(prikup_cards_gui, hidden_bidding)
+        RoundGUI.display_oponent_cards(oponent1_cards_gui, (game.id_player + 1) % 3)
+        RoundGUI.display_oponent_cards(oponent2_cards_gui, (game.id_player + 2) % 3)
+
+        self.display_surface.fill(BACKGROUND_COLOR)
+        self.all_sprites.draw(self.display_surface)
+        pygame.display.update()
+        self.frame_per_sec.tick(FPS)
+
+    def card_clicked(self):
+        pos = pygame.mouse.get_pos()
+
+        clicked_sprites = [s for s in self.all_sprites if s.rect.collidepoint(pos)]
+        if len(clicked_sprites) != 0:
+            clicked_sprites[len(clicked_sprites) - 1].update(self.event_list)
             pygame.display.update()
-            FramePerSec.tick(FPS)
 
+    def waiting_for_players_view(self):
+        ...
+
+    @staticmethod
+    def quit(game):
+        Database.leave_game(game.id_game)
+        pygame.quit()
+        sys.exit()
