@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
 from Player import Player
-import Round
+from Round import Round
 from Database import Database
 from GUIGame import Desk
 from GUISettings import FONT, FONTSIZE, FONTSIZE_TITLE, START_WINDOWS_WIDTH, START_WINDOWS_HEIGHT
@@ -53,13 +53,6 @@ class Game:
                 return True
         return False
 
-    def start_game(self):
-        self.add_player_to_game(Player.Player(0))
-        self.add_player_to_game(Player.Player(1))
-        self.add_player_to_game(Player.Player(2))
-
-        self.add_round_to_game(Round.Round())
-
 
 class GameGUI(tk.Frame):
 
@@ -70,10 +63,10 @@ class GameGUI(tk.Frame):
         self.parent = parent
         self.parent.geometry(START_WINDOWS_WIDTH + "x" + START_WINDOWS_HEIGHT)
         self.__game = game
+        self.robocze = self.parent
         self.create_start_window()
 
     def create_start_window(self):
-        self.robocze = self.parent
         window = self.robocze
         self.robocze.title("Game: 1000")
 

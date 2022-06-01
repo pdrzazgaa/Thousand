@@ -1,6 +1,5 @@
 from Database import Database
 
-
 class ControlPanel:
 
     # Etapy gry
@@ -13,9 +12,11 @@ class ControlPanel:
     player1_phase = False
     player2_phase = False
 
+    current_players_in_game: int
+
     def check_players(self, id_game):
-        players = Database.check_players(id_game)[0]
-        if players[0] == 3:
+        self.current_players_in_game = Database.check_players(id_game)[0]
+        if self.current_players_in_game == (3,):
             self.waiting_for_players_phase = False
             self.dealing_phase = False
         else:
