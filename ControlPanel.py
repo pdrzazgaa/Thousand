@@ -37,7 +37,7 @@ class ControlPanel:
             self.dealing_phase = True
             self.started_game_phase = True
             if self.timer_check_dealing is None:
-                self.timer_check_players = RepeatedTimer(2.0, self.check_dealing)
+                self.timer_check_dealing = RepeatedTimer(2.0, self.check_dealing)
         else:
             if not self.started_game_phase:
                 self.waiting_for_players_phase = True
@@ -45,17 +45,14 @@ class ControlPanel:
                 self.player_left_game_phase = True
 
     def check_dealing(self):
-        print("x")
         last_dealing = None if len(self.game.rounds) == 0 else \
             Database.check_round(self.game.id_game)
         if last_dealing is not None:
-            print("y")
             IdR, IdG, P0_1, P0_2, P0_3, P0_4, P0_5, P0_6, P0_7, P0_8, \
             P1_1, P1_2, P1_3, P1_4, P1_5, P1_6, P1_7, P1_8, \
             P2_1, P2_2, P2_3, P2_4, P2_5, P2_6, P2_7, P2_8, \
             PickUp1, PickUp2, PickUp3, RoundDateTime = last_dealing[0]
             if self.game.rounds[-1].last_change != RoundDateTime:
-                print("z")
                 self.waiting_for_dealing = False
                 self.game.rounds[-1].players_rounds[0].cards = [Card.card_from_sql(P0_1), Card.card_from_sql(P0_2),
                                                                 Card.card_from_sql(P0_3), Card.card_from_sql(P0_4),
@@ -73,7 +70,8 @@ class ControlPanel:
                                                        Card.card_from_sql(PickUp3)]
                 self.game.rounds[-1].id_r = IdR
                 self.game.rounds[-1].last_change = RoundDateTime
-                if None in self.game.rounds[-1].bidding.prikup and self.timer_check_dealing is not None:
+                self.bidding_phase = True
+                if None in self.game.rounds[-1].bidding.prikup and self.timer_check_dealing.is_running:
                     self.timer_check_dealing.stop()
         else:
             self.waiting_for_dealing = True

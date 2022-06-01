@@ -26,8 +26,8 @@ class Desk:
                     self.waiting_screen.main()
             while self.panel_control.dealing_phase:
                 self.dealing_screen.main()
-            while self.panel_control.bidding_phase:
-                ...
+                while self.panel_control.bidding_phase:
+                    ...
             while self.panel_control.game_phase:
                 while self.panel_control.player0_phase:
                     ...
