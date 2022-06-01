@@ -16,10 +16,16 @@ class Game:
 
     def __init__(self, id_game):
         self.__id_game = id_game
+        for i in range(0, 3):
+            self.add_player_to_game(Player(i))
 
     @property
     def id_game(self):
         return self.__id_game
+
+    @property
+    def rounds(self):
+        return self.__rounds
 
     @id_game.setter
     def id_game(self, id_game):

@@ -13,12 +13,14 @@ class Round:
     __desk: [Card]
     __atu: int  # wiodący kolor
     __last_change: str
+    __dealing_player_id: int
 
     def __init__(self, players_rounds, dealing_player_id):
         self.__players_rounds = players_rounds
         self.__bidding = Bidding((dealing_player_id + 1) % 3)
         self.__desk = []
-
+        self.__dealing_player_id = dealing_player_id
+        # Przy tworzeniu rundy od razu rozdajemy karty
         self.deal_cards(dealing_player_id)
 
     @property
@@ -28,6 +30,10 @@ class Round:
     @property
     def last_change(self):
         return self.__last_change
+
+    @property
+    def dealing_player_id(self):
+        return self.__dealing_player_id
 
     @last_change.setter
     def last_change(self, last_change):
