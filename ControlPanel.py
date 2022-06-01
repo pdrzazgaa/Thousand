@@ -1,10 +1,28 @@
-# Etapy gry
+from Database import Database
 
-waiting_for_players_phase = False
-dealing_phase = False
-end_bidding_phase = False
-bidding_phase = False
-game_phase = False
-player0_phase = False
-player1_phase = False
-player2_phase = False
+
+class ControlPanel:
+
+    # Etapy gry
+    waiting_for_players_phase = False
+    dealing_phase = False
+    bidding_phase = False
+    end_bidding_phase = False
+    game_phase = False
+    player0_phase = False
+    player1_phase = False
+    player2_phase = False
+
+    def check_players(self, id_game):
+        players = Database.check_players(id_game)[0]
+        if players[0] == 3:
+            self.waiting_for_players_phase = False
+            self.dealing_phase = False
+        else:
+            self.waiting_for_players_phase = True
+
+    def check_bidding(self, id_game):
+        ...
+
+    def check_moves(self, id_game):
+        ...

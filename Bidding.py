@@ -10,6 +10,7 @@ class Bidding:
     __players_bidding: [int]                #stawki graczy
     __bidding_player_round: PlayerRound     #gracz, który licytował
     __init_player_id: int                   #gracz zaczynający licytacje
+    __last_bidding: str
 
     def __init__(self, init_player_id):
         self.__prikup = []
@@ -28,6 +29,14 @@ class Bidding:
     def bid(self, i_bid):
         if i_bid > self.__bid:
             self.__bid = i_bid
+
+    @property
+    def last_bidding(self):
+        return self.__last_bidding
+
+    @last_bidding.setter
+    def last_bidding(self, last_bidding):
+        self.__last_bidding = last_bidding
 
     def add_card_to_prikup(self, card):
         self.__prikup.append(card)

@@ -1,3 +1,7 @@
+import pygame
+
+pygame.font.init()
+
 HEIGHT = 700
 WIDTH = 1100
 ACC = 0.5
@@ -11,6 +15,8 @@ FONT = "Helvetica"
 FONTSIZE = "15"
 FONTSIZE_TITLE = "100"
 BACKGROUND_COLOR = (0, 74, 0)
+FONT_WAITING = pygame.font.SysFont('Helvetica', 60)
+FONT_BUTTON = pygame.font.SysFont('Helvetica', 30)
 
 CARD_WIDTH = 150
 CARD_HEIGHT = 216

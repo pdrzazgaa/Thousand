@@ -179,3 +179,22 @@ class Database:
         results = Database.select_db(query_check_game)
         return results
 
+    @staticmethod
+    def check_moves(id_game):
+        query_check_game = "select * from MOVEMENTS_1000 where IdG = " + str(id_game) + \
+                           " limit 1 order by MoveDateTime desc"
+        results = Database.select_db(query_check_game)
+        return results
+
+    @staticmethod
+    def check_round(id_game):
+        query_check_game = "select * from ROUNDS_1000 where IdG = " + str(id_game) + \
+                           " limit 1 order by RoundDateTime desc"
+        results = Database.select_db(query_check_game)
+        return results
+
+    @staticmethod
+    def check_bidding(id_game):
+        query_check_game = "select * from BIDS_1000 where IdG = " + str(id_game) + " limit 1 order by BidDateTime desc"
+        results = Database.select_db(query_check_game)
+        return results

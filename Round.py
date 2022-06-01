@@ -12,6 +12,7 @@ class Round:
     __bidding: Bidding
     __desk: [Card]
     __atu: int  # wiodący kolor
+    __last_change: str
 
     def __init__(self, players_rounds, dealing_player_id):
         self.__players_rounds = players_rounds
@@ -23,6 +24,14 @@ class Round:
     @property
     def bidding(self):
         return self.__bidding
+
+    @property
+    def last_change(self):
+        return self.__last_change
+
+    @last_change.setter
+    def last_change(self, last_change):
+        self.__last_change = last_change
 
     @staticmethod
     def shuffle_cards():

@@ -1,17 +1,17 @@
 import sys
-import pygame
-
+import ControlPanel
+import GUISettings
 from Player import Player
 from Database import Database
 from PlayerRound import PlayerRound
 from pygame.locals import *
 from GUISettings import *
 from Round import RoundGUI, Round
-from ControlPanel import *
+from ControlPanel import ControlPanel
+from Timer import RepeatedTimer
 
 
 class Desk:
-
     display_surface: pygame.display
     all_sprites: pygame.sprite.Group()
     event_list: []
@@ -20,6 +20,12 @@ class Desk:
     def __init__(self, game):
         pygame.init()
         self.prepare_game()
+        self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface)
+        self.panel_control = ControlPanel()
+
+        # Timery sprawdzające bazę - Czy są jacyś gracze
+        timer_check_players = RepeatedTimer(2.0, self.panel_control.check_players, game.id_game)
+        timer_check_players.start()
 
         # TESTOWANIE
         for i in range(len(game.players), 3):
@@ -34,18 +40,18 @@ class Desk:
                     Desk.quit(game)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.card_clicked()
-            while waiting_for_players_phase:
-                self.waiting_for_players_view()
-            while bidding_phase:
+            while self.panel_control.waiting_for_players_phase:
+                self.waiting_screen.main()
+            while self.panel_control.bidding_phase:
                 ...
-            while game_phase:
-                while player0_phase:
+            while self.panel_control.game_phase:
+                while self.panel_control.player0_phase:
                     ...
-                while player1_phase:
+                while self.panel_control.player1_phase:
                     ...
-                while player2_phase:
+                while self.panel_control.player2_phase:
                     ...
-            self.display_cards(game, end_bidding_phase, cards_gui)
+            self.display_cards(game, self.panel_control.end_bidding_phase, cards_gui)
 
     def prepare_game(self):
         vec = pygame.math.Vector2  # 2 for two dimensional
@@ -91,11 +97,93 @@ class Desk:
             clicked_sprites[len(clicked_sprites) - 1].update(self.event_list)
             pygame.display.update()
 
-    def waiting_for_players_view(self):
-        ...
-
     @staticmethod
     def quit(game):
         Database.leave_game(game.id_game)
         pygame.quit()
         sys.exit()
+
+
+class WaitingForPlayersScreen:
+
+    display: pygame.display
+
+    def __init__(self, game, display):
+        self.game = game
+        self.display = display
+        self.buttons = []
+        self.initialize_buttons()
+        self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
+
+    def main(self):
+        pygame.mouse.set_visible(True)
+        self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
+        self.manage_display()
+        self.handle_clicks()
+
+    def initialize_buttons(self):
+        ...
+    #     self.buttons.append(Button(self, 600, 700, 400, 80, "Quit", Desk.quit, self.display))
+
+    def handle_clicks(self):
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    for button in self.buttons:
+                        button.do_sth()
+
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+    def manage_display(self):
+        self.display.fill(BACKGROUND_COLOR)
+        message = GUISettings.FONT_WAITING.render("WAITING FOR OTHER PLAYERS", True, (255, 255, 255), BACKGROUND_COLOR)
+        self.display.blit(message, (100, 150))
+        for button in self.buttons:
+            button.render()
+        pygame.display.update()
+
+    @staticmethod
+    def go_back():
+        ControlPanel.waiting_for_players_phase = False
+
+
+class Button:
+    # base = pygame.image.load("textures\\Button_base.xcf")
+    # click = pygame.image.load("textures\\Button_click.xcf")
+
+    def __init__(self, menu, x, y, width, height, name, function, display):
+        self.menu = menu
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = name
+        self.name = GUISettings.FONT_BUTTON.render(name, True, (0, 0, 0))
+        self.function = function
+        self.hit_box = pygame.Rect(x - width / 2, y - width / 2, width, height)
+        self.clicked = False
+        # self.texture = Button.base
+        self.display = display
+
+    def render(self):
+        # self.choose_texture()
+        pygame.draw.rect(self.display, (255, 0, 0), self.hit_box)
+        # texture_copy = pygame.transform.scale(self.texture, (self.width, self.height))
+        # self.display.blit(texture_copy, (self.x - self.width/2, self.y - self.height * 2.5))
+        self.display.blit(self.name,
+                          (self.x - self.name.get_width() / 2, self.y - self.height * 2.25))
+
+    # def choose_texture(self):
+    #     if self.hit_box.x < self.menu.mouse_x < self.hit_box.x + self.hit_box.width and\
+    #        self.hit_box.y < self.menu.mouse_y < self.hit_box.y + self.hit_box.height:
+    #         self.texture = Button.click
+    #         self.clicked = True
+    #     else:
+    #         self.texture = Button.base
+    #         self.clicked = False
+
+    def do_sth(self):
+        if self.clicked:
+            self.function()
