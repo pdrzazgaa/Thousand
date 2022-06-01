@@ -21,6 +21,13 @@ FONT_WAITING = pygame.font.SysFont('Helvetica', 60)
 FONT_BUTTON = pygame.font.SysFont('Helvetica', 40)
 FONT_CURRENT_PLAYERS = pygame.font.SysFont('Helvetica', 40)
 
+# Licytacje
+WIDTH_BIDDING_TABLE = 600
+HEIGHT_BIDDING_TABLE = 200
+BIDDING_TABLE_COLOR = (222, 184, 135)
+FONT_BIDDING = pygame.font.SysFont('Helvetica', 30, True)
+FONT_BIDDING_PLAYERS = pygame.font.SysFont('Helvetica', 20)
+
 # Karty
 CARD_WIDTH = 150
 CARD_HEIGHT = 216

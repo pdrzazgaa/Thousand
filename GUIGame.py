@@ -5,6 +5,7 @@ from GUISettings import *
 from ControlPanel import ControlPanel
 from WaitingForPlayersScreen import WaitingForPlayersScreen
 from DealingCardsScreen import DealingCardsScreen
+from BiddingScreen import BiddingScreen
 
 
 class Desk:
@@ -17,6 +18,7 @@ class Desk:
         self.panel_control = ControlPanel(game)
         self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface, self.panel_control)
         self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control)
+        self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control)
 
         while True:
             while self.panel_control.waiting_for_players_phase:
@@ -27,7 +29,7 @@ class Desk:
             while self.panel_control.dealing_phase:
                 self.dealing_screen.main()
                 while self.panel_control.bidding_phase:
-                    ...
+                    self.bidding_screen.main()
             while self.panel_control.game_phase:
                 while self.panel_control.player0_phase:
                     ...

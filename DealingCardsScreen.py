@@ -5,7 +5,6 @@ from Database import Database
 from GUISettings import *
 from PlayerRound import PlayerRound
 from Round import Round, RoundGUI
-from ControlPanel import ControlPanel
 
 
 class DealingCardsScreen:

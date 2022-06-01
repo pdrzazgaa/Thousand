@@ -1,11 +1,11 @@
-from Game import *
+from Game import Game
 from Database import Database
 import tkinter as tk
-import pygame
+from StartWindow import StartWindow
 
 if __name__ == '__main__':
 
     game = Game(-1)
     Database.create_tables()
-    start_window = GameGUI(tk.Tk(), game)
+    start_window = StartWindow(tk.Tk(), game)
     # desk = Desk()

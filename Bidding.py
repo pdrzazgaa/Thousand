@@ -8,14 +8,16 @@ class Bidding:
     __prikup: [Card]                        #musek (3 karty)
     __bid: int                              #max. licytowana stawka
     __players_bidding: [int]                #stawki graczy
-    __bidding_player_round: PlayerRound     #gracz, który licytował
-    __init_player_id: int                   #gracz zaczynający licytacje
+    __bidding_player_round: PlayerRound     #gracz, który licytował (domyślnie zaczynający licytacje)
     __last_bidding: str
 
     def __init__(self, init_player_id):
         self.__prikup = []
         self.__bid = Settings.DEFAULT_BID
-        self.__init_player_id = init_player_id
+        self.__bidding_player_round = init_player_id
+        self.__players_bidding = [0, 0, 0]
+        for i in range(0, 3):
+            self.players_bidding[i] = Settings.DEFAULT_BID if i == init_player_id else 0
 
     @property
     def prikup(self):
@@ -33,6 +35,10 @@ class Bidding:
     def bid(self, i_bid):
         if i_bid > self.__bid:
             self.__bid = i_bid
+
+    @property
+    def players_bidding(self):
+        return self.__players_bidding
 
     @property
     def last_bidding(self):
