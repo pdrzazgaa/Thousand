@@ -38,6 +38,10 @@ class PlayerRound:
     def cards(self):
         return self.__cards
 
+    @cards.setter
+    def cards(self, cards):
+        self.__cards = cards
+
     @declared_points.setter
     def declared_points(self, declared_points):
         self.__declared_points = declared_points
@@ -64,7 +68,7 @@ class PlayerRound:
         card = self.__cards.pop(card_id)
         return card
 
-    def sort_card(self):
+    def sort_cards(self):
         self.__cards.sort(key=lambda card: (card.color, card.value), reverse=True)
 
 

@@ -2,7 +2,7 @@ from Bidding import Bidding
 from Card import Card, CardGUI
 import random
 from PlayerRound import PlayerRound
-import pygame
+from Database import Database
 from GUISettings import *
 from Settings import ACE, TEN, KING, QUEEN, JACK, NINE, HEART, DIAMONDS, CLUBS, SPADES
 
@@ -14,12 +14,15 @@ class Round:
     __atu: int  # wiodący kolor
     __last_change: str
     __dealing_player_id: int
+    __id_r: int
 
     def __init__(self, players_rounds, dealing_player_id):
         self.__players_rounds = players_rounds
         self.__bidding = Bidding((dealing_player_id + 1) % 3)
         self.__desk = []
         self.__dealing_player_id = dealing_player_id
+        self.__id_r = 0
+        self.__last_change = ""
         # Przy tworzeniu rundy od razu rozdajemy karty
         self.deal_cards(dealing_player_id)
 
@@ -28,16 +31,28 @@ class Round:
         return self.__bidding
 
     @property
-    def last_change(self):
-        return self.__last_change
+    def players_rounds(self):
+        return self.__players_rounds
 
     @property
-    def dealing_player_id(self):
-        return self.__dealing_player_id
+    def id_r(self):
+        return self.__id_r
+
+    @id_r.setter
+    def id_r(self, id_r):
+        self.__id_r = id_r
+
+    @property
+    def last_change(self):
+        return self.__last_change
 
     @last_change.setter
     def last_change(self, last_change):
         self.__last_change = last_change
+
+    @property
+    def dealing_player_id(self):
+        return self.__dealing_player_id
 
     @staticmethod
     def shuffle_cards():
@@ -55,6 +70,39 @@ class Round:
             self.__players_rounds[id_player].add_card(cards[i_card])
         for i_card in range(len(cards) - 3, len(cards)):
             self.__bidding.add_card_to_prikup(cards[i_card])
+
+    def send_dealing_to_database(self, game_id):
+        p01 = self.__players_rounds[0].cards[0].card_to_sql()
+        p02 = self.__players_rounds[0].cards[1].card_to_sql()
+        p03 = self.__players_rounds[0].cards[2].card_to_sql()
+        p04 = self.__players_rounds[0].cards[3].card_to_sql()
+        p05 = self.__players_rounds[0].cards[4].card_to_sql()
+        p06 = self.__players_rounds[0].cards[5].card_to_sql()
+        p07 = self.__players_rounds[0].cards[6].card_to_sql()
+        p08 = "null" if len(self.__players_rounds[0].cards) == 7 else self.__players_rounds[0].cards[7].card_to_sql()
+        p11 = self.__players_rounds[1].cards[0].card_to_sql()
+        p12 = self.__players_rounds[1].cards[1].card_to_sql()
+        p13 = self.__players_rounds[1].cards[2].card_to_sql()
+        p14 = self.__players_rounds[1].cards[3].card_to_sql()
+        p15 = self.__players_rounds[1].cards[4].card_to_sql()
+        p16 = self.__players_rounds[1].cards[5].card_to_sql()
+        p17 = self.__players_rounds[1].cards[6].card_to_sql()
+        p18 = "null" if len(self.__players_rounds[1].cards) == 7 else self.__players_rounds[1].cards[7].card_to_sql()
+        p21 = self.__players_rounds[2].cards[0].card_to_sql()
+        p22 = self.__players_rounds[2].cards[1].card_to_sql()
+        p23 = self.__players_rounds[2].cards[2].card_to_sql()
+        p24 = self.__players_rounds[2].cards[3].card_to_sql()
+        p25 = self.__players_rounds[2].cards[4].card_to_sql()
+        p26 = self.__players_rounds[2].cards[5].card_to_sql()
+        p27 = self.__players_rounds[2].cards[6].card_to_sql()
+        p28 = "null" if len(self.__players_rounds[2].cards) == 7 else self.__players_rounds[2].cards[7].card_to_sql()
+        pc1 = "null" if len(self.__bidding.prikup) == 0 else self.__bidding.prikup[0].card_to_sql()
+        pc2 = "null" if len(self.__bidding.prikup) <= 1 else self.__bidding.prikup[1].card_to_sql()
+        pc3 = "null" if len(self.__bidding.prikup) <= 2 else self.__bidding.prikup[2].card_to_sql()
+        Database.deal_cards(game_id, p01, p02, p03, p04, p05, p06, p07, p08,
+                            p11, p12, p13, p14, p15, p16, p17, p18,
+                            p21, p22, p23, p24, p25, p26, p27, p28,
+                            pc1, pc2, pc3)
 
 
 class RoundGUI:

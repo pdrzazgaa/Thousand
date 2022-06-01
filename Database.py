@@ -8,7 +8,6 @@ DB_PASSWORD = "kcQb4oo2bVJrG"
 
 
 class Database:
-
     __query_create_table_games = "CREATE TABLE IF NOT EXISTS GAMES_1000 " \
                                  "(IdG Integer not null primary key auto_increment, " \
                                  "Players Integer not null, " \
@@ -17,14 +16,19 @@ class Database:
     __query_create_table_rounds = "CREATE TABLE IF NOT EXISTS ROUNDS_1000 " \
                                   "(IdR Integer not null primary key auto_increment, " \
                                   "IdG Integer not null, " \
-                                  "P0_1 Integer not null, P0_2 Integer not null, P0_3 Integer not null, P0_4 Integer not null," \
-                                  "P0_5 Integer not null, P0_6 Integer not null, P0_7 Integer not null, P0_8 Integer not null," \
-                                  "P1_1 Integer not null, P1_2 Integer not null, P1_3 Integer not null, P1_4 Integer not null," \
-                                  "P1_5 Integer not null, P1_6 Integer not null, P1_7 Integer not null, P1_8 Integer not null," \
-                                  "P2_1 Integer not null, P2_2 Integer not null, P2_3 Integer not null, P2_4 Integer not null," \
-                                  "P2_5 Integer not null, P2_6 Integer not null, P2_7 Integer not null, P2_8 Integer not null," \
-                                  "PickUp1 Integer not null, PickUp2 Integer not null, PickUp3 Integer not null, " \
-                                  "Bid Integer, " \
+                                  "P0_1 Integer not null, P0_2 Integer not null, " \
+                                  "P0_3 Integer not null, P0_4 Integer not null," \
+                                  "P0_5 Integer not null, P0_6 Integer not null, " \
+                                  "P0_7 Integer not null, P0_8 Integer," \
+                                  "P1_1 Integer not null, P1_2 Integer not null, " \
+                                  "P1_3 Integer not null, P1_4 Integer not null," \
+                                  "P1_5 Integer not null, P1_6 Integer not null, " \
+                                  "P1_7 Integer not null, P1_8 Integer," \
+                                  "P2_1 Integer not null, P2_2 Integer not null, " \
+                                  "P2_3 Integer not null, P2_4 Integer not null," \
+                                  "P2_5 Integer not null, P2_6 Integer not null, " \
+                                  "P2_7 Integer not null, P2_8 Integer," \
+                                  "PickUp1 Integer, PickUp2 Integer, PickUp3 Integer, " \
                                   "RoundDateTime timestamp NOT NULL " \
                                   ")"
     __query_create_table_bids = "CREATE TABLE IF NOT EXISTS BIDS_1000 " \
@@ -144,18 +148,18 @@ class Database:
     @staticmethod
     def check_game(id_game):
         query_check_game = "select Players, (select count(IdR) from ROUNDS_1000 where IdG = " + \
-                        str(id_game)+") from GAMES_1000 where IdG = "+str(id_game)
+                           str(id_game) + ") from GAMES_1000 where IdG = " + str(id_game)
         results = Database.select_db(query_check_game)
         return results
 
     @staticmethod
     def join_game(id_game):
-        query_create_game = "update GAMES_1000 set Players = Players + 1 where IdG like "+str(id_game)
+        query_create_game = "update GAMES_1000 set Players = Players + 1 where IdG like " + str(id_game)
         return Database.execute_db(query_create_game)
 
     @staticmethod
     def leave_game(id_game):
-        query_leave_game = "update GAMES_1000 set Players = Players - 1 where IdG like "+str(id_game)
+        query_leave_game = "update GAMES_1000 set Players = Players - 1 where IdG like " + str(id_game)
         return Database.execute_db(query_leave_game)
 
     @staticmethod
@@ -167,11 +171,29 @@ class Database:
         if_again_dealing = "1" if b_if_again_dealing is None else "0"
 
         query_make_move = "insert into MOVEMENTS_1000 (IdG, IdR, IdP, CardColor, CardValue, IfKingQueenPair, IfBomb, " \
-                            "IfAgainDealing) values (" + idg + \
-                            ", " + idr + ", " + idp + ", " + card_color + ", " + card_value + ", " + if_king_queen_pair \
-                            + ", " + if_bomb + ", " + if_again_dealing + ")"
+                          "IfAgainDealing) values (" + idg + \
+                          ", " + idr + ", " + idp + ", " + card_color + ", " + card_value + ", " + if_king_queen_pair \
+                          + ", " + if_bomb + ", " + if_again_dealing + ")"
 
         return Database.execute_db(query_make_move)
+
+    @staticmethod
+    def deal_cards(idg, p01, p02, p03, p04, p05, p06, p07, p08, p11, p12, p13, p14, p15, p16, p17, p18,
+                   p21, p22, p23, p24, p25, p26, p27, p28, pc1, pc2, pc3):
+        query_deal_cards = "insert into ROUNDS_1000 " \
+                           "(IdG, P0_1, P0_2, P0_3, P0_4, P0_5, P0_6, P0_7, P0_8," \
+                           "P1_1, P1_2, P1_3, P1_4, P1_5, P1_6, P1_7, P1_8, " \
+                           "P2_1, P2_2, P2_3, P2_4, P2_5, P2_6, P2_7, P2_8, " \
+                           "PickUp1, PickUp2, PickUp3) values (" + idg + \
+                           ", " + p01 + ", " + p02 + ", " + p03 + ", " + p04 + \
+                           ", " + p05 + ", " + p06 + ", " + p07 + ", " + p08 + \
+                           ", " + p11 + ", " + p12 + ", " + p13 + ", " + p14 + \
+                           ", " + p15 + ", " + p16 + ", " + p17 + ", " + p18 + \
+                           ", " + p21 + ", " + p22 + ", " + p23 + ", " + p24 + \
+                           ", " + p25 + ", " + p26 + ", " + p27 + ", " + p28 + \
+                           ", " + pc1 + ", " + pc2 + ", " + pc3 + ")"
+
+        return Database.execute_db(query_deal_cards)
 
     @staticmethod
     def check_players(id_game):
@@ -182,19 +204,19 @@ class Database:
     @staticmethod
     def check_moves(id_game):
         query_check_game = "select * from MOVEMENTS_1000 where IdG = " + str(id_game) + \
-                           " limit 1 order by MoveDateTime desc"
+                           " order by MoveDateTime desc limit 1"
         results = Database.select_db(query_check_game)
         return results
 
     @staticmethod
     def check_round(id_game):
         query_check_game = "select * from ROUNDS_1000 where IdG = " + str(id_game) + \
-                           " limit 1 order by RoundDateTime desc"
+                           " order by RoundDateTime desc limit 1"
         results = Database.select_db(query_check_game)
         return results
 
     @staticmethod
     def check_bidding(id_game):
-        query_check_game = "select * from BIDS_1000 where IdG = " + str(id_game) + " limit 1 order by BidDateTime desc"
+        query_check_game = "select * from BIDS_1000 where IdG = " + str(id_game) + " order by BidDateTime desc limit 1"
         results = Database.select_db(query_check_game)
         return results

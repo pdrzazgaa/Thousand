@@ -1,10 +1,8 @@
 import sys
 import ControlPanel
-from Player import Player
 from Database import Database
 from GUISettings import *
 from ControlPanel import ControlPanel
-from Timer import RepeatedTimer
 from WaitingForPlayersScreen import WaitingForPlayersScreen
 from DealingCardsScreen import DealingCardsScreen
 
@@ -12,22 +10,20 @@ from DealingCardsScreen import DealingCardsScreen
 class Desk:
     frame_per_sec: pygame.time.Clock()
     display_surface: pygame.display
-    event_list: []
 
     def __init__(self, game):
         pygame.init()
         self.prepare_game()
-        self.panel_control = ControlPanel()
+        self.panel_control = ControlPanel(game)
         self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface, self.panel_control)
         self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control)
 
-        # Timery sprawdzające bazę - czy są jacyś gracze
-        timer_check_players = RepeatedTimer(2.0, self.panel_control.check_players, game.id_game)
-        timer_check_players.start()
-
         while True:
             while self.panel_control.waiting_for_players_phase:
-                self.waiting_screen.main()
+                if self.panel_control.player_left_game_phase:
+                    ...
+                else:
+                    self.waiting_screen.main()
             while self.panel_control.dealing_phase:
                 self.dealing_screen.main()
             while self.panel_control.bidding_phase:
@@ -45,7 +41,6 @@ class Desk:
         self.frame_per_sec = pygame.time.Clock()
         self.display_surface = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("1000")
-
 
     @staticmethod
     def quit(game):

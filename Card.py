@@ -64,8 +64,20 @@ class Card:
     def reverse_card(self):
         self.__is_showed = not self.__is_showed
 
+    def card_to_sql(self):
+        return str(self.color) + str(self.value)
+
+    @staticmethod
+    def card_from_sql(card_sql):
+        return Card(int(card_sql/10), (card_sql % 10)) if card_sql is not None else None
+
     def __eq__(self, other):
-        return self.__color == (Card(other)).__color and self.__value == (Card(other)).value
+        if isinstance(other, Card):
+            return self.__color == other.__color and self.__value == other.value
+        elif self is None and other is None:
+            return True
+        else:
+            return False
 
 
 class CardGUI(pygame.sprite.Sprite):
@@ -127,11 +139,11 @@ class CardGUI(pygame.sprite.Sprite):
     def top(self, top):
         self.__top = top
 
-    def update(self, event_list):
-        for event in event_list:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.rect.collidepoint(event.pos):
-                    self.is_clicked = not self.is_clicked
-                    self.top = self.top - CARD_OFFSET_TOP if self.is_clicked else self.top + CARD_OFFSET_TOP
-                    self.rect = self.image.get_rect(center=(self.left + CARD_WIDTH / 2, self.top + CARD_HEIGHT / 2))
+    def click_card(self):
+        self.is_clicked = not self.is_clicked
+        self.top = self.top - CARD_OFFSET_TOP if self.is_clicked else self.top + CARD_OFFSET_TOP
+        self.rect = self.image.get_rect(center=(self.left + CARD_WIDTH / 2, self.top + CARD_HEIGHT / 2))
 
+    def update(self, event):
+        if event == pygame.MOUSEBUTTONDOWN:
+            self.click_card()

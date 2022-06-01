@@ -21,6 +21,10 @@ class Bidding:
     def prikup(self):
         return self.__prikup
 
+    @prikup.setter
+    def prikup(self, prikup):
+        self.__prikup = prikup
+
     @property
     def bid(self):
         return self.__bid
