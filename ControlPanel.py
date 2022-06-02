@@ -47,7 +47,7 @@ class ControlPanel:
     def check_dealing(self):
         last_dealing = None if len(self.game.rounds) == 0 else \
             Database.check_round(self.game.id_game)
-        if last_dealing is not None:
+        if last_dealing is not None and len(last_dealing) != 0:
             IdR, IdG, P0_1, P0_2, P0_3, P0_4, P0_5, P0_6, P0_7, P0_8, \
             P1_1, P1_2, P1_3, P1_4, P1_5, P1_6, P1_7, P1_8, \
             P2_1, P2_2, P2_3, P2_4, P2_5, P2_6, P2_7, P2_8, \

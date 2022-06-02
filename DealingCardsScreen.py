@@ -43,6 +43,9 @@ class DealingCardsScreen:
         self.display.blit(message_waiting, (300, 150))
         if self.cards:
             self.display_cards(self.control_panel.end_bidding_phase, self.cards)
+        if self.control_panel.dealing_phase and not self.control_panel.waiting_for_dealing and not self.cards:
+            # self.cards = self.create_cards()
+            self.make_new_deal()
         pygame.display.update()
 
     def make_new_deal(self):
@@ -52,14 +55,16 @@ class DealingCardsScreen:
         player2_round = PlayerRound(self.game.players[(self.game.id_player + 2) % 3])
         # Jeżeli jesteśmy graczem tasującym, to tworzymy karty i wysyłamy je do bazy
         dealing_player = 0 if len(self.game.rounds) == 0 else self.game.rounds[-1].dealing_player_id
+        self.game.add_round_to_game(Round([player0_round, player1_round, player2_round], dealing_player))
         if dealing_player == self.game.id_player:
-            self.game.add_round_to_game(Round([player0_round, player1_round, player2_round], dealing_player))
+            self.game.rounds[-1].deal_cards()
             for pr in self.game.rounds[-1].players_rounds:
                 pr.sort_cards()
             self.game.rounds[-1].send_dealing_to_database(self.game.id_game)
             self.cards = self.create_cards()
         else:
-            ...
+            if self.control_panel.dealing_phase and not self.control_panel.waiting_for_dealing:
+                self.cards = self.create_cards()
 
     def create_cards(self):
         player_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds[0].cards, self.all_sprites)

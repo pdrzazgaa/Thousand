@@ -23,8 +23,6 @@ class Round:
         self.__dealing_player_id = dealing_player_id
         self.__id_r = 0
         self.__last_change = ""
-        # Przy tworzeniu rundy od razu rozdajemy karty
-        self.deal_cards(dealing_player_id)
 
     @property
     def bidding(self):
@@ -63,10 +61,10 @@ class Round:
         random.shuffle(cards)
         return cards
 
-    def deal_cards(self, dealing_player_id):
+    def deal_cards(self):
         cards = self.shuffle_cards()
         for i_card in range(0, len(cards) - 3):
-            id_player = (dealing_player_id + i_card + 1) % 3
+            id_player = (self.__dealing_player_id + i_card + 1) % 3
             self.__players_rounds[id_player].add_card(cards[i_card])
         for i_card in range(len(cards) - 3, len(cards)):
             self.__bidding.add_card_to_prikup(cards[i_card])
@@ -111,9 +109,10 @@ class RoundGUI:
     def create_cards_gui(cards, all_sprites):
         all_cards = pygame.sprite.Group()
         for card in cards:
-            gui_card = CardGUI(card)
-            all_cards.add(gui_card)
-            all_sprites.add(gui_card)
+            if card is not None:
+                gui_card = CardGUI(card)
+                all_cards.add(gui_card)
+                all_sprites.add(gui_card)
         return all_cards
 
     @staticmethod

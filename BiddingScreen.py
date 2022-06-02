@@ -30,8 +30,8 @@ class BiddingScreen:
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
+        self.display_cards(self.control_panel.end_bidding_phase, self.create_cards())
         self.bidding_table.render()
-        # self.display_cards(self.control_panel.end_bidding_phase, self.create_cards())
         pygame.display.update()
 
     def create_cards(self):
@@ -50,7 +50,6 @@ class BiddingScreen:
         RoundGUI.display_oponent_cards(oponent1_cards_gui, (self.game.id_player + 1) % 3)
         RoundGUI.display_oponent_cards(oponent2_cards_gui, (self.game.id_player + 2) % 3)
 
-        self.display.fill(BACKGROUND_COLOR)
         self.all_sprites.draw(self.display)
         pygame.display.update()
 
@@ -80,9 +79,9 @@ class BiddingTable:
     def render(self):
         pygame.draw.rect(self.display, BIDDING_TABLE_COLOR, self.hit_box)
         self.display.blit(self.title, (WIDTH / 2 - 70, 40))
-        self.display.blit(self.players[0], (WIDTH / 2 - 240, 80))
-        self.display.blit(self.players[1], (WIDTH / 2 - 30, 80))
-        self.display.blit(self.players[2], (WIDTH / 2 + 180, 80))
+        self.display.blit(self.players[0], (WIDTH / 2 - 240, 100))
+        self.display.blit(self.players[1], (WIDTH / 2 - 240, 130))
+        self.display.blit(self.players[2], (WIDTH / 2 - 240, 160))
         self.display_biddings()
 
     def display_biddings(self):
@@ -92,6 +91,6 @@ class BiddingTable:
         self.biddings = [FONT_BIDDING_PLAYERS.render(str(bid_player0), True, (255, 255, 255)),
                          FONT_BIDDING_PLAYERS.render(str(bid_player1), True, (255, 255, 255)),
                          FONT_BIDDING_PLAYERS.render(str(bid_player2), True, (255, 255, 255))]
-        self.display.blit(self.biddings[0], (WIDTH / 2 - 230, 110))
-        self.display.blit(self.biddings[1], (WIDTH / 2 - 20, 110))
-        self.display.blit(self.biddings[2], (WIDTH / 2 + 200, 110))
+        self.display.blit(self.biddings[0], (WIDTH / 2 - 100, 100))
+        self.display.blit(self.biddings[1], (WIDTH / 2 - 100, 130))
+        self.display.blit(self.biddings[2], (WIDTH / 2 - 100, 160))

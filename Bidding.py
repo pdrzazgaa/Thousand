@@ -84,6 +84,3 @@ class Bidding:
         (PlayerRound(player_round2)).add_card(card2)
 
 
-class BiddingGUI:
-    ...
-
