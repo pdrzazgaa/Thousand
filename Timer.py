@@ -18,6 +18,8 @@ class RepeatedTimer(object):
 
     def start(self):
         if not self.is_running:
+            if self._timer is not None:
+                self.stop()
             self._timer = Timer(self.interval, self._run)
             self._timer.start()
             self.is_running = True

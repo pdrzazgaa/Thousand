@@ -70,7 +70,3 @@ class PlayerRound:
 
     def sort_cards(self):
         self.__cards.sort(key=lambda card: (card.color, card.value), reverse=True)
-
-
-class PlayerRoundGUI(pygame.sprite.Sprite):
-    ...

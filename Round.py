@@ -12,7 +12,8 @@ class Round:
     __bidding: Bidding
     __desk: [Card]
     __atu: int  # wiodący kolor
-    __last_change: str
+    __last_round: str
+    __last_move: str
     __dealing_player_id: int
     __id_r: int
 
@@ -22,7 +23,7 @@ class Round:
         self.__desk = []
         self.__dealing_player_id = dealing_player_id
         self.__id_r = 0
-        self.__last_change = ""
+        self.__last_round = ""
 
     @property
     def bidding(self):
@@ -41,16 +42,22 @@ class Round:
         self.__id_r = id_r
 
     @property
-    def last_change(self):
-        return self.__last_change
+    def last_round(self):
+        return self.__last_round
 
-    @last_change.setter
-    def last_change(self, last_change):
-        self.__last_change = last_change
+    @last_round.setter
+    def last_round(self, last_round):
+        self.__last_round = last_round
 
     @property
     def dealing_player_id(self):
         return self.__dealing_player_id
+
+    def used_bomb(self, player_id):
+        for pr in self.players_rounds:
+            if pr.player.id_player != player_id:
+                pr.player.add_points(60)
+        self.players_rounds[player_id].pla.use_bomb()
 
     @staticmethod
     def shuffle_cards():
@@ -135,14 +142,14 @@ class RoundGUI:
         for card in gui_cards:
             card.card.is_reversed = True
             card.top = top
-            if player % 2 == 0:
+            if player % 2 == 1:
                 card.left = OPPONENT_CARD_LOCATION_LEFT
             else:
                 card.left = OPPONENT_CARD_LOCATION_RIGHT
             top += CARD_WIDTH + OPPONENT_CARD_OFFSET
         for card in gui_cards:
             card.image = card.card_back_image
-            if player % 2 == 0:
+            if player % 2 == 1:
                 card.image = pygame.transform.rotate(card.image, angle=PIVOT_LEFT_CARDS)
             else:
                 card.image = pygame.transform.rotate(card.image, angle=PIVOT_RIGHT_CARDS)

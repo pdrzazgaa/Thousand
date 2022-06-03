@@ -24,7 +24,8 @@ class DealingCardsScreen:
         self.cards = []
 
     def main(self):
-        if not self.is_done and self.control_panel.waiting_for_dealing:
+        if not self.is_done and self.control_panel.waiting_for_dealing and \
+                self.game.rounds[-1].dealing_player_id == self.game.id_player:
             self.is_done = True
             self.make_new_deal()
         self.manage_display()
@@ -38,14 +39,15 @@ class DealingCardsScreen:
                 self.quit()
 
     def manage_display(self):
-        self.display.fill(BACKGROUND_COLOR)
-        message_waiting = FONT_WAITING.render("DEALING CARDS...", True, (255, 255, 255), BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (300, 150))
-        if self.cards:
-            self.display_cards(self.control_panel.end_bidding_phase, self.cards)
-        if self.control_panel.dealing_phase and not self.control_panel.waiting_for_dealing and not self.cards:
-            # self.cards = self.create_cards()
-            self.make_new_deal()
+        if self.control_panel.waiting_for_dealing:
+            self.display.fill(BACKGROUND_COLOR)
+            message_waiting = FONT_WAITING.render("DEALING CARDS...", True, (255, 255, 255), BACKGROUND_COLOR)
+            self.display.blit(message_waiting, (300, 150))
+        else:
+            if self.control_panel.dealing_phase and not self.cards:
+                self.make_new_deal()
+            if self.cards:
+                self.display_cards(not self.control_panel.end_bidding_phase, self.cards)
         pygame.display.update()
 
     def make_new_deal(self):
@@ -95,6 +97,8 @@ class DealingCardsScreen:
 
     def quit(self):
         Database.leave_game(self.game.id_game)
+        for timer in self.control_panel.timers:
+            timer.cancel()
         pygame.quit()
         sys.exit()
 

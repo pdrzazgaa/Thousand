@@ -71,7 +71,7 @@ class Database:
             if connection.is_connected():
                 cursor.close()
                 connection.close()
-                print("MySQL connection is closed")
+                # print("MySQL connection is closed")
 
     @staticmethod
     def execute_db(query):
@@ -196,6 +196,12 @@ class Database:
         return Database.execute_db(query_deal_cards)
 
     @staticmethod
+    def make_bid(id_r, id_p, bid):
+        query_create_game = "insert into BIDS_1000 (IdR, IdP, Bid) values (" + str(id_r) + ", " + str(id_p) + \
+                            ", " + str(bid) + ")"
+        Database.execute_db(query_create_game)
+
+    @staticmethod
     def check_players(id_game):
         query_check_game = "select Players from GAMES_1000 where IdG = " + str(id_game)
         results = Database.select_db(query_check_game)
@@ -216,7 +222,7 @@ class Database:
         return results
 
     @staticmethod
-    def check_bidding(id_game):
-        query_check_game = "select * from BIDS_1000 where IdG = " + str(id_game) + " order by BidDateTime desc limit 1"
+    def check_bidding(id_round):
+        query_check_game = "select * from BIDS_1000 where IdR = " + str(id_round) + " order by BidDateTime desc limit 1"
         results = Database.select_db(query_check_game)
         return results

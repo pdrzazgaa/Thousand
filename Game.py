@@ -37,6 +37,9 @@ class Game:
     def players(self):
         return self.__players
 
+    def player_me(self):
+        return self.players[self.id_player]
+
     def add_player_to_game(self, player):
         if len(self.__players) < 3:
             self.__players.append(player)

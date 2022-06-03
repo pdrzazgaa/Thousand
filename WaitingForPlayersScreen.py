@@ -1,4 +1,7 @@
 import sys
+
+import pygame.mouse
+
 from Database import Database
 from GUISettings import *
 from ControlPanel import ControlPanel
@@ -20,7 +23,8 @@ class WaitingForPlayersScreen:
         self.handle_clicks()
 
     def initialize_buttons(self):
-        self.buttons.append(Button(self, 550, 700, 400, 80, "QUIT", self.quit, self.display))
+        self.buttons.append(Button(self, 550, 550, 400, 80,
+                                   FONT_BUTTON.render("QUIT", True, (0, 0, 0)), self.quit, self.display))
 
     def handle_clicks(self):
         for event in pygame.event.get():
@@ -44,7 +48,7 @@ class WaitingForPlayersScreen:
                                                           BACKGROUND_COLOR)
             self.display.blit(message_players, (300, 350))
         for button in self.buttons:
-            button.render()
+            button.render(False)
         pygame.display.update()
 
     @staticmethod
@@ -53,5 +57,7 @@ class WaitingForPlayersScreen:
 
     def quit(self):
         Database.leave_game(self.game.id_game)
+        for timer in self.control_panel.timers:
+            timer.cancel()
         pygame.quit()
         sys.exit()
