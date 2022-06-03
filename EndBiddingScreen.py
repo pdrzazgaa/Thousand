@@ -52,9 +52,9 @@ class EndBiddingScreen:
         self.display.fill(BACKGROUND_COLOR)
         self.display_cards()
         self.waiting_for_dealing_cards_label()
-        for b in self.buttons:
-            b.render(False)
-
+        if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
+            for b in self.buttons:
+                b.render(False)
         pygame.display.update()
 
     def create_cards(self):
