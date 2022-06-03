@@ -19,7 +19,7 @@ class Round:
 
     def __init__(self, players_rounds, dealing_player_id):
         self.__players_rounds = players_rounds
-        self.__bidding = Bidding((dealing_player_id + 1) % 3)
+        self.__bidding = Bidding(players_rounds[(dealing_player_id + 1) % 3])
         self.__desk = []
         self.__dealing_player_id = dealing_player_id
         self.__id_r = 0
@@ -136,20 +136,20 @@ class RoundGUI:
             card.rect = card.image.get_rect(center=(card.left+CARD_WIDTH/2, card.top+CARD_HEIGHT/2))
 
     @staticmethod
-    def display_oponent_cards(oponent_cards_gui, player: int):
+    def display_oponent_cards(oponent_cards_gui, left: bool):
         gui_cards = oponent_cards_gui
         top = HEIGHT / 2 - float(len(oponent_cards_gui) / 2) * (CARD_WIDTH / 2)
         for card in gui_cards:
             card.card.is_reversed = True
             card.top = top
-            if player % 2 == 1:
+            if left:
                 card.left = OPPONENT_CARD_LOCATION_LEFT
             else:
                 card.left = OPPONENT_CARD_LOCATION_RIGHT
             top += CARD_WIDTH + OPPONENT_CARD_OFFSET
         for card in gui_cards:
             card.image = card.card_back_image
-            if player % 2 == 1:
+            if left:
                 card.image = pygame.transform.rotate(card.image, angle=PIVOT_LEFT_CARDS)
             else:
                 card.image = pygame.transform.rotate(card.image, angle=PIVOT_RIGHT_CARDS)

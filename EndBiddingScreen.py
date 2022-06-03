@@ -53,9 +53,12 @@ class EndBiddingScreen:
         pygame.display.update()
 
     def create_cards(self):
-        player_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds[0].cards, self.all_sprites)
-        oponent1_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds[1].cards, self.all_sprites)
-        oponent2_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds[2].cards, self.all_sprites)
+        player_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
+                                                     [self.game.id_player].cards, self.all_sprites)
+        oponent1_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
+                                                       [(self.game.id_player + 1) % 3].cards, self.all_sprites)
+        oponent2_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
+                                                       [(self.game.id_player + 2) % 3].cards, self.all_sprites)
 
         return player_cards_gui, oponent1_cards_gui, oponent2_cards_gui
 
@@ -63,8 +66,17 @@ class EndBiddingScreen:
         player_cards_gui, oponent1_cards_gui, oponent2_cards_gui= self.cards
         # rozkładamy karty
         RoundGUI.display_player_cards(player_cards_gui)
-        RoundGUI.display_oponent_cards(oponent1_cards_gui, (self.game.id_player + 1) % 3)
-        RoundGUI.display_oponent_cards(oponent2_cards_gui, (self.game.id_player + 2) % 3)
+        # przeciwnik 1
+        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i" % ((self.game.id_player + 1) % 3), True, (255, 255, 255),
+                                                         BACKGROUND_COLOR)
+        self.display.blit(message_waiting, (30, 30))
+        RoundGUI.display_oponent_cards(oponent1_cards_gui, True)
+
+        # przeciwnik 2
+        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i" % ((self.game.id_player + 2) % 3), True, (255, 255, 255),
+                                                         BACKGROUND_COLOR)
+        self.display.blit(message_waiting, (WIDTH - 80, 30))
+        RoundGUI.display_oponent_cards(oponent2_cards_gui, False)
 
         self.all_sprites.draw(self.display)
 
@@ -72,7 +84,7 @@ class EndBiddingScreen:
         if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("CHOOSE CARDS FOR YOUR OPPONENTS", True, (255, 255, 255),
                                                              BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (120, 50))
+            self.display.blit(message_waiting, (130, 50))
         else:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("WINNER CHOOSES CARDS...", True, (255, 255, 255),
                                                              BACKGROUND_COLOR)

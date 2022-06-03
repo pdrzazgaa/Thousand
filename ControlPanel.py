@@ -111,7 +111,6 @@ class ControlPanel:
                     bidding.bidding_end()
                     self.bidding_phase = False
                     self.end_bidding_phase = True
-                    print("Bidding end")
 
     def check_moves(self, id_game):
         ...
