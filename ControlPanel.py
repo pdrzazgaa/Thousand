@@ -3,7 +3,7 @@ from threading import Event
 
 from Card import Card
 from Database import Database
-from Timer_v2 import RepeatedTimer
+from Timer import RepeatedTimer
 
 
 class ControlPanel:
