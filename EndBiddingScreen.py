@@ -21,9 +21,11 @@ class EndBiddingScreen:
         self.display = display
         self.control_panel = control_panel
         self.all_sprites = pygame.sprite.Group()
+        self.clicked_card = None
         self.cards = []
         self.is_dealt = False
         self.buttons = []
+        self.initialize_buttons()
 
     def main(self):
         if not self.is_dealt:
@@ -50,6 +52,9 @@ class EndBiddingScreen:
         self.display.fill(BACKGROUND_COLOR)
         self.display_cards()
         self.waiting_for_dealing_cards_label()
+        for b in self.buttons:
+            b.render(False)
+
         pygame.display.update()
 
     def create_cards(self):
@@ -91,18 +96,33 @@ class EndBiddingScreen:
             self.display.blit(message_waiting, (280, 50))
 
     def initialize_buttons(self):
-        self.buttons.append(Button(self, (WIDTH / 2 - 100), 160, 100, 60,
+        self.buttons.append(Button(self, (WIDTH / 2), 160, 150, 60,
                                    FONT_BIDDING_PLAYERS.render("BOMB", True, (0, 0, 0)), self.use_bomb,
                                    self.display))
+        self.buttons.append(Button(self, (WIDTH / 2 - 80), 230, 120, 60,
+                                   FONT_BIDDING_PLAYERS.render("Left player", True, (0, 0, 0)),
+                                   self.card_for_left_player, self.display))
+        self.buttons.append(Button(self, (WIDTH / 2 + 80), 230, 120, 60,
+                                   FONT_BIDDING_PLAYERS.render("Right player", True, (0, 0, 0)),
+                                   self.card_for_right_player, self.display))
 
     def use_bomb(self):
-        self.game.rounds[-1].used_bomb()
+        self.game.rounds[-1].used_bomb(self.game.id_player)
+
+    def card_for_left_player(self):
+        ...
+
+    def card_for_right_player(self):
+        ...
 
     def card_clicked(self):
         pos = pygame.mouse.get_pos()
         clicked_sprites = [s for s in self.all_sprites if s.rect.collidepoint(pos)]
         if len(clicked_sprites) != 0:
             clicked_sprites[len(clicked_sprites) - 1].update(pygame.MOUSEBUTTONDOWN)
+            if self.clicked_card:
+                self.clicked_card.update(pygame.MOUSEBUTTONDOWN)
+            self.clicked_card = clicked_sprites[len(clicked_sprites) - 1]
 
     def quit(self):
         Database.leave_game(self.game.id_game)

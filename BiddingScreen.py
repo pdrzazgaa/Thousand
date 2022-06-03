@@ -66,6 +66,7 @@ class BiddingScreen:
         # rozkładamy karty
         RoundGUI.display_player_cards(player_cards_gui)
         RoundGUI.display_bidding_cards(prikup_cards_gui, hidden_bidding)
+
         # przeciwnik 1
         message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i" % ((self.game.id_player + 1) % 3), True, (255, 255, 255),
                                                          BACKGROUND_COLOR)

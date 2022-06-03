@@ -41,6 +41,9 @@ class PlayerRound:
     @cards.setter
     def cards(self, cards):
         self.__cards = cards
+        for card in self.__cards:
+            if card is None:
+                self.__cards.remove(card)
 
     @declared_points.setter
     def declared_points(self, declared_points):
@@ -69,4 +72,5 @@ class PlayerRound:
         return card
 
     def sort_cards(self):
-        self.__cards.sort(key=lambda card: (card.color, card.value), reverse=True)
+        if self is not None:
+            self.__cards.sort(key=lambda card: (card.color, card.value), reverse=True)
