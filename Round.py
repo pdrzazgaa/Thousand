@@ -76,7 +76,7 @@ class Round:
         for i_card in range(len(cards) - 3, len(cards)):
             self.__bidding.add_card_to_prikup(cards[i_card])
 
-    def send_dealing_to_database(self, game_id, round_id):
+    def send_dealing_to_database(self, game_id, round_id=None, if_bomb=False, if_again_dealing=False):
         p01 = self.__players_rounds[0].cards[0].card_to_sql()
         p02 = self.__players_rounds[0].cards[1].card_to_sql()
         p03 = self.__players_rounds[0].cards[2].card_to_sql()
@@ -104,7 +104,9 @@ class Round:
         pc1 = "null" if len(self.__bidding.prikup) == 0 else self.__bidding.prikup[0].card_to_sql()
         pc2 = "null" if len(self.__bidding.prikup) <= 1 else self.__bidding.prikup[1].card_to_sql()
         pc3 = "null" if len(self.__bidding.prikup) <= 2 else self.__bidding.prikup[2].card_to_sql()
-        if round_id == -1:
+        sql_if_bomb = "1" if if_bomb else "null"
+        sql_if_again_dealing = "1" if if_again_dealing else "null"
+        if round_id is None:
             Database.deal_cards(str(game_id), p01, p02, p03, p04, p05, p06, p07, p08,
                                 p11, p12, p13, p14, p15, p16, p17, p18,
                                 p21, p22, p23, p24, p25, p26, p27, p28,
@@ -112,7 +114,8 @@ class Round:
         else:
             Database.update_dealing(str(round_id), p01, p02, p03, p04, p05, p06, p07, p08,
                                     p11, p12, p13, p14, p15, p16, p17, p18,
-                                    p21, p22, p23, p24, p25, p26, p27, p28)
+                                    p21, p22, p23, p24, p25, p26, p27, p28,
+                                    sql_if_bomb, sql_if_again_dealing)
 
 
 class RoundGUI:

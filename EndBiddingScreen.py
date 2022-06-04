@@ -140,7 +140,7 @@ class EndBiddingScreen:
     def accept(self):
         if self.card_for_player_left != () and self.card_for_player_right != ():
             self.game.rounds[-1].bidding.give_away_card(self.card_for_player_left, self.card_for_player_right)
-            self.game.rounds[-1].send_dealing_to_database(self.game.id_game, self.game.rounds[-1].id_r)
+            self.game.rounds[-1].send_dealing_to_database(game_id=self.game.id_game, round_id=self.game.rounds[-1].id_r)
         else:
             print("Cards for opponents haven't been chosen")
 

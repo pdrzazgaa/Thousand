@@ -6,7 +6,7 @@ from GUISettings import *
 from Round import RoundGUI
 
 
-class DealingCardsScreen:
+class GameScreen:
 
     display: pygame.display
     all_sprites: pygame.sprite.Group()
@@ -23,7 +23,8 @@ class DealingCardsScreen:
         self.cards = []
 
     def main(self):
-        self.cards = self.create_cards()
+        if len(self.cards) == 0:
+            self.cards = self.create_cards()
         self.manage_display()
         self.handle_clicks()
 
@@ -46,15 +47,13 @@ class DealingCardsScreen:
                                                        [(self.game.id_player + 1) % 3].cards, self.all_sprites)
         oponent2_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
                                                        [(self.game.id_player + 2) % 3].cards, self.all_sprites)
-        prikup_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].bidding.prikup, self.all_sprites)
 
-        return player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, prikup_cards_gui
+        return player_cards_gui, oponent1_cards_gui, oponent2_cards_gui
 
     def display_cards(self, hidden_bidding, cards):
-        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, prikup_cards_gui = cards
+        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui = cards
         # rozkładamy karty
         RoundGUI.display_player_cards(player_cards_gui)
-        RoundGUI.display_bidding_cards(prikup_cards_gui, hidden_bidding)
 
         # przeciwnik 1
         message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i" % ((self.game.id_player + 1) % 3), True, (255, 255, 255),

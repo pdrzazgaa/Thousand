@@ -31,6 +31,8 @@ class Database:
                                   "P2_5 Integer not null, P2_6 Integer not null, " \
                                   "P2_7 Integer not null, P2_8 Integer," \
                                   "PickUp1 Integer, PickUp2 Integer, PickUp3 Integer, " \
+                                  "IfBomb Integer, " \
+                                  "IfAgainDealing Integer, " \
                                   "RoundDateTime timestamp NOT NULL " \
                                   ")"
     __query_create_table_bids = "CREATE TABLE IF NOT EXISTS BIDS_1000 " \
@@ -47,8 +49,6 @@ class Database:
                                      "CardColor Integer, " \
                                      "CardValue Integer, " \
                                      "IfKingQueenPair Integer, " \
-                                     "IfBomb Integer, " \
-                                     "IfAgainDealing Integer, " \
                                      "MoveDateTime timestamp NOT NULL " \
                                      ")"
 
@@ -170,13 +170,11 @@ class Database:
         card_color = "null" if i_card_color is None else str(i_card_color)
         card_value = "null" if i_card_value is None else str(i_card_value)
         if_king_queen_pair = "1" if b_if_king_queen_pair is None else "0"
-        if_bomb = "1" if b_if_bomb is None else "0"
-        if_again_dealing = "1" if b_if_again_dealing is None else "0"
 
         query_make_move = "insert into MOVEMENTS_1000 (IdG, IdR, IdP, CardColor, CardValue, IfKingQueenPair, IfBomb, " \
                           "IfAgainDealing) values (" + idg + \
                           ", " + idr + ", " + idp + ", " + card_color + ", " + card_value + ", " + if_king_queen_pair \
-                          + ", " + if_bomb + ", " + if_again_dealing + ")"
+                          + ")"
 
         return Database.execute_db(query_make_move)
 
@@ -200,7 +198,11 @@ class Database:
 
     @staticmethod
     def update_dealing(idr, p01, p02, p03, p04, p05, p06, p07, p08, p11, p12, p13, p14, p15, p16, p17, p18,
-                       p21, p22, p23, p24, p25, p26, p27, p28):
+                       p21, p22, p23, p24, p25, p26, p27, p28, b_if_bomb, b_if_again_dealing):
+
+        if_bomb = "1" if b_if_bomb is None else "0"
+        if_again_dealing = "1" if b_if_again_dealing is None else "0"
+
         query_deal_cards = "UPDATE ROUNDS_1000 SET " \
                            "P0_1 = " + p01 + ", P0_2 = " + p02 + ", P0_3 = " + p03 + ", " \
                            "P0_4 = " + p04 + ", P0_5 = " + p05 + ", P0_6 = " + p06 + ", " \
@@ -211,8 +213,9 @@ class Database:
                            "P2_1 = " + p21 + ", P2_2 = " + p22 + ", P2_3 = " + p23 + ", " \
                            "P2_4 = " + p24 + ", P2_5 = " + p25 + ", P2_6 = " + p26 + ", " \
                            "P2_7 = " + p27 + ", P2_8 = " + p28 + ", " \
-                           "PickUp1 =  null, PickUp2 = null, PickUp3 = null " \
-                           "where IdR = "+idr
+                           "PickUp1 =  null, PickUp2 = null, PickUp3 = null, " \
+                           "IfBomb = " + if_bomb + ", IfAgainDealing = " + if_again_dealing + \
+                           " where IdR = "+idr
 
         return Database.execute_db(query_deal_cards)
 

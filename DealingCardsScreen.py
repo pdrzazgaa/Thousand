@@ -62,7 +62,7 @@ class DealingCardsScreen:
             self.game.rounds[-1].deal_cards()
             for pr in self.game.rounds[-1].players_rounds:
                 pr.sort_cards()
-            self.game.rounds[-1].send_dealing_to_database(self.game.id_game, -1)
+            self.game.rounds[-1].send_dealing_to_database(game_id=self.game.id_game)
             self.cards = self.create_cards()
         else:
             if self.control_panel.dealing_phase and not self.control_panel.waiting_for_dealing:

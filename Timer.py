@@ -10,6 +10,7 @@ class RepeatedTimer(Thread):
         self.args = args
         self.kwargs = kwargs
         self.is_running = False
+        self.is_stopped = False
 
     def run(self):
         self.is_running = True
@@ -19,4 +20,5 @@ class RepeatedTimer(Thread):
     def cancel(self):
         self.stopped.set()
         self.is_running = False
+        self.is_stopped = True
 

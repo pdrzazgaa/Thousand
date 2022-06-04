@@ -7,6 +7,7 @@ from WaitingForPlayersScreen import WaitingForPlayersScreen
 from DealingCardsScreen import DealingCardsScreen
 from BiddingScreen import BiddingScreen
 from EndBiddingScreen import EndBiddingScreen
+from GameScreen import GameScreen
 
 
 class Desk:
@@ -21,6 +22,7 @@ class Desk:
         self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control)
         self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control)
         self.end_bidding_screen = EndBiddingScreen(game, self.display_surface, self.panel_control)
+        self.game_screen = GameScreen(game, self.display_surface, self.panel_control)
 
         while True:
             while self.panel_control.waiting_for_players_phase:
@@ -35,13 +37,7 @@ class Desk:
                 while self.panel_control.end_bidding_phase:
                     self.end_bidding_screen.main()
             while self.panel_control.game_phase:
-                self.dealing_screen.main()
-                while self.panel_control.player0_phase:
-                    ...
-                while self.panel_control.player1_phase:
-                    ...
-                while self.panel_control.player2_phase:
-                    ...
+                self.game_screen.main()
 
     def prepare_game(self):
         vec = pygame.math.Vector2  # 2 for two dimensional
