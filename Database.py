@@ -166,15 +166,14 @@ class Database:
         return Database.execute_db(query_leave_game)
 
     @staticmethod
-    def make_move(idg, idr, idp, i_card_color, i_card_value, b_if_king_queen_pair, b_if_bomb, b_if_again_dealing):
+    def make_move(idr, idp, i_card_color, i_card_value, b_if_king_queen_pair):
         card_color = "null" if i_card_color is None else str(i_card_color)
         card_value = "null" if i_card_value is None else str(i_card_value)
         if_king_queen_pair = "1" if b_if_king_queen_pair is None else "0"
 
-        query_make_move = "insert into MOVEMENTS_1000 (IdG, IdR, IdP, CardColor, CardValue, IfKingQueenPair, IfBomb, " \
-                          "IfAgainDealing) values (" + idg + \
-                          ", " + idr + ", " + idp + ", " + card_color + ", " + card_value + ", " + if_king_queen_pair \
-                          + ")"
+        query_make_move = "insert into MOVEMENTS_1000 (IdR, IdP, CardColor, CardValue, IfKingQueenPair" \
+                          ") values (" + str(idr) + ", " + str(idp) + ", " + str(card_color) + ", " + \
+                          str(card_value) + ", " + str(if_king_queen_pair) + ")"
 
         return Database.execute_db(query_make_move)
 

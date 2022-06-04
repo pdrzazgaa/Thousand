@@ -1,31 +1,32 @@
 from GUISettings import CARD_HEIGHT, CARD_WIDTH, CARD_OFFSET_TOP
 import pygame
 
+
 cards_images = [[pygame.image.load("CardsIMG/card11.png"),
-            pygame.image.load("CardsIMG/card12.png"),
-            pygame.image.load("CardsIMG/card13.png"),
-            pygame.image.load("CardsIMG/card14.png"),
-            pygame.image.load("CardsIMG/card15.png"),
-            pygame.image.load("CardsIMG/card16.png")
-        ], [pygame.image.load("CardsIMG/card21.png"),
-            pygame.image.load("CardsIMG/card22.png"),
-            pygame.image.load("CardsIMG/card23.png"),
-            pygame.image.load("CardsIMG/card24.png"),
-            pygame.image.load("CardsIMG/card25.png"),
-            pygame.image.load("CardsIMG/card26.png"),
-        ], [pygame.image.load("CardsIMG/card31.png"),
-            pygame.image.load("CardsIMG/card32.png"),
-            pygame.image.load("CardsIMG/card33.png"),
-            pygame.image.load("CardsIMG/card34.png"),
-            pygame.image.load("CardsIMG/card35.png"),
-            pygame.image.load("CardsIMG/card36.png")
-        ], [pygame.image.load("CardsIMG/card41.png"),
-            pygame.image.load("CardsIMG/card42.png"),
-            pygame.image.load("CardsIMG/card43.png"),
-            pygame.image.load("CardsIMG/card44.png"),
-            pygame.image.load("CardsIMG/card45.png"),
-            pygame.image.load("CardsIMG/card46.png"),
-        ]]
+                 pygame.image.load("CardsIMG/card12.png"),
+                 pygame.image.load("CardsIMG/card13.png"),
+                 pygame.image.load("CardsIMG/card14.png"),
+                 pygame.image.load("CardsIMG/card15.png"),
+                 pygame.image.load("CardsIMG/card16.png")
+                 ], [pygame.image.load("CardsIMG/card21.png"),
+                     pygame.image.load("CardsIMG/card22.png"),
+                     pygame.image.load("CardsIMG/card23.png"),
+                     pygame.image.load("CardsIMG/card24.png"),
+                     pygame.image.load("CardsIMG/card25.png"),
+                     pygame.image.load("CardsIMG/card26.png"),
+                     ], [pygame.image.load("CardsIMG/card31.png"),
+                         pygame.image.load("CardsIMG/card32.png"),
+                         pygame.image.load("CardsIMG/card33.png"),
+                         pygame.image.load("CardsIMG/card34.png"),
+                         pygame.image.load("CardsIMG/card35.png"),
+                         pygame.image.load("CardsIMG/card36.png")
+                         ], [pygame.image.load("CardsIMG/card41.png"),
+                             pygame.image.load("CardsIMG/card42.png"),
+                             pygame.image.load("CardsIMG/card43.png"),
+                             pygame.image.load("CardsIMG/card44.png"),
+                             pygame.image.load("CardsIMG/card45.png"),
+                             pygame.image.load("CardsIMG/card46.png"),
+                             ]]
 
 card_back_img = pygame.image.load("CardsIMG/card00.png")
 
@@ -69,7 +70,7 @@ class Card:
 
     @staticmethod
     def card_from_sql(card_sql):
-        return Card(int(card_sql/10), (card_sql % 10)) if card_sql is not None else None
+        return Card(int(card_sql / 10), (card_sql % 10)) if card_sql is not None else None
 
     def __eq__(self, other):
         if isinstance(other, Card):
@@ -79,9 +80,11 @@ class Card:
         else:
             return False
 
+    def __hash__(self):
+        return hash(self.value + self.color)
+
 
 class CardGUI(pygame.sprite.Sprite):
-
     __card_back_image: pygame.image
     __card_image: pygame.image
     __is_clicked: bool
@@ -95,7 +98,7 @@ class CardGUI(pygame.sprite.Sprite):
         v = card.value
         c = card.color
         self.surf = pygame.Surface((CARD_WIDTH, CARD_HEIGHT))
-        self.__card_image = cards_images[c-1][v-1]
+        self.__card_image = cards_images[c - 1][v - 1]
         self.__card_image = pygame.transform.scale(self.__card_image, (CARD_WIDTH, CARD_HEIGHT))
         self.__card_back_image = card_back_img
         self.__card_back_image = pygame.transform.scale(self.__card_back_image, (CARD_WIDTH, CARD_HEIGHT))

@@ -16,18 +16,24 @@ class Round:
     __last_move: str
     __dealing_player_id: int
     __id_r: int
+    __last_move_player_id: int
 
     def __init__(self, players_rounds, dealing_player_id):
         self.__players_rounds = players_rounds
         self.__bidding = Bidding(players_rounds[(dealing_player_id + 1) % 3])
-        self.__desk = []
+        self.__desk = [None, None, None]
         self.__dealing_player_id = dealing_player_id
         self.__id_r = 0
+        self.__last_move_player_id = -1
         self.__last_round = ""
 
     @property
     def bidding(self):
         return self.__bidding
+
+    @property
+    def desk(self):
+        return self.__desk
 
     @property
     def players_rounds(self):
@@ -52,6 +58,21 @@ class Round:
     @property
     def dealing_player_id(self):
         return self.__dealing_player_id
+
+    @property
+    def last_move_player_id(self):
+        return self.__last_move_player_id
+
+    @last_move_player_id.setter
+    def last_move_player_id(self, last_move_player_id):
+        self.__last_move_player_id = last_move_player_id
+
+    @property
+    def current_id_player(self):
+        if self.__last_move_player_id != -1:
+            return self.bidding.last_bidding_player_id
+        else:
+            return (self.__last_move_player_id + 1) % 3
 
     def used_bomb(self, player_id):
         for pr in self.players_rounds:
@@ -175,3 +196,43 @@ class RoundGUI:
             card.image = card.card_back_image if is_covered else card.card_image
             card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top + CARD_HEIGHT / 2))
             card.card.is_reversed = is_covered
+
+    @staticmethod
+    def display_desk(desk_cards_gui: pygame.sprite.Group(), self_player_id, starting_id_player):
+
+        sprites_cards = desk_cards_gui.sprites()
+        gui_desk_cards = [None, None, None]
+        try:
+            gui_desk_cards[starting_id_player] = sprites_cards[0]
+            gui_desk_cards[(starting_id_player + 1) % 3] = sprites_cards[1]
+            gui_desk_cards[(starting_id_player + 2) % 3] = sprites_cards[2]
+        except:
+            ...
+
+        card_gui_me = gui_desk_cards[self_player_id]
+        card_gui_op1 = gui_desk_cards[(self_player_id + 1) % 3]
+        card_gui_op2 = gui_desk_cards[(self_player_id + 2) % 3]
+
+        top_op = 160
+        top_me = top_op + 10
+        left_op1 = WIDTH / 2 + 5
+        left_op2 = WIDTH / 2 - CARD_WIDTH - 5
+        left_me = WIDTH / 2 - CARD_WIDTH / 2
+
+        if card_gui_me is not None:
+            RoundGUI.display_desk_card(card_gui_me, left_me, top_me)
+
+        if card_gui_op1 is not None:
+            RoundGUI.display_desk_card(card_gui_op1, left_op1, top_op)
+
+        if card_gui_op2 is not None:
+            RoundGUI.display_desk_card(card_gui_op2, left_op2, top_op)
+
+    @staticmethod
+    def display_desk_card(card, left, top):
+        card.left = left
+        card.top = top
+        card.image = card.card_image
+        card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top +
+                                                CARD_HEIGHT / 2))
+        card.card.is_reversed = False

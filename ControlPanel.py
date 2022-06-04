@@ -4,6 +4,7 @@ from threading import Event
 from Card import Card
 from Database import Database
 from Timer import RepeatedTimer
+from GUISettings import TIME_CHECKING_PLAYERS, TIME_CHECKING_BIDDINGS, TIME_CHECKING_DEALINGS, TIME_CHECKING_MOVES
 
 
 class ControlPanel:
@@ -31,10 +32,11 @@ class ControlPanel:
 
     def __init__(self, game):
         self.game = game
-        self.timer_check_players = RepeatedTimer(Event(), 2, self.check_players)
+        self.timer_check_players = RepeatedTimer(Event(), TIME_CHECKING_PLAYERS, self.check_players)
         self.timer_check_players.start()
-        self.timer_check_dealing = RepeatedTimer(Event(), 2, self.check_dealing)
-        self.timer_check_bidding = RepeatedTimer(Event(), 2, self.check_bidding)
+        self.timer_check_dealing = RepeatedTimer(Event(), TIME_CHECKING_DEALINGS, self.check_dealing)
+        self.timer_check_bidding = RepeatedTimer(Event(), TIME_CHECKING_BIDDINGS, self.check_bidding)
+        self.timer_check_moves = RepeatedTimer(Event(), TIME_CHECKING_MOVES, self.check_moves)
         self.timers = []
         self.timers.append(self.timer_check_players)
         self.timers.append(self.timer_check_dealing)
@@ -117,5 +119,5 @@ class ControlPanel:
                     self.bidding_phase = False
                     self.end_bidding_phase = True
 
-    def check_moves(self, id_game):
+    def check_moves(self):
         ...

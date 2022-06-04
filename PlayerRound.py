@@ -67,9 +67,8 @@ class PlayerRound:
                 nines += 1
         return nines == 4
 
-    def play_card(self, card_id):
-        card = self.__cards.pop(card_id)
-        return card
+    def play_card(self, desk, id_player, card):
+        desk[id_player] = self.__cards.pop(self.__cards.index(card))
 
     def sort_cards(self):
         if self is not None:

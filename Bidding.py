@@ -1,6 +1,5 @@
 import Settings
 from Card import Card
-from Player import Player
 from PlayerRound import PlayerRound
 
 
