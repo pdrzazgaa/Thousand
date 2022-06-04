@@ -76,7 +76,7 @@ class Round:
         for i_card in range(len(cards) - 3, len(cards)):
             self.__bidding.add_card_to_prikup(cards[i_card])
 
-    def send_dealing_to_database(self, game_id):
+    def send_dealing_to_database(self, game_id, round_id):
         p01 = self.__players_rounds[0].cards[0].card_to_sql()
         p02 = self.__players_rounds[0].cards[1].card_to_sql()
         p03 = self.__players_rounds[0].cards[2].card_to_sql()
@@ -104,10 +104,15 @@ class Round:
         pc1 = "null" if len(self.__bidding.prikup) == 0 else self.__bidding.prikup[0].card_to_sql()
         pc2 = "null" if len(self.__bidding.prikup) <= 1 else self.__bidding.prikup[1].card_to_sql()
         pc3 = "null" if len(self.__bidding.prikup) <= 2 else self.__bidding.prikup[2].card_to_sql()
-        Database.deal_cards(game_id, p01, p02, p03, p04, p05, p06, p07, p08,
-                            p11, p12, p13, p14, p15, p16, p17, p18,
-                            p21, p22, p23, p24, p25, p26, p27, p28,
-                            pc1, pc2, pc3)
+        if round_id == -1:
+            Database.deal_cards(str(game_id), p01, p02, p03, p04, p05, p06, p07, p08,
+                                p11, p12, p13, p14, p15, p16, p17, p18,
+                                p21, p22, p23, p24, p25, p26, p27, p28,
+                                pc1, pc2, pc3)
+        else:
+            Database.update_dealing(str(round_id), p01, p02, p03, p04, p05, p06, p07, p08,
+                                    p11, p12, p13, p14, p15, p16, p17, p18,
+                                    p21, p22, p23, p24, p25, p26, p27, p28)
 
 
 class RoundGUI:
@@ -125,7 +130,7 @@ class RoundGUI:
     @staticmethod
     def display_player_cards(player_cards_gui):
         gui_cards = player_cards_gui
-        left = WIDTH/2 - (((len(player_cards_gui) - 1) * (CARD_WIDTH + CARD_OFFSET) + CARD_WIDTH)/2)
+        left = WIDTH / 2 - (((len(player_cards_gui) - 1) * (CARD_WIDTH + CARD_OFFSET) + CARD_WIDTH) / 2)
         for card in gui_cards:
             card.card.is_reversed = False
             card.left = left
@@ -133,7 +138,7 @@ class RoundGUI:
             left += CARD_WIDTH + CARD_OFFSET
         for card in gui_cards:
             card.image = card.card_image
-            card.rect = card.image.get_rect(center=(card.left+CARD_WIDTH/2, card.top+CARD_HEIGHT/2))
+            card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top + CARD_HEIGHT / 2))
 
     @staticmethod
     def display_oponent_cards(oponent_cards_gui, left: bool):
@@ -158,7 +163,7 @@ class RoundGUI:
     @staticmethod
     def display_bidding_cards(bidding_cards_gui, is_covered):
         gui_cards = bidding_cards_gui
-        left = WIDTH / 2 - float(len(bidding_cards_gui) / 2) * (CARD_WIDTH + CARD_OFFSET/2)
+        left = WIDTH / 2 - float(len(bidding_cards_gui) / 2) * (CARD_WIDTH + CARD_OFFSET / 2)
         for card in gui_cards:
             card.left = left
             card.top = BIDDING_LOCATION_TOP
@@ -167,4 +172,3 @@ class RoundGUI:
             card.image = card.card_back_image if is_covered else card.card_image
             card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top + CARD_HEIGHT / 2))
             card.card.is_reversed = is_covered
-

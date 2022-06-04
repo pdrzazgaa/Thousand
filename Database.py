@@ -1,3 +1,5 @@
+from tkinter import messagebox
+
 import mysql.connector as db
 from mysql.connector import Error
 
@@ -127,6 +129,7 @@ class Database:
                 cursor.execute(Database.__query_create_table_bids)
                 cursor.execute(Database.__query_create_table_movements)
         except Error as e:
+            messagebox("Information", "Error while connecting to MySQL")
             print("Error while connecting to MySQL or creating a table", e)
         finally:
             if connection.is_connected():
@@ -192,6 +195,24 @@ class Database:
                            ", " + p21 + ", " + p22 + ", " + p23 + ", " + p24 + \
                            ", " + p25 + ", " + p26 + ", " + p27 + ", " + p28 + \
                            ", " + pc1 + ", " + pc2 + ", " + pc3 + ")"
+
+        return Database.execute_db(query_deal_cards)
+
+    @staticmethod
+    def update_dealing(idr, p01, p02, p03, p04, p05, p06, p07, p08, p11, p12, p13, p14, p15, p16, p17, p18,
+                       p21, p22, p23, p24, p25, p26, p27, p28):
+        query_deal_cards = "UPDATE ROUNDS_1000 SET " \
+                           "P0_1 = " + p01 + ", P0_2 = " + p02 + ", P0_3 = " + p03 + ", " \
+                           "P0_4 = " + p04 + ", P0_5 = " + p05 + ", P0_6 = " + p06 + ", " \
+                           "P0_7 = " + p07 + ", P0_8 = " + p08 + "," \
+                           "P1_1 = " + p11 + ", P1_2 = " + p12 + ", P1_3 = " + p13 + ", " \
+                           "P1_4 = " + p14 + ", P1_5 = " + p15 + ", P1_6 = " + p16 + ", " \
+                           "P1_7 = " + p17 + ", P1_8 = " + p18 + "," \
+                           "P2_1 = " + p21 + ", P2_2 = " + p22 + ", P2_3 = " + p23 + ", " \
+                           "P2_4 = " + p24 + ", P2_5 = " + p25 + ", P2_6 = " + p26 + ", " \
+                           "P2_7 = " + p27 + ", P2_8 = " + p28 + ", " \
+                           "PickUp1 =  null, PickUp2 = null, PickUp3 = null " \
+                           "where IdR = "+idr
 
         return Database.execute_db(query_deal_cards)
 

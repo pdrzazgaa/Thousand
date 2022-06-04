@@ -45,8 +45,7 @@ class Bidding:
 
     @last_bidding_player_id.setter
     def last_bidding_player_id(self, last_bidding_player_id):
-        if last_bidding_player_id > self.__last_bidding_player_id:
-            self.__last_bidding_player_id = last_bidding_player_id
+        self.__last_bidding_player_id = last_bidding_player_id
 
     @property
     def current_bidding_player_id(self):
@@ -78,15 +77,15 @@ class Bidding:
 
     def players_declaration(self, player_round):
         self.bid += Settings.INCREASE_OF_BIDDING
-        self.__bidding_player_round = player_round
-        self.__last_bidding_player_id = player_round.player.id_player
-        self.__players_bidding[player_round.player.id_player] = self.bid
+        self.bidding_player_round = player_round
+        self.last_bidding_player_id = player_round.player.id_player
+        self.players_bidding[player_round.player.id_player] = self.bid
 
     def players_declaration_value(self, player_round, value):
         self.bid = value
-        self.__bidding_player_round = player_round
-        self.__last_bidding_player_id = player_round.player.id_player
-        self.__players_bidding[player_round.player.id_player] = self.bid
+        self.bidding_player_round = player_round
+        self.last_bidding_player_id = player_round.player.id_player
+        self.players_bidding[player_round.player.id_player] = self.bid
 
     def if_bidding_end(self):
         return self.__players_bidding.count(-1) == 2
@@ -95,11 +94,11 @@ class Bidding:
         self.__players_bidding[player_round.player.id_player] = -1
 
     def bidding_end(self):
-        self.__bidding_player_round.declared_points = self.__bid
-        for i in range(len(self.__prikup)-1, -1, -1):
-            if self.__prikup[i] is not None:
-                self.__bidding_player_round.add_card(self.__prikup.pop(i))
-        self.__bidding_player_round.sort_cards()
+        self.bidding_player_round.declared_points = self.__bid
+        for i in range(len(self.prikup) - 1, -1, -1):
+            if self.prikup[i] is not None:
+                self.bidding_player_round.add_card(self.prikup.pop(i))
+        self.bidding_player_round.sort_cards()
 
     def use_bomb(self, players):
         self.__bidding_player_round.player.use_bomb()
@@ -107,13 +106,20 @@ class Bidding:
             if player != self.__bidding_player_round.player:
                 player.add_points(Settings.POINTS_FROM_BOMB)
 
-    @staticmethod
-    def give_away_card(card_player1, card_player2):
+    def pop_card(self, popping_card):
+        i_card = 0
+        for card in self.bidding_player_round.cards:
+            if card.__eq__(popping_card):
+                return self.bidding_player_round.cards.pop(i_card)
+            i_card += 1
+        return None
+
+    def give_away_card(self, card_player1, card_player2):
         card1, player_round1 = card_player1
         card2, player_round2 = card_player2
 
-        player_round1.add_card(card1)
-        player_round2.add_card(card2)
+        player_round1.add_card(self.pop_card(card1))
+        player_round2.add_card(self.pop_card(card2))
 
         player_round1.sort_cards()
         player_round2.sort_cards()

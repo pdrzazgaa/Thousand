@@ -3,8 +3,7 @@ import pygame.event
 from Card import CardGUI
 from Database import Database
 from GUISettings import *
-from PlayerRound import PlayerRound
-from Round import Round, RoundGUI
+from Round import RoundGUI
 
 
 class DealingCardsScreen:
@@ -24,10 +23,7 @@ class DealingCardsScreen:
         self.cards = []
 
     def main(self):
-        if not self.is_done and self.control_panel.waiting_for_dealing and \
-                self.game.rounds[-1].dealing_player_id == self.game.id_player:
-            self.is_done = True
-            self.make_new_deal()
+        self.cards = self.create_cards()
         self.manage_display()
         self.handle_clicks()
 
@@ -39,34 +35,9 @@ class DealingCardsScreen:
                 self.quit()
 
     def manage_display(self):
-        if self.control_panel.waiting_for_dealing:
-            self.display.fill(BACKGROUND_COLOR)
-            message_waiting = FONT_WAITING.render("DEALING CARDS...", True, (255, 255, 255), BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (300, 150))
-        else:
-            if self.control_panel.dealing_phase and not self.cards:
-                self.make_new_deal()
-            if self.cards:
-                self.display_cards(not self.control_panel.end_bidding_phase, self.cards)
+        if self.cards:
+            self.display_cards(not self.control_panel.end_bidding_phase, self.cards)
         pygame.display.update()
-
-    def make_new_deal(self):
-        # Tworzymy rundy graczy
-        player0_round = PlayerRound(self.game.players[0])
-        player1_round = PlayerRound(self.game.players[1])
-        player2_round = PlayerRound(self.game.players[2])
-        # Jeżeli jesteśmy graczem tasującym, to tworzymy karty i wysyłamy je do bazy
-        dealing_player = 0 if len(self.game.rounds) == 0 else self.game.rounds[-1].dealing_player_id
-        self.game.add_round_to_game(Round([player0_round, player1_round, player2_round], dealing_player))
-        if dealing_player == self.game.id_player:
-            self.game.rounds[-1].deal_cards()
-            for pr in self.game.rounds[-1].players_rounds:
-                pr.sort_cards()
-            self.game.rounds[-1].send_dealing_to_database(self.game.id_game, -1)
-            self.cards = self.create_cards()
-        else:
-            if self.control_panel.dealing_phase and not self.control_panel.waiting_for_dealing:
-                self.cards = self.create_cards()
 
     def create_cards(self):
         player_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds[self.game.id_player].cards,

@@ -15,6 +15,8 @@ class EndBiddingScreen:
     event_list: []
     game: Game
     cards: [CardGUI]
+    card_for_player_left: ()
+    card_for_player_right: ()
 
     def __init__(self, game, display, control_panel):
         self.game = game
@@ -25,6 +27,8 @@ class EndBiddingScreen:
         self.cards = []
         self.is_dealt = False
         self.buttons = []
+        self.card_for_player_left = ()
+        self.card_for_player_right = ()
         self.initialize_buttons()
 
     def main(self):
@@ -40,12 +44,10 @@ class EndBiddingScreen:
                 self.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if self.control_panel.bidding_phase and \
-                            self.game.rounds[-1].bidding.current_bidding_player_id == self.game.id_player:
+                    if self.game.rounds[-1].bidding.last_bidding_player_id == self.game.id_player:
                         for button in self.buttons:
                             button.do_sth()
-                if self.control_panel.end_bidding_phase and \
-                        self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
+                if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
                     self.card_clicked()
 
     def manage_display(self):
@@ -68,7 +70,7 @@ class EndBiddingScreen:
         return player_cards_gui, oponent1_cards_gui, oponent2_cards_gui
 
     def display_cards(self):
-        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui= self.cards
+        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui = self.cards
         # rozkładamy karty
         RoundGUI.display_player_cards(player_cards_gui)
         # przeciwnik 1
@@ -105,15 +107,42 @@ class EndBiddingScreen:
         self.buttons.append(Button(self, (WIDTH / 2 + 80), 230, 120, 60,
                                    FONT_BIDDING_PLAYERS.render("Right player", True, (0, 0, 0)),
                                    self.card_for_right_player, self.display))
+        self.buttons.append(Button(self, (WIDTH / 2), 300, 120, 60,
+                                   FONT_BIDDING_PLAYERS.render("Accept", True, (0, 0, 0)),
+                                   self.accept, self.display))
 
     def use_bomb(self):
         self.game.rounds[-1].used_bomb(self.game.id_player)
 
     def card_for_left_player(self):
-        ...
+        if self.card_for_player_left == ():
+            if self.clicked_card.card is not None:
+                #     moving card
+                self.card_for_player_left = (self.clicked_card.card, self.game.rounds[-1].players_rounds[
+                    (self.game.id_player + 1) % 3])
+            else:
+                print("Card hasn't been chosen")
+
+        else:
+            self.card_for_player_left = ()
 
     def card_for_right_player(self):
-        ...
+        if self.card_for_player_right == ():
+            if self.clicked_card.card is not None:
+                self.card_for_player_right = (self.clicked_card.card, self.game.rounds[-1].players_rounds[
+                    (self.game.id_player + 2) % 3])
+            #     moving card
+            else:
+                print("Card hasn't been chosen")
+        else:
+            self.card_for_player_right = ()
+
+    def accept(self):
+        if self.card_for_player_left != () and self.card_for_player_right != ():
+            self.game.rounds[-1].bidding.give_away_card(self.card_for_player_left, self.card_for_player_right)
+            self.game.rounds[-1].send_dealing_to_database(self.game.id_game, self.game.rounds[-1].id_r)
+        else:
+            print("Cards for opponents haven't been chosen")
 
     def card_clicked(self):
         pos = pygame.mouse.get_pos()

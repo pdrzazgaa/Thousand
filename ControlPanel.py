@@ -81,7 +81,7 @@ class ControlPanel:
                 self.game.rounds[-1].bidding.prikup = [Card.card_from_sql(PickUp1), Card.card_from_sql(PickUp2),
                                                        Card.card_from_sql(PickUp3)]
                 self.game.rounds[-1].id_r = IdR
-                self.game.rounds[-1].last_change = RoundDateTime
+                self.game.rounds[-1].last_round = RoundDateTime
                 self.bidding_phase = True
                 if not self.timer_check_bidding.is_running:
                     self.timer_check_bidding.start()
@@ -99,7 +99,7 @@ class ControlPanel:
             if self.game.rounds[-1].bidding.last_bidding_date != BidDateTime:
                 bidding = self.game.rounds[-1].bidding
                 player_round = self.game.rounds[-1].players_rounds[IdP]
-                bidding.last_bidding_player_id = IdP
+                # bidding.last_bidding_player_id = IdP
                 bidding.last_bidding_date = BidDateTime
                 if Bid != -1:
                     bidding.players_declaration_value(player_round, Bid)

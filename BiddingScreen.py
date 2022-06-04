@@ -114,10 +114,11 @@ class BiddingTable(pygame.sprite.Sprite):
         pygame.draw.rect(self.display, BIDDING_TABLE_COLOR, self.hit_box)
         id_player = self.game.rounds[-1].bidding.current_bidding_player_id
         for i in range(0, 3):
-            text = "Player %i" % i
             if i == self.game.id_player:
                 text = "Me"
-            if i == id_player:
+            else:
+                text = "Player %i" % i
+            if i == id_player and self.control_panel.hidden_prikup:
                 self.players[i] = FONT_BIDDING_PLAYERS.render(text, True, (255, 0, 0))
             else:
                 self.players[i] = FONT_BIDDING_PLAYERS.render(text, True, (255, 255, 255))

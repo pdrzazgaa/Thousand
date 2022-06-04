@@ -59,19 +59,22 @@ class StartWindow(tk.Frame):
             messagebox.showwarning("Warning", "Enter game ID")
             return
         check_game_values = Database.check_game(id_game)
-        if len(check_game_values) != 0:
-            players, rounds = check_game_values[0]
-            if rounds == 0:
-                if players < 3:
-                    Database.join_game(id_game)
-                    self.close_start_window()
-                    self.start_game(id_game, players)
+        if check_game_values is not None:
+            if len(check_game_values) != 0:
+                players, rounds = check_game_values[0]
+                if rounds == 0:
+                    if players < 3:
+                        Database.join_game(id_game)
+                        self.close_start_window()
+                        self.start_game(id_game, players)
+                    else:
+                        messagebox.showinfo("Information", "The game is full")
                 else:
-                    messagebox.showinfo("Information", "The game is full")
+                    messagebox.showinfo("Information", "The game has alredy been started")
             else:
-                messagebox.showinfo("Information", "The game has alredy been started")
+                messagebox.showinfo("Information", "The game with ID = %s does not exists" % id_game)
         else:
-            messagebox.showinfo("Information", "The game with ID = %s does not exists" % id_game)
+            messagebox.showinfo("Information", "No Internet connection")
 
     def start_game(self, id_game, id_player):
         self.__game.id_game = id_game
