@@ -8,7 +8,7 @@ from ControlPanel import ControlPanel
 from Button import Button
 
 
-class WaitingForPlayersScreen:
+class PlayerLeftGameScreen:
     display: pygame.display
 
     def __init__(self, game, display, control_panel):
@@ -19,6 +19,7 @@ class WaitingForPlayersScreen:
         self.initialize_buttons()
 
     def main(self):
+        self.turn_off_game()
         self.manage_display()
         self.handle_clicks()
 
@@ -37,23 +38,19 @@ class WaitingForPlayersScreen:
                 pygame.quit()
                 sys.exit()
 
+    def turn_off_game(self):
+        for timer in self.control_panel.timers:
+            timer.cancel()
+
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
-        message_waiting = FONT_WAITING.render("WAITING FOR OTHER PLAYERS", True, (255, 255, 255), BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (100, 150))
-        if self.control_panel.currently_players_in_game != -1:
-            message_players = FONT_CURRENT_PLAYERS.render("Currently in game: %i player(s)" %
-                                                          self.control_panel.currently_players_in_game, True,
-                                                          (255, 255, 255),
-                                                          BACKGROUND_COLOR)
-            self.display.blit(message_players, (300, 350))
+        message_waiting = FONT_WAITING.render("YOUR OPPONENT LEFT THE GAME", True, (255, 255, 255), BACKGROUND_COLOR)
+        self.display.blit(message_waiting, (50, 150))
         for button in self.buttons:
             button.render(False)
         pygame.display.update()
 
     def quit(self):
         Database.leave_game(self.game.id_game)
-        for timer in self.control_panel.timers:
-            timer.cancel()
         pygame.quit()
         sys.exit()

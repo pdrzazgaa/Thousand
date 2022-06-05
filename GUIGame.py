@@ -3,6 +3,7 @@ import ControlPanel
 from Database import Database
 from GUISettings import *
 from ControlPanel import ControlPanel
+from PlayerLeftGameScreen import PlayerLeftGameScreen
 from PointsTable import PointsTable
 from WaitingForPlayersScreen import WaitingForPlayersScreen
 from DealingCardsScreen import DealingCardsScreen
@@ -21,6 +22,7 @@ class Desk:
         self.panel_control = ControlPanel(game)
         self.points_table = PointsTable(game, self.display_surface, self.panel_control)
         self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface, self.panel_control)
+        self.player_left_game_screen = PlayerLeftGameScreen(game, self.display_surface, self.panel_control)
         self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control)
         self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control)
         self.end_bidding_screen = EndBiddingScreen(game, self.display_surface, self.panel_control)
@@ -28,18 +30,24 @@ class Desk:
 
         while True:
             while self.panel_control.waiting_for_players_phase:
-                if self.panel_control.player_left_game_phase:
-                    ...
-                else:
-                    self.waiting_screen.main()
+                self.waiting_screen.main()
             while self.panel_control.dealing_phase:
                 self.dealing_screen.main()
                 while self.panel_control.bidding_phase:
-                    self.bidding_screen.main()
+                    if self.panel_control.player_left_game_phase:
+                        self.player_left_game_screen.main()
+                    else:
+                        self.bidding_screen.main()
                 while self.panel_control.end_bidding_phase:
-                    self.end_bidding_screen.main()
+                    if self.panel_control.player_left_game_phase:
+                        self.player_left_game_screen.main()
+                    else:
+                        self.end_bidding_screen.main()
             while self.panel_control.game_phase:
-                self.game_screen.main()
+                if self.panel_control.player_left_game_phase:
+                    self.player_left_game_screen.main()
+                else:
+                    self.game_screen.main()
             while self.panel_control.end_game_phase:
                 ...
             self.create_new_round()
