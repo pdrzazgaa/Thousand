@@ -7,6 +7,7 @@ class Game:
     __id_player: int
     __players: [Player] = []
     __rounds: [Round] = []
+    __points_table = [[0], [0], [0]]
 
     def __init__(self, id_game):
         self.__id_game = id_game
@@ -36,6 +37,10 @@ class Game:
     @property
     def players(self):
         return self.__players
+
+    @property
+    def points_table(self):
+        return self.__points_table
 
     def player_me(self):
         return self.players[self.id_player]

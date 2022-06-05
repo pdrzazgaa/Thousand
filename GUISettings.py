@@ -20,6 +20,7 @@ BACKGROUND_COLOR = (0, 74, 0)
 FONT_WAITING = pygame.font.SysFont('Helvetica', 60)
 FONT_BUTTON = pygame.font.SysFont('Helvetica', 40)
 FONT_CURRENT_PLAYERS = pygame.font.SysFont('Helvetica', 40)
+FONT_COLLECTED_CARDS = pygame.font.SysFont('Helvetica', 20)
 
 # Licytacje
 WIDTH_BIDDING_TABLE = 600
@@ -29,7 +30,7 @@ FONT_BIDDING = pygame.font.SysFont('Helvetica', 30, True)
 FONT_BIDDING_PLAYERS = pygame.font.SysFont('Helvetica', 20)
 FONT_INFO_AFTER_BIDDING = pygame.font.SysFont('Helvetica', 40)
 
-#Rozdawanie kart
+# Rozdawanie kart
 LEFT_CARD_POSITION = ()
 RIGHT_CARD_POSITION = ()
 
@@ -48,8 +49,12 @@ PIVOT_LEFT_CARDS = 90
 PIVOT_RIGHT_CARDS = -90
 OPPONENT_CARD_OFFSET = -100
 
-TABLE_WIDTH = 300
+# Tabela punktów
+TABLE_WIDTH = 400
 TABLE_HEIGHT = 400
+POINTS_TABLE_COLOR = (222, 184, 135)
+POINTS_SIZE = 10
+POINT_OFFSET_HEIGHT = 13
 
 # Czasy dostępu do bazy
 TIME_CHECKING_PLAYERS = 3

@@ -50,12 +50,13 @@ class GameScreen:
             self.display_cards()
 
         if self.game.id_player == self.game.rounds[-1].current_id_player:
-            for button in self.buttons:
-                button.render(False)
+            if not self.control_panel.full_desk:
+                for button in self.buttons:
+                    button.render(False)
         else:
-            message_waiting = FONT_INFO_AFTER_BIDDING.render \
-                ("PLAYER'S %i TURN" % self.game.rounds[-1].current_id_player, True, (255, 255, 255), BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (WIDTH - 50, 50))
+            message_waiting = FONT_INFO_AFTER_BIDDING.render("PLAYER %i TURN" % self.game.rounds[-1].current_id_player
+                                                             , True, (255, 255, 255), BACKGROUND_COLOR)
+            self.display.blit(message_waiting, (WIDTH/2 - 170, 30))
         pygame.display.update()
 
     def create_cards(self):
@@ -74,21 +75,33 @@ class GameScreen:
     def display_cards(self):
         player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, desk_cards_gui = self.cards
         # rozkładamy karty
+        # gracz
+        id_p = self.game.id_player
+        collected_cards_p1 = len(self.game.rounds[-1].players_rounds[id_p].collected_cards)
+        message_waiting = FONT_COLLECTED_CARDS.render("Collected\ncards: [%i]" % collected_cards_p1, True,
+                                                      (255, 255, 255), BACKGROUND_COLOR)
+        self.display.blit(message_waiting, (WIDTH - 200, HEIGHT - 40))
         RoundGUI.display_player_cards(player_cards_gui)
 
         # przeciwnik 1
-        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i" % ((self.game.id_player + 1) % 3), True, (255, 255, 255),
+        id_op1 = (self.game.id_player + 1) % 3
+        collected_cards_p1 = len(self.game.rounds[-1].players_rounds[id_op1].collected_cards)
+        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op1, collected_cards_p1), True,
+                                                         (255, 255, 255),
                                                          BACKGROUND_COLOR)
         self.display.blit(message_waiting, (30, 30))
         RoundGUI.display_oponent_cards(oponent1_cards_gui, True)
 
         # przeciwnik 2
-        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i" % ((self.game.id_player + 2) % 3), True, (255, 255, 255),
+        id_op2 = (self.game.id_player + 2) % 3
+        collected_cards_p2 = len(self.game.rounds[-1].players_rounds[id_op2].collected_cards)
+        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op2, collected_cards_p2), True,
+                                                         (255, 255, 255),
                                                          BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (WIDTH - 80, 30))
+        self.display.blit(message_waiting, (WIDTH - 120, 30))
         RoundGUI.display_oponent_cards(oponent2_cards_gui, False)
 
-        RoundGUI.display_desk(desk_cards_gui, self.game.id_player, self.game.rounds[-1].current_id_player)
+        RoundGUI.display_desk(desk_cards_gui, self.game.id_player, self.game.rounds[-1].initial_move_player_id)
 
         self.all_sprites.draw(self.display)
 
@@ -105,10 +118,7 @@ class GameScreen:
             if_queen_king_pair = False
             Database.make_move(self.game.rounds[-1].id_r, self.game.id_player, color, value,
                                if_queen_king_pair)
-            # self.game.rounds[-1].players_rounds[self.game.id_player].play_card(
-            #     self.game.rounds[-1].desk, self.game.id_player, self.clicked_card.card)
             self.clicked_card = None
-            # self.create_cards()
         else:
             print("Nie wybrano karty")
 

@@ -35,6 +35,14 @@ class PlayerRound:
         return self.__declared_points
 
     @property
+    def collected_cards(self):
+        return self.__collected_cards
+
+    @property
+    def points(self):
+        return self.__points
+
+    @property
     def cards(self):
         return self.__cards
 

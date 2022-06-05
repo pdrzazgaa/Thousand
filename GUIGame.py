@@ -3,6 +3,7 @@ import ControlPanel
 from Database import Database
 from GUISettings import *
 from ControlPanel import ControlPanel
+from PointsTable import PointsTable
 from WaitingForPlayersScreen import WaitingForPlayersScreen
 from DealingCardsScreen import DealingCardsScreen
 from BiddingScreen import BiddingScreen
@@ -18,6 +19,7 @@ class Desk:
         pygame.init()
         self.prepare_game()
         self.panel_control = ControlPanel(game)
+        self.points_table = PointsTable(game, self.display_surface, self.panel_control)
         self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface, self.panel_control)
         self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control)
         self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control)
@@ -38,12 +40,18 @@ class Desk:
                     self.end_bidding_screen.main()
             while self.panel_control.game_phase:
                 self.game_screen.main()
+            while self.panel_control.end_game_phase:
+                ...
+            self.create_new_round()
 
     def prepare_game(self):
         vec = pygame.math.Vector2  # 2 for two dimensional
         self.frame_per_sec = pygame.time.Clock()
         self.display_surface = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("1000")
+
+    def create_new_round(self):
+        ...
 
     @staticmethod
     def quit(game):

@@ -81,14 +81,17 @@ class Round:
 
     @property
     def current_id_player(self):
-        if self.__last_move_player_id != -1:
+        if self.__last_move_player_id == -1:
             return self.bidding.last_bidding_player_id
         else:
-            return (self.__last_move_player_id + 1) % 3
+            if self.__desk.count(None) != 3:
+                return (self.__last_move_player_id + 1) % 3
+            else:
+                return self.initial_move_player_id
 
     @property
     def initial_move_player_id(self):
-        if self.__initial_move_player_id != -1:
+        if self.__initial_move_player_id == -1:
             return self.bidding.last_bidding_player_id
         else:
             return self.__initial_move_player_id
@@ -116,7 +119,7 @@ class Round:
                         strongest_player_index = i
             # Oddanie graczowi kart
             self.players_rounds[strongest_player_index].take_cards(self.__desk)
-            self.__desk.clear()
+            self.__desk = [None, None, None]
             self.__initial_move_player_id = strongest_player_index
         else:
             pass
@@ -126,6 +129,24 @@ class Round:
             if pr.player.id_player != player_id:
                 pr.player.add_points(60)
         self.players_rounds[player_id].player.use_bomb()
+
+    def check_if_end_round(self):
+        return len(self.__players_rounds[0].cards) == 0 and \
+               len(self.__players_rounds[1].cards) == 0 and \
+               len(self.__players_rounds[2].cards) == 0
+
+    def end_round(self, game):
+        for pr in self.__players_rounds:
+            if self.bidding.bidding_player_round == pr:
+                # Gracz, który licytował
+                if self.bidding.bid <= pr.points:
+                    pr.player.add_points(pr.points)
+                else:
+                    pr.player.add_points(-pr.points)
+            else:
+                # Pozostali gracze
+                pr.player.add_points(pr.points)
+            game.points_table[pr.player.id_player].append(pr.player.points)
 
     @staticmethod
     def shuffle_cards():

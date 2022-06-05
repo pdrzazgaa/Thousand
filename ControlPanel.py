@@ -20,6 +20,10 @@ class ControlPanel:
     hidden_prikup = True
     end_bidding_phase = False
     game_phase = False
+    end_round_phase = False
+    end_game_phase = False
+
+    full_desk = False
     made_move = False
     players_phase = [False, False, False]
 
@@ -115,6 +119,7 @@ class ControlPanel:
                     bidding.pass_bid(player_round)
                 if bidding.if_bidding_end():
                     self.hidden_prikup = False
+                    self.timer_check_bidding.cancel()
                     time.sleep(8)
                     bidding.bidding_end()
                     self.bidding_phase = False
@@ -130,11 +135,21 @@ class ControlPanel:
                 current_round = self.game.rounds[-1]
                 player_round = self.game.rounds[-1].players_rounds[IdP]
                 current_round.last_move = MoveDateTime
-                current_round.last_move_player_id = IdP
                 card = Card(Color, Value)
                 player_round.play_card(desk, IdP, card)
+                current_round.last_move_player_id = IdP
                 self.made_move = True
                 if None not in desk:
+                    self.full_desk = True
                     time.sleep(4)
                     self.game.rounds[-1].end_move()
+                    self.full_desk = False
                     self.made_move = True
+                    if current_round.check_if_end_round():
+                        self.game_phase = False
+                        self.end_round_phase = True
+                        current_round.end_round()
+                        if self.game.check_end():
+                            self.timer_check_players.cancel()
+                            self.timer_check_moves.cancel()
+                            self.end_game_phase = True

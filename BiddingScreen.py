@@ -112,6 +112,13 @@ class BiddingTable(pygame.sprite.Sprite):
 
     def render(self):
         pygame.draw.rect(self.display, BIDDING_TABLE_COLOR, self.hit_box)
+        self.display_headers()
+        self.display_biddings()
+        for b in self.buttons:
+            b.render(self.control_panel.bidding_phase and
+                     self.game.rounds[-1].bidding.current_bidding_player_id != self.game.id_player)
+
+    def display_headers(self):
         id_player = self.game.rounds[-1].bidding.current_bidding_player_id
         for i in range(0, 3):
             if i == self.game.id_player:
@@ -126,10 +133,6 @@ class BiddingTable(pygame.sprite.Sprite):
         self.display.blit(self.players[0], (WIDTH / 2 - 240, 100))
         self.display.blit(self.players[1], (WIDTH / 2 - 240, 130))
         self.display.blit(self.players[2], (WIDTH / 2 - 240, 160))
-        self.display_biddings()
-        for b in self.buttons:
-            b.render(self.control_panel.bidding_phase and
-                     self.game.rounds[-1].bidding.current_bidding_player_id != self.game.id_player)
 
     def display_biddings(self):
         bid_player0 = self.game.rounds[-1].bidding.players_bidding[0]
