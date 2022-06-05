@@ -68,6 +68,14 @@ class Round:
         self.__last_move = last_move
 
     @property
+    def atut(self):
+        return self.__atut
+
+    @atut.setter
+    def atut(self, atut):
+        self.__atut = atut
+
+    @property
     def dealing_player_id(self):
         return self.__dealing_player_id
 

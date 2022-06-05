@@ -169,7 +169,7 @@ class Database:
     def make_move(idr, idp, i_card_color, i_card_value, b_if_king_queen_pair):
         card_color = "null" if i_card_color is None else str(i_card_color)
         card_value = "null" if i_card_value is None else str(i_card_value)
-        if_king_queen_pair = "1" if b_if_king_queen_pair is None else "0"
+        if_king_queen_pair = "1" if b_if_king_queen_pair else "0"
 
         query_make_move = "insert into MOVEMENTS_1000 (IdR, IdP, CardColor, CardValue, IfKingQueenPair" \
                           ") values (" + str(idr) + ", " + str(idp) + ", " + str(card_color) + ", " + \

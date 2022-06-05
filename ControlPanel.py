@@ -136,8 +136,10 @@ class ControlPanel:
                 player_round = self.game.rounds[-1].players_rounds[IdP]
                 current_round.last_move = MoveDateTime
                 card = Card(Color, Value)
-                player_round.play_card(desk, IdP, card)
+                player_round.play_card(desk, IdP, card, IfQueenKingPair == 1)
                 current_round.last_move_player_id = IdP
+                if IfQueenKingPair == 1:
+                    current_round.atut = Color
                 self.made_move = True
                 if None not in desk:
                     self.full_desk = True

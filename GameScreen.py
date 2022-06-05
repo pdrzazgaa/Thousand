@@ -117,11 +117,12 @@ class GameScreen:
                                    self.display))
 
     def make_move(self):
-        if self.clicked_card.card is not None:
+        if self.clicked_card is not None:
             color = self.clicked_card.card.color
             value = self.clicked_card.card.value
             # Na razie domyślnie fałsz
-            if_queen_king_pair = False
+            if_queen_king_pair = self.game.rounds[-1].players_rounds[self.game.id_player].check_if_pair\
+                (self.clicked_card.card)
             Database.make_move(self.game.rounds[-1].id_r, self.game.id_player, color, value,
                                if_queen_king_pair)
             self.clicked_card = None

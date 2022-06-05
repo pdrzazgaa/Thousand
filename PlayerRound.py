@@ -2,7 +2,8 @@ import pygame
 
 from Card import Card
 from Player import Player
-from Settings import ACE, TEN, KING, QUEEN, JACK, NINE, HEART, DIAMONDS, CLUBS, SPADES
+from Settings import KING, QUEEN, NINE, HEART, DIAMONDS, CLUBS, SPADES, SPADES_POINTS, CLUBS_POINTS, DIAMONDS_POINTS, \
+    HEART_POINTS
 
 
 class PlayerRound:
@@ -62,6 +63,11 @@ class PlayerRound:
             if Card(color, QUEEN) in self.__cards and Card(color, KING) in self.__cards:
                 self.__pairs[color-1] = True
 
+    def check_if_pair(self, card):
+        return card.value == QUEEN and Card(card.color, KING) in self.__cards or card.value == KING and \
+               Card(card.color, QUEEN) in self.__cards
+
+    # Będą używane w późniejszych etapach rozwoju gry
     def check_points(self):
         points = 0
         for card in self.__cards:
@@ -75,8 +81,17 @@ class PlayerRound:
                 nines += 1
         return nines == 4
 
-    def play_card(self, desk, id_player, card):
+    def play_card(self, desk, id_player, card, if_queen_king_pair):
         desk[id_player] = self.__cards.pop(self.__cards.index(card))
+        if if_queen_king_pair:
+            if card.color == SPADES:
+                self.__points += SPADES_POINTS
+            elif card.color == CLUBS:
+                self.__points += CLUBS_POINTS
+            elif card.color == DIAMONDS:
+                self.__points += DIAMONDS_POINTS
+            else:
+                self.__points += HEART_POINTS
 
     def sort_cards(self):
         if self is not None:
