@@ -15,7 +15,7 @@ class StartWindow(tk.Frame):
     def __init__(self, parent, game):
         super().__init__()
         self.parent = parent
-        self.parent.geometry(START_WINDOWS_WIDTH + "x" + START_WINDOWS_HEIGHT)
+        self.parent.geometry(START_WINDOWS_WIDTH + "x" + START_WINDOWS_HEIGHT + "+500+250")
         self.__game = game
         self.robocze = self.parent
         self.create_start_window()

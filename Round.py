@@ -153,22 +153,20 @@ class RoundGUI:
 
     @staticmethod
     def display_player_cards(player_cards_gui):
-        gui_cards = player_cards_gui
         left = WIDTH / 2 - (((len(player_cards_gui) - 1) * (CARD_WIDTH + CARD_OFFSET) + CARD_WIDTH) / 2)
-        for card in gui_cards:
+        for card in player_cards_gui:
             card.card.is_reversed = False
             card.left = left
             card.top = CARD_LOCATION_TOP if not card.is_clicked else CARD_LOCATION_TOP - CARD_OFFSET_TOP
             left += CARD_WIDTH + CARD_OFFSET
-        for card in gui_cards:
+        for card in player_cards_gui:
             card.image = card.card_image
             card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top + CARD_HEIGHT / 2))
 
     @staticmethod
     def display_oponent_cards(oponent_cards_gui, left: bool):
-        gui_cards = oponent_cards_gui
         top = HEIGHT / 2 - float(len(oponent_cards_gui) / 2) * (CARD_WIDTH / 2)
-        for card in gui_cards:
+        for card in oponent_cards_gui:
             card.card.is_reversed = True
             card.top = top
             if left:
@@ -176,7 +174,7 @@ class RoundGUI:
             else:
                 card.left = OPPONENT_CARD_LOCATION_RIGHT
             top += CARD_WIDTH + OPPONENT_CARD_OFFSET
-        for card in gui_cards:
+        for card in oponent_cards_gui:
             card.image = card.card_back_image
             if left:
                 card.image = pygame.transform.rotate(card.image, angle=PIVOT_LEFT_CARDS)
@@ -186,13 +184,12 @@ class RoundGUI:
 
     @staticmethod
     def display_bidding_cards(bidding_cards_gui, is_covered):
-        gui_cards = bidding_cards_gui
         left = WIDTH / 2 - float(len(bidding_cards_gui) / 2) * (CARD_WIDTH + CARD_OFFSET / 2)
-        for card in gui_cards:
+        for card in bidding_cards_gui:
             card.left = left
             card.top = BIDDING_LOCATION_TOP
             left += CARD_WIDTH + CARD_OFFSET
-        for card in gui_cards:
+        for card in bidding_cards_gui:
             card.image = card.card_back_image if is_covered else card.card_image
             card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top + CARD_HEIGHT / 2))
             card.card.is_reversed = is_covered
@@ -213,10 +210,10 @@ class RoundGUI:
         card_gui_op1 = gui_desk_cards[(self_player_id + 1) % 3]
         card_gui_op2 = gui_desk_cards[(self_player_id + 2) % 3]
 
-        top_op = 160
-        top_me = top_op + 10
-        left_op1 = WIDTH / 2 + 5
-        left_op2 = WIDTH / 2 - CARD_WIDTH - 5
+        top_op = 130
+        top_me = 260
+        left_op1 = WIDTH / 2 - 1.5 * CARD_WIDTH - 5
+        left_op2 = WIDTH / 2 + 0.5 * CARD_WIDTH + 5
         left_me = WIDTH / 2 - CARD_WIDTH / 2
 
         if card_gui_me is not None:

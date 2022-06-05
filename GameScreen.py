@@ -9,7 +9,6 @@ from Round import RoundGUI
 
 
 class GameScreen:
-
     display: pygame.display
     all_sprites: pygame.sprite.Group()
     cards: [CardGUI]
@@ -29,7 +28,7 @@ class GameScreen:
 
     def main(self):
         if len(self.cards) == 0:
-            self.cards = self.create_cards()
+            self.create_cards()
         self.manage_display()
         self.handle_clicks()
 
@@ -37,27 +36,30 @@ class GameScreen:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if self.game.rounds[-1].bidding.current_bidding_player_id == self.game.id_player:
+                    self.card_clicked()
+                    if self.game.rounds[-1].current_id_player == self.game.id_player:
                         for button in self.buttons:
                             button.do_sth()
-                self.card_clicked()
             if event.type == pygame.QUIT:
                 self.quit()
 
     def manage_display(self):
+        self.display.fill(BACKGROUND_COLOR)
         if self.cards:
-            self.display_cards(self.cards)
+            self.display_cards()
 
         if self.game.id_player == self.game.rounds[-1].current_id_player:
             for button in self.buttons:
                 button.render(False)
         else:
-            message_waiting = FONT_INFO_AFTER_BIDDING.render("PLAYER'S %i TURN" % self.game.rounds[-1].current_id_player,
-                                                             True, (255, 255, 255), BACKGROUND_COLOR)
+            message_waiting = FONT_INFO_AFTER_BIDDING.render \
+                ("PLAYER'S %i TURN" % self.game.rounds[-1].current_id_player, True, (255, 255, 255), BACKGROUND_COLOR)
             self.display.blit(message_waiting, (WIDTH - 50, 50))
         pygame.display.update()
 
     def create_cards(self):
+        self.all_sprites.empty()
+        self.cards = []
         player_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds[self.game.id_player].cards,
                                                      self.all_sprites)
         oponent1_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
@@ -66,13 +68,12 @@ class GameScreen:
                                                        [(self.game.id_player + 2) % 3].cards, self.all_sprites)
         desk_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].desk, self.all_sprites)
 
-        return player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, desk_cards_gui
+        self.cards = player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, desk_cards_gui
 
-    def display_cards(self, cards):
-        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, desk_cards_gui = cards
+    def display_cards(self):
+        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, desk_cards_gui = self.cards
         # rozkładamy karty
         RoundGUI.display_player_cards(player_cards_gui)
-        self.display.fill(BACKGROUND_COLOR)
 
         # przeciwnik 1
         message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i" % ((self.game.id_player + 1) % 3), True, (255, 255, 255),
@@ -91,7 +92,7 @@ class GameScreen:
         self.all_sprites.draw(self.display)
 
     def initialize_buttons(self):
-        self.buttons.append(Button(self, (WIDTH / 2), 30, 150, 60,
+        self.buttons.append(Button(self, (WIDTH / 2), 60, 150, 60,
                                    FONT_BIDDING_PLAYERS.render("Make move", True, (0, 0, 0)), self.make_move,
                                    self.display))
 
@@ -103,9 +104,10 @@ class GameScreen:
             if_queen_king_pair = False
             Database.make_move(self.game.rounds[-1].id_r, self.game.id_player, color, value,
                                if_queen_king_pair)
+            self.game.rounds[-1].players_rounds[self.game.id_player].play_card(
+                self.game.rounds[-1].desk, self.game.id_player, self.clicked_card.card)
             self.clicked_card = None
-            self.game.rounds[-1].players_rounds[self.game.id_player].make_move\
-                (self.game.rounds[-1].desk, self.game.id_player, self.clicked_card.card)
+            self.create_cards()
         else:
             print("Nie wybrano karty")
 
@@ -124,4 +126,3 @@ class GameScreen:
             timer.cancel()
         pygame.quit()
         sys.exit()
-
