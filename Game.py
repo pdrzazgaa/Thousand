@@ -1,4 +1,5 @@
 from Player import Player
+from PlayerRound import PlayerRound
 from Round import Round
 
 
@@ -52,8 +53,14 @@ class Game:
         else:
             return False
 
-    def add_round_to_game(self, game_round):
-        self.__rounds.append(game_round)
+    def add_round_to_game(self):
+        # Tworzymy rundy graczy
+        player0_round = PlayerRound(self.players[0])
+        player1_round = PlayerRound(self.players[1])
+        player2_round = PlayerRound(self.players[2])
+        # Jeżeli jesteśmy graczem tasującym, to tworzymy karty i wysyłamy je do bazy
+        dealing_player = 0 if len(self.rounds) == 0 else (self.rounds[-1].dealing_player_id + 1) % 3
+        self.__rounds.append(Round([player0_round, player1_round, player2_round], dealing_player))
 
     def check_end(self):
         for player in self.__players:

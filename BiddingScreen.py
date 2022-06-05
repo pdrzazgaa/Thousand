@@ -138,9 +138,12 @@ class BiddingTable(pygame.sprite.Sprite):
         bid_player0 = self.game.rounds[-1].bidding.players_bidding[0]
         bid_player1 = self.game.rounds[-1].bidding.players_bidding[1]
         bid_player2 = self.game.rounds[-1].bidding.players_bidding[2]
-        self.biddings = [FONT_BIDDING_PLAYERS.render(str(bid_player0), True, (255, 255, 255)),
-                         FONT_BIDDING_PLAYERS.render(str(bid_player1), True, (255, 255, 255)),
-                         FONT_BIDDING_PLAYERS.render(str(bid_player2), True, (255, 255, 255))]
+        self.biddings = [FONT_BIDDING_PLAYERS.render("PASS" if bid_player0 == -1 else str(bid_player0), True,
+                                                     (255, 255, 255)),
+                         FONT_BIDDING_PLAYERS.render("PASS" if bid_player1 == -1 else str(bid_player1), True,
+                                                     (255, 255, 255)),
+                         FONT_BIDDING_PLAYERS.render("PASS" if bid_player2 == -1 else str(bid_player2), True,
+                                                     (255, 255, 255))]
         self.display.blit(self.biddings[0], (WIDTH / 2 - 100, 100))
         self.display.blit(self.biddings[1], (WIDTH / 2 - 100, 130))
         self.display.blit(self.biddings[2], (WIDTH / 2 - 100, 160))

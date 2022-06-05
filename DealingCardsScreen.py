@@ -24,7 +24,7 @@ class DealingCardsScreen:
         self.cards = []
 
     def main(self):
-        if not self.is_done and self.control_panel.waiting_for_dealing and \
+        if not self.is_done and self.control_panel.waiting_for_dealing_phase and \
                 self.game.rounds[-1].dealing_player_id == self.game.id_player:
             self.is_done = True
             self.make_new_deal()
@@ -39,7 +39,7 @@ class DealingCardsScreen:
                 self.quit()
 
     def manage_display(self):
-        if self.control_panel.waiting_for_dealing:
+        if self.control_panel.waiting_for_dealing_phase:
             self.display.fill(BACKGROUND_COLOR)
             message_waiting = FONT_WAITING.render("DEALING CARDS...", True, (255, 255, 255), BACKGROUND_COLOR)
             self.display.blit(message_waiting, (300, 150))
@@ -51,21 +51,15 @@ class DealingCardsScreen:
         pygame.display.update()
 
     def make_new_deal(self):
-        # Tworzymy rundy graczy
-        player0_round = PlayerRound(self.game.players[0])
-        player1_round = PlayerRound(self.game.players[1])
-        player2_round = PlayerRound(self.game.players[2])
-        # Jeżeli jesteśmy graczem tasującym, to tworzymy karty i wysyłamy je do bazy
-        dealing_player = 0 if len(self.game.rounds) == 0 else self.game.rounds[-1].dealing_player_id
-        self.game.add_round_to_game(Round([player0_round, player1_round, player2_round], dealing_player))
-        if dealing_player == self.game.id_player:
+        self.game.add_round_to_game()
+        if self.game.rounds[-1].dealing_player_id == self.game.id_player:
             self.game.rounds[-1].deal_cards()
             for pr in self.game.rounds[-1].players_rounds:
                 pr.sort_cards()
             self.game.rounds[-1].send_dealing_to_database(game_id=self.game.id_game)
             self.cards = self.create_cards()
         else:
-            if self.control_panel.dealing_phase and not self.control_panel.waiting_for_dealing:
+            if self.control_panel.dealing_phase and not self.control_panel.waiting_for_dealing_phase:
                 self.cards = self.create_cards()
 
     def create_cards(self):

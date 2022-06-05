@@ -15,10 +15,11 @@ class GameScreen:
     event_list: []
     is_done: bool
 
-    def __init__(self, game, display, control_panel):
+    def __init__(self, game, display, control_panel, points_table):
         self.game = game
         self.display = display
         self.control_panel = control_panel
+        self.points_table = points_table
         self.all_sprites = pygame.sprite.Group()
         self.is_done = False
         self.clicked_card = None
@@ -32,6 +33,8 @@ class GameScreen:
             self.control_panel.made_move = False
         self.manage_display()
         self.handle_clicks()
+        if self.control_panel.end_round_phase:
+            self.displace_table()
 
     def handle_clicks(self):
         for event in pygame.event.get():
@@ -104,6 +107,9 @@ class GameScreen:
         RoundGUI.display_desk(desk_cards_gui, self.game.id_player, self.game.rounds[-1].initial_move_player_id)
 
         self.all_sprites.draw(self.display)
+
+    def displace_table(self):
+        self.points_table.render()
 
     def initialize_buttons(self):
         self.buttons.append(Button(self, (WIDTH / 2), 60, 150, 60,

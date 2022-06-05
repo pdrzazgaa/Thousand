@@ -23,10 +23,12 @@ class Desk:
         self.points_table = PointsTable(game, self.display_surface, self.panel_control)
         self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface, self.panel_control)
         self.player_left_game_screen = PlayerLeftGameScreen(game, self.display_surface, self.panel_control)
-        self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control)
-        self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control)
-        self.end_bidding_screen = EndBiddingScreen(game, self.display_surface, self.panel_control)
-        self.game_screen = GameScreen(game, self.display_surface, self.panel_control)
+
+        self.dealing_screen = None
+        self.bidding_screen = None
+        self.end_bidding_screen = None
+        self.game_screen = None
+        self.create_new_round(game)
 
         while True:
             while self.panel_control.waiting_for_players_phase:
@@ -48,9 +50,11 @@ class Desk:
                     self.player_left_game_screen.main()
                 else:
                     self.game_screen.main()
+            while self.panel_control.end_round_phase:
+                ...
             while self.panel_control.end_game_phase:
                 ...
-            self.create_new_round()
+            self.create_new_round(game)
 
     def prepare_game(self):
         vec = pygame.math.Vector2  # 2 for two dimensional
@@ -58,8 +62,11 @@ class Desk:
         self.display_surface = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("1000")
 
-    def create_new_round(self):
-        ...
+    def create_new_round(self, game):
+        self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control)
+        self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control)
+        self.end_bidding_screen = EndBiddingScreen(game, self.display_surface, self.panel_control)
+        self.game_screen = GameScreen(game, self.display_surface, self.panel_control, self.points_table)
 
     @staticmethod
     def quit(game):

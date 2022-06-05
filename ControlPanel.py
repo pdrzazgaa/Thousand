@@ -14,7 +14,7 @@ class ControlPanel:
 
     waiting_for_players_phase = True
     dealing_phase = False
-    waiting_for_dealing = False
+    waiting_for_dealing_phase = False
 
     bidding_phase = False
     hidden_prikup = True
@@ -25,7 +25,6 @@ class ControlPanel:
 
     full_desk = False
     made_move = False
-    players_phase = [False, False, False]
 
     currently_players_in_game = -1
 
@@ -46,6 +45,7 @@ class ControlPanel:
         self.timers.append(self.timer_check_players)
         self.timers.append(self.timer_check_dealing)
         self.timers.append(self.timer_check_bidding)
+        self.timers.append(self.timer_check_moves)
 
     def check_players(self):
         self.currently_players_in_game = Database.check_players(self.game.id_game)[0]
@@ -70,7 +70,7 @@ class ControlPanel:
             P2_1, P2_2, P2_3, P2_4, P2_5, P2_6, P2_7, P2_8, \
             PickUp1, PickUp2, PickUp3, IfBomb, IfAgainDealing, RoundDateTime = last_dealing[0]
             if self.game.rounds[-1].last_round != RoundDateTime:
-                self.waiting_for_dealing = False
+                self.waiting_for_dealing_phase = False
                 self.game.rounds[-1].players_rounds[0].cards = [Card.card_from_sql(P0_1), Card.card_from_sql(P0_2),
                                                                 Card.card_from_sql(P0_3), Card.card_from_sql(P0_4),
                                                                 Card.card_from_sql(P0_5), Card.card_from_sql(P0_6),
@@ -101,7 +101,7 @@ class ControlPanel:
             elif IfBomb == 1:
                 ...
         else:
-            self.waiting_for_dealing = True
+            self.waiting_for_dealing_phase = True
 
     def check_bidding(self):
         id_round = self.game.rounds[-1].id_r
@@ -146,10 +146,37 @@ class ControlPanel:
                     self.full_desk = False
                     self.made_move = True
                     if current_round.check_if_end_round():
-                        self.game_phase = False
                         self.end_round_phase = True
-                        current_round.end_round()
+                        current_round.end_round(self.game)
+                        time.sleep(10)
+                        self.game_phase = False
+                        self.start_new_round()
                         if self.game.check_end():
                             self.timer_check_players.cancel()
                             self.timer_check_moves.cancel()
                             self.end_game_phase = True
+
+    def start_new_round(self):
+        self.dealing_phase = True
+        self.waiting_for_dealing_phase = False
+
+        self.bidding_phase = False
+        self.hidden_prikup = True
+        self.end_bidding_phase = False
+        self.game_phase = False
+        self.end_round_phase = False
+
+        self.full_desk = False
+        self.made_move = False
+        self.reset_timers()
+
+        self.end_game_phase = False
+
+    def reset_timers(self):
+        self.timer_check_dealing.daemon = True
+        self.timer_check_bidding.daemon = True
+        self.timer_check_moves.daemon = True
+        self.timer_check_dealing = RepeatedTimer(Event(), TIME_CHECKING_DEALINGS, self.check_dealing)
+        self.timer_check_bidding = RepeatedTimer(Event(), TIME_CHECKING_BIDDINGS, self.check_bidding)
+        self.timer_check_moves = RepeatedTimer(Event(), TIME_CHECKING_MOVES, self.check_moves)
+        self.timer_check_dealing.start()
