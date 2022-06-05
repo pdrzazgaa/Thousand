@@ -20,9 +20,10 @@ class ControlPanel:
     hidden_prikup = True
     end_bidding_phase = False
     game_phase = False
+    made_move = False
     players_phase = [False, False, False]
 
-    current_players_in_game = -1
+    currently_players_in_game = -1
 
     # Timery sprawdzające bazę - czy są jacyś gracze
     timers: [RepeatedTimer]
@@ -43,8 +44,8 @@ class ControlPanel:
         self.timers.append(self.timer_check_bidding)
 
     def check_players(self):
-        self.current_players_in_game = Database.check_players(self.game.id_game)[0]
-        if self.current_players_in_game == (3,):
+        self.currently_players_in_game = Database.check_players(self.game.id_game)[0]
+        if self.currently_players_in_game == (3,):
             self.waiting_for_players_phase = False
             self.dealing_phase = True
             self.started_game_phase = True
@@ -90,6 +91,7 @@ class ControlPanel:
                     self.end_bidding_phase = False
                     self.dealing_phase = False
                     self.game_phase = True
+                    self.timer_check_moves.start()
             elif IfAgainDealing == 1:
                 ...
             elif IfBomb == 1:
@@ -106,7 +108,6 @@ class ControlPanel:
             if self.game.rounds[-1].bidding.last_bidding_date != BidDateTime:
                 bidding = self.game.rounds[-1].bidding
                 player_round = self.game.rounds[-1].players_rounds[IdP]
-                # bidding.last_bidding_player_id = IdP
                 bidding.last_bidding_date = BidDateTime
                 if Bid != -1:
                     bidding.players_declaration_value(player_round, Bid)
@@ -120,4 +121,20 @@ class ControlPanel:
                     self.end_bidding_phase = True
 
     def check_moves(self):
-        ...
+        id_round = self.game.rounds[-1].id_r
+        last_move = Database.check_moves(id_round)
+        if last_move is not None and len(last_move) != 0:
+            IdM, IdR, IdP, Color, Value, IfQueenKingPair, MoveDateTime = last_move[0]
+            if self.game.rounds[-1].last_move != MoveDateTime:
+                desk = self.game.rounds[-1].desk
+                current_round = self.game.rounds[-1]
+                player_round = self.game.rounds[-1].players_rounds[IdP]
+                current_round.last_move = MoveDateTime
+                current_round.last_move_player_id = IdP
+                card = Card(Color, Value)
+                player_round.play_card(desk, IdP, card)
+                self.made_move = True
+                if None not in desk:
+                    time.sleep(4)
+                    self.game.rounds[-1].end_move()
+                    self.made_move = True

@@ -11,12 +11,13 @@ class Round:
     __players_rounds: [PlayerRound]
     __bidding: Bidding
     __desk: [Card]
-    __atu: int  # wiodący kolor
+    __atut: int  # wiodący kolor
     __last_round: str
     __last_move: str
     __dealing_player_id: int
     __id_r: int
     __last_move_player_id: int
+    __initial_move_player_id: int
 
     def __init__(self, players_rounds, dealing_player_id):
         self.__players_rounds = players_rounds
@@ -26,6 +27,9 @@ class Round:
         self.__id_r = 0
         self.__last_move_player_id = -1
         self.__last_round = ""
+        self.__last_move = ""
+        self.__initial_move_player_id = -1
+        self.__atut = -1
 
     @property
     def bidding(self):
@@ -56,6 +60,14 @@ class Round:
         self.__last_round = last_round
 
     @property
+    def last_move(self):
+        return self.__last_move
+
+    @last_move.setter
+    def last_move(self, last_move):
+        self.__last_move = last_move
+
+    @property
     def dealing_player_id(self):
         return self.__dealing_player_id
 
@@ -74,11 +86,46 @@ class Round:
         else:
             return (self.__last_move_player_id + 1) % 3
 
+    @property
+    def initial_move_player_id(self):
+        if self.__initial_move_player_id != -1:
+            return self.bidding.last_bidding_player_id
+        else:
+            return self.__initial_move_player_id
+
+    def end_move(self):
+        if None not in self.__desk:
+            strongest_player_index = self.__initial_move_player_id
+            # Był wcześniej lub teraz meldunek
+            atut_cards_on_desk = [card for card in self.__desk if card.color == self.__atut]
+            if self.__atut != -1 and len[atut_cards_on_desk] != 0 :
+                for i in range(0, len(self.__desk)):
+                    card = self.__desk[i]
+                    if card.color == self.__atut:
+                        if self.__desk[strongest_player_index].color != self.__atut:
+                            strongest_player_index = i
+                        else:
+                            if card.value > self.__desk[strongest_player_index].value:
+                                strongest_player_index = i
+            else:
+                # Nie było meldunku lub nie położono żadnych takich kart
+                for i in range(0, len(self.__desk)):
+                    card = self.__desk[i]
+                    if card.color == self.__desk[strongest_player_index].color and \
+                            card.value > self.__desk[strongest_player_index].value:
+                        strongest_player_index = i
+            # Oddanie graczowi kart
+            self.players_rounds[strongest_player_index].take_cards(self.__desk)
+            self.__desk.clear()
+            self.__initial_move_player_id = strongest_player_index
+        else:
+            pass
+
     def used_bomb(self, player_id):
         for pr in self.players_rounds:
             if pr.player.id_player != player_id:
                 pr.player.add_points(60)
-        self.players_rounds[player_id].pla.use_bomb()
+        self.players_rounds[player_id].player.use_bomb()
 
     @staticmethod
     def shuffle_cards():

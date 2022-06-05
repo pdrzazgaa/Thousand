@@ -232,14 +232,14 @@ class Database:
 
     @staticmethod
     def check_moves(id_game):
-        query_check_game = "select * from MOVEMENTS_1000 where IdG = " + str(id_game) + \
+        query_check_game = "select * from MOVEMENTS_1000 where IdR = " + str(id_game) + \
                            " order by MoveDateTime desc limit 1"
         results = Database.select_db(query_check_game)
         return results
 
     @staticmethod
-    def check_round(id_game):
-        query_check_game = "select * from ROUNDS_1000 where IdG = " + str(id_game) + \
+    def check_round(id_round):
+        query_check_game = "select * from ROUNDS_1000 where IdG = " + str(id_round) + \
                            " order by RoundDateTime desc limit 1"
         results = Database.select_db(query_check_game)
         return results

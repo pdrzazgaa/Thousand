@@ -27,8 +27,9 @@ class GameScreen:
         self.initialize_buttons()
 
     def main(self):
-        if len(self.cards) == 0:
+        if len(self.cards) == 0 or self.control_panel.made_move:
             self.create_cards()
+            self.control_panel.made_move = False
         self.manage_display()
         self.handle_clicks()
 
@@ -104,10 +105,10 @@ class GameScreen:
             if_queen_king_pair = False
             Database.make_move(self.game.rounds[-1].id_r, self.game.id_player, color, value,
                                if_queen_king_pair)
-            self.game.rounds[-1].players_rounds[self.game.id_player].play_card(
-                self.game.rounds[-1].desk, self.game.id_player, self.clicked_card.card)
+            # self.game.rounds[-1].players_rounds[self.game.id_player].play_card(
+            #     self.game.rounds[-1].desk, self.game.id_player, self.clicked_card.card)
             self.clicked_card = None
-            self.create_cards()
+            # self.create_cards()
         else:
             print("Nie wybrano karty")
 

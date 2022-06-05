@@ -41,9 +41,9 @@ class WaitingForPlayersScreen:
         self.display.fill(BACKGROUND_COLOR)
         message_waiting = FONT_WAITING.render("WAITING FOR OTHER PLAYERS", True, (255, 255, 255), BACKGROUND_COLOR)
         self.display.blit(message_waiting, (100, 150))
-        if self.control_panel.current_players_in_game != -1:
+        if self.control_panel.currently_players_in_game != -1:
             message_players = FONT_CURRENT_PLAYERS.render("Currently in game: %i player(s)" %
-                                                          self.control_panel.current_players_in_game, True,
+                                                          self.control_panel.currently_players_in_game, True,
                                                           (255, 255, 255),
                                                           BACKGROUND_COLOR)
             self.display.blit(message_players, (300, 350))
