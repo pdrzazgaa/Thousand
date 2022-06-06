@@ -1,6 +1,7 @@
 import sys
 import ControlPanel
 from Database import Database
+from EndGameScreen import EndGameScreen
 from GUISettings import *
 from ControlPanel import ControlPanel
 from PlayerLeftGameScreen import PlayerLeftGameScreen
@@ -23,6 +24,7 @@ class Desk:
         self.points_table = PointsTable(game, self.display_surface, self.panel_control)
         self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface, self.panel_control)
         self.player_left_game_screen = PlayerLeftGameScreen(game, self.display_surface, self.panel_control)
+        self.end_game_screen = EndGameScreen(game, self.display_surface, self.panel_control, self.points_table)
 
         self.dealing_screen = None
         self.bidding_screen = None
@@ -50,10 +52,8 @@ class Desk:
                     self.player_left_game_screen.main()
                 else:
                     self.game_screen.main()
-            while self.panel_control.end_round_phase:
-                ...
             while self.panel_control.end_game_phase:
-                ...
+                self.end_game_screen.main()
             self.create_new_round(game)
 
     def prepare_game(self):

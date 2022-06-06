@@ -19,6 +19,7 @@ BACKGROUND_COLOR = (0, 74, 0)
 # Oczekiwanie na graczy
 FONT_WAITING = pygame.font.SysFont('Helvetica', 60)
 FONT_BUTTON = pygame.font.SysFont('Helvetica', 40)
+FONT_BUTTON_SMALL = pygame.font.SysFont('Helvetica', 30)
 FONT_CURRENT_PLAYERS = pygame.font.SysFont('Helvetica', 40)
 FONT_COLLECTED_CARDS = pygame.font.SysFont('Helvetica', 20)
 
@@ -55,6 +56,9 @@ TABLE_HEIGHT = 600
 POINTS_TABLE_COLOR = (222, 184, 135)
 FONT_POINTS = pygame.font.SysFont('Helvetica', 16)
 POINT_OFFSET_HEIGHT = 13
+
+# Koniec gry
+FONT_ENDING = pygame.font.SysFont('Helvetica', 120, bold=True)
 
 # Czasy dostępu do bazy
 TIME_CHECKING_PLAYERS = 3

@@ -29,6 +29,9 @@ class Player:
     def has_bombs(self):
         return self.__bombs > 0
 
+    def check_if_winner(self):
+        return self.points >= 1000
+
     def __eq__(self, other):
         return self.__id_player == (Player(other)).__id_player
 

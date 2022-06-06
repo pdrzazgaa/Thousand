@@ -151,7 +151,7 @@ class ControlPanel:
                         current_round.end_round(self.game)
                         time.sleep(2)
                         self.end_round_phase = True
-                        time.sleep(10)
+                        time.sleep(15)
                         self.game_phase = False
                         self.start_new_round()
                         if self.game.check_end():

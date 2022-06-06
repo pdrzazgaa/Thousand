@@ -34,7 +34,7 @@ class GameScreen:
                 self.control_panel.made_move = False
             self.manage_display()
         else:
-            self.displace_table()
+            self.display_table()
         self.handle_clicks()
 
     def handle_clicks(self):
@@ -109,7 +109,7 @@ class GameScreen:
 
         self.all_sprites.draw(self.display)
 
-    def displace_table(self):
+    def display_table(self):
         self.points_table.render()
         pygame.display.update()
 
