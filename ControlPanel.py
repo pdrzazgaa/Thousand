@@ -12,15 +12,15 @@ class ControlPanel:
     started_game_phase = False
     player_left_game_phase = False
 
-    waiting_for_players_phase = False # True
+    waiting_for_players_phase = True
     dealing_phase = False
     waiting_for_dealing_phase = False
 
     bidding_phase = False
     hidden_prikup = True
     end_bidding_phase = False
-    game_phase = True # False
-    end_round_phase = True # False
+    game_phase = False
+    end_round_phase = False
     end_game_phase = False
 
     full_desk = False
