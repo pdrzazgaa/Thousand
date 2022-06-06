@@ -131,7 +131,7 @@ class GameScreen:
             else:
                 print("You should play a card with the same color as the initial one")
         else:
-            print("Nie wybrano karty")
+            print("Card hasn't been chosen")
 
     def card_clicked(self):
         pos = pygame.mouse.get_pos()
