@@ -1,5 +1,5 @@
 from GUISettings import TABLE_WIDTH, TABLE_HEIGHT, WIDTH, HEIGHT, FONT_BIDDING, FONT_BIDDING_PLAYERS, \
-    POINTS_TABLE_COLOR, POINT_OFFSET_HEIGHT
+    POINTS_TABLE_COLOR, POINT_OFFSET_HEIGHT, FONT_POINTS
 import pygame
 
 
@@ -56,7 +56,8 @@ class PointsTable(pygame.sprite.Sprite):
         for player in players_points:
             top = 130
             for points in player:
-                self.display.blit(points, (WIDTH / 2 - 70, 40))
+                points_display = FONT_POINTS.render(str(points), True, (255, 255, 255))
+                self.display.blit(points_display, (WIDTH / 2 - 70, 40))
                 top += POINT_OFFSET_HEIGHT
             left += 190
 

@@ -101,7 +101,7 @@ class GameScreen:
         message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op2, collected_cards_p2), True,
                                                          (255, 255, 255),
                                                          BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (WIDTH - 120, 30))
+        self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 5, 30))
         RoundGUI.display_oponent_cards(oponent2_cards_gui, False)
 
         RoundGUI.display_desk(desk_cards_gui, self.game.id_player, self.game.rounds[-1].initial_move_player_id)
