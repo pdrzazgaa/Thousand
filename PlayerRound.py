@@ -93,6 +93,17 @@ class PlayerRound:
             else:
                 self.__points += HEART_POINTS
 
+    def check_if_can_make_move(self, card, init_card):
+        if init_card is not None:
+            if card.color == init_card.color:
+                return True
+            else:
+                for c in self.__cards:
+                    if c.color == init_card.color:
+                        return False
+                return True
+        return True
+
     def sort_cards(self):
         if self is not None:
             self.__cards.sort(key=lambda card: (card.color, card.value), reverse=True)

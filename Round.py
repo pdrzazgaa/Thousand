@@ -109,7 +109,7 @@ class Round:
             strongest_player_index = self.__initial_move_player_id
             # Był wcześniej lub teraz meldunek
             atut_cards_on_desk = [card for card in self.__desk if card.color == self.__atut]
-            if self.__atut != -1 and len[atut_cards_on_desk] != 0 :
+            if self.__atut != -1 and len[atut_cards_on_desk] != 0:
                 for i in range(0, len(self.__desk)):
                     card = self.__desk[i]
                     if card.color == self.__atut:

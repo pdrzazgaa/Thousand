@@ -81,7 +81,7 @@ class GameScreen:
         # gracz
         id_p = self.game.id_player
         collected_cards_p1 = len(self.game.rounds[-1].players_rounds[id_p].collected_cards)
-        message_waiting = FONT_COLLECTED_CARDS.render("Collected\ncards: [%i]" % collected_cards_p1, True,
+        message_waiting = FONT_COLLECTED_CARDS.render("Collected cards: [%i]" % collected_cards_p1, True,
                                                       (255, 255, 255), BACKGROUND_COLOR)
         self.display.blit(message_waiting, (WIDTH - 200, HEIGHT - 40))
         RoundGUI.display_player_cards(player_cards_gui)
@@ -118,14 +118,18 @@ class GameScreen:
 
     def make_move(self):
         if self.clicked_card is not None:
-            color = self.clicked_card.card.color
-            value = self.clicked_card.card.value
-            # Na razie domyślnie fałsz
-            if_queen_king_pair = self.game.rounds[-1].players_rounds[self.game.id_player].check_if_pair\
-                (self.clicked_card.card)
-            Database.make_move(self.game.rounds[-1].id_r, self.game.id_player, color, value,
-                               if_queen_king_pair)
-            self.clicked_card = None
+            if self.game.rounds[-1].players_rounds[self.game.id_player].check_if_can_make_move\
+                        (self.clicked_card.card, self.game.rounds[-1].desk[0]):
+                color = self.clicked_card.card.color
+                value = self.clicked_card.card.value
+                # Na razie domyślnie fałsz
+                if_queen_king_pair = self.game.rounds[-1].players_rounds[self.game.id_player].check_if_pair\
+                    (self.clicked_card.card) and self.game.id_player == self.game.rounds[-1].initial_move_player_id
+                Database.make_move(self.game.rounds[-1].id_r, self.game.id_player, color, value,
+                                   if_queen_king_pair)
+                self.clicked_card = None
+            else:
+                print("You should play a card with the same color as the initial one")
         else:
             print("Nie wybrano karty")
 
