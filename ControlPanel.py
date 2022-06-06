@@ -177,9 +177,9 @@ class ControlPanel:
     def reset_timers(self):
         for timer in self.timers:
             timer.cancel()
-        self.timer_check_dealing.daemon = True
-        self.timer_check_bidding.daemon = True
-        self.timer_check_moves.daemon = True
+        # self.timer_check_dealingg.daemon = True
+        # self.timer_check_bidding.daemon = True
+        # self.timer_check_moves.daemon = True
         self.timer_check_dealing = RepeatedTimer(Event(), TIME_CHECKING_DEALINGS, self.check_dealing)
         self.timer_check_bidding = RepeatedTimer(Event(), TIME_CHECKING_BIDDINGS, self.check_bidding)
         self.timer_check_moves = RepeatedTimer(Event(), TIME_CHECKING_MOVES, self.check_moves)
