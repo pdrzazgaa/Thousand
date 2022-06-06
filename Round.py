@@ -228,6 +228,16 @@ class RoundGUI:
         return all_cards
 
     @staticmethod
+    def create_cards_desk(cards, all_sprites):
+        all_cards = [None, None, None]
+        for i in range(0, len(cards)):
+            if cards[i] is not None:
+                gui_card = CardGUI(cards[i])
+                all_cards[i] = gui_card
+                all_sprites.add(gui_card)
+        return all_cards
+
+    @staticmethod
     def display_player_cards(player_cards_gui):
         left = WIDTH / 2 - (((len(player_cards_gui) - 1) * (CARD_WIDTH + CARD_OFFSET) + CARD_WIDTH) / 2)
         for card in player_cards_gui:
@@ -271,20 +281,31 @@ class RoundGUI:
             card.card.is_reversed = is_covered
 
     @staticmethod
-    def display_desk(desk_cards_gui: pygame.sprite.Group(), self_player_id, starting_id_player):
+    def display_desk(desk_cards_gui: [CardGUI], self_player_id, starting_id_player):
 
-        sprites_cards = desk_cards_gui.sprites()
-        gui_desk_cards = [None, None, None]
+        # gui_desk_cards = [None, None, None]
+
         try:
-            gui_desk_cards[starting_id_player] = sprites_cards[0]
-            gui_desk_cards[(starting_id_player + 1) % 3] = sprites_cards[1]
-            gui_desk_cards[(starting_id_player + 2) % 3] = sprites_cards[2]
+            card_gui_me = desk_cards_gui[self_player_id]
         except:
-            ...
+            card_gui_me = None
 
-        card_gui_me = gui_desk_cards[self_player_id]
-        card_gui_op1 = gui_desk_cards[(self_player_id + 1) % 3]
-        card_gui_op2 = gui_desk_cards[(self_player_id + 2) % 3]
+        try:
+            card_gui_op1 = desk_cards_gui[(self_player_id + 1) % 3]
+        except:
+            card_gui_op1 = None
+        try:
+            card_gui_op2 = desk_cards_gui[(self_player_id + 2) % 3]
+        except:
+            card_gui_op2 = None
+
+        # try:
+        #     # gui_desk_cards[starting_id_player] = desk_cards_gui[0]
+        #     # gui_desk_cards[(starting_id_player + 1) % 3] = desk_cards_gui[1]
+        #     # gui_desk_cards[(starting_id_player + 2) % 3] = desk_cards_gui[2]
+        # except:
+        #     ...
+
 
         top_op = 130
         top_me = 260

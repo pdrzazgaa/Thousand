@@ -72,7 +72,7 @@ class GameScreen:
                                                        [(self.game.id_player + 1) % 3].cards, self.all_sprites)
         oponent2_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
                                                        [(self.game.id_player + 2) % 3].cards, self.all_sprites)
-        desk_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].desk, self.all_sprites)
+        desk_cards_gui = RoundGUI.create_cards_desk(self.game.rounds[-1].desk, self.all_sprites)
 
         self.cards = player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, desk_cards_gui
 
