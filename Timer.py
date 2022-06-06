@@ -18,7 +18,8 @@ class RepeatedTimer(Thread):
             self.function(*self.args, **self.kwargs)
 
     def cancel(self):
-        self.stopped.set()
-        self.is_running = False
-        self.is_stopped = True
+        if not self.is_stopped:
+            self.stopped.set()
+            self.is_running = False
+            self.is_stopped = True
 

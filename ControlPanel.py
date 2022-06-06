@@ -175,6 +175,8 @@ class ControlPanel:
         self.end_game_phase = False
 
     def reset_timers(self):
+        for timer in self.timers:
+            timer.cancel()
         self.timer_check_dealing.daemon = True
         self.timer_check_bidding.daemon = True
         self.timer_check_moves.daemon = True
