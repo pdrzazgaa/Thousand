@@ -248,7 +248,6 @@ class RoundGUI:
             card.left = left
             card.top = CARD_LOCATION_TOP if not card.is_clicked else CARD_LOCATION_TOP - CARD_OFFSET_TOP
             left += CARD_WIDTH + CARD_OFFSET
-        for card in player_cards_gui:
             card.image = card.card_image
             card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top + CARD_HEIGHT / 2))
 
@@ -263,7 +262,6 @@ class RoundGUI:
             else:
                 card.left = OPPONENT_CARD_LOCATION_RIGHT
             top += CARD_WIDTH + OPPONENT_CARD_OFFSET
-        for card in oponent_cards_gui:
             card.image = card.card_back_image
             if left:
                 card.image = pygame.transform.rotate(card.image, angle=PIVOT_LEFT_CARDS)
@@ -278,13 +276,12 @@ class RoundGUI:
             card.left = left
             card.top = BIDDING_LOCATION_TOP
             left += CARD_WIDTH + CARD_OFFSET
-        for card in bidding_cards_gui:
             card.image = card.card_back_image if is_covered else card.card_image
             card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top + CARD_HEIGHT / 2))
             card.card.is_reversed = is_covered
 
     @staticmethod
-    def display_desk(desk_cards_gui: [CardGUI], self_player_id, starting_id_player):
+    def display_desk(desk_cards_gui: [CardGUI], self_player_id):
 
         # gui_desk_cards = [None, None, None]
 
@@ -297,18 +294,11 @@ class RoundGUI:
             card_gui_op1 = desk_cards_gui[(self_player_id + 1) % 3]
         except:
             card_gui_op1 = None
+
         try:
             card_gui_op2 = desk_cards_gui[(self_player_id + 2) % 3]
         except:
             card_gui_op2 = None
-
-        # try:
-        #     # gui_desk_cards[starting_id_player] = desk_cards_gui[0]
-        #     # gui_desk_cards[(starting_id_player + 1) % 3] = desk_cards_gui[1]
-        #     # gui_desk_cards[(starting_id_player + 2) % 3] = desk_cards_gui[2]
-        # except:
-        #     ...
-
 
         top_op = 130
         top_me = 260
@@ -317,19 +307,20 @@ class RoundGUI:
         left_me = WIDTH / 2 - CARD_WIDTH / 2
 
         if card_gui_me is not None:
-            RoundGUI.display_desk_card(card_gui_me, left_me, top_me)
+            RoundGUI.display_card(card_gui_me, left_me, top_me)
 
         if card_gui_op1 is not None:
-            RoundGUI.display_desk_card(card_gui_op1, left_op1, top_op)
+            RoundGUI.display_card(card_gui_op1, left_op1, top_op)
 
         if card_gui_op2 is not None:
-            RoundGUI.display_desk_card(card_gui_op2, left_op2, top_op)
+            RoundGUI.display_card(card_gui_op2, left_op2, top_op)
 
     @staticmethod
-    def display_desk_card(card, left, top):
-        card.left = left
-        card.top = top
-        card.image = card.card_image
-        card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top +
-                                                CARD_HEIGHT / 2))
-        card.card.is_reversed = False
+    def display_card(card, left, top):
+        if card is not None:
+            card.left = left
+            card.top = top
+            card.image = card.card_image
+            card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top +
+                                                    CARD_HEIGHT / 2))
+            card.card.is_reversed = False

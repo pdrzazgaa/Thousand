@@ -27,13 +27,11 @@ class EndBiddingScreen:
         self.cards = []
         self.is_dealt = False
         self.buttons = []
-        self.card_for_player_left = ()
-        self.card_for_player_right = ()
         self.initialize_buttons()
 
     def main(self):
         if not self.is_dealt:
-            self.cards = self.create_cards()
+            self.create_cards()
             self.is_dealt = True
         self.manage_display()
         self.handle_clicks()
@@ -45,10 +43,9 @@ class EndBiddingScreen:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if self.game.rounds[-1].bidding.last_bidding_player_id == self.game.id_player:
+                        self.card_clicked()
                         for button in self.buttons:
                             button.do_sth()
-                if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
-                    self.card_clicked()
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
@@ -60,6 +57,9 @@ class EndBiddingScreen:
         pygame.display.update()
 
     def create_cards(self):
+        self.all_sprites.empty()
+        self.cards = []
+
         player_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
                                                      [self.game.id_player].cards, self.all_sprites)
         oponent1_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
@@ -67,10 +67,21 @@ class EndBiddingScreen:
         oponent2_cards_gui = RoundGUI.create_cards_gui(self.game.rounds[-1].players_rounds
                                                        [(self.game.id_player + 2) % 3].cards, self.all_sprites)
 
-        return player_cards_gui, oponent1_cards_gui, oponent2_cards_gui
+        left_player_card_for = self.game.rounds[-1].bidding.cards_for_other_players[0]
+        right_player_card_for = self.game.rounds[-1].bidding.cards_for_other_players[1]
+
+        card_for_left_player = RoundGUI.create_cards_gui([left_player_card_for[0]], self.all_sprites) if \
+            left_player_card_for != () else -1
+        card_for_right_player = RoundGUI.create_cards_gui([right_player_card_for[0]], self.all_sprites) if \
+            right_player_card_for != () else -1
+
+        self.cards = player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, card_for_left_player, \
+                     card_for_right_player
 
     def display_cards(self):
-        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui = self.cards
+        player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, card_for_left_player, card_for_right_player = \
+            self.cards
+
         # rozkładamy karty
         RoundGUI.display_player_cards(player_cards_gui)
         # przeciwnik 1
@@ -85,17 +96,25 @@ class EndBiddingScreen:
         self.display.blit(message_waiting, (WIDTH - 80, 30))
         RoundGUI.display_oponent_cards(oponent2_cards_gui, False)
 
+        # Karta dla lewego gracza
+        if card_for_left_player != -1:
+            RoundGUI.display_card(card_for_left_player.sprites()[0], 200, 250)
+
+        # Karta dla prawego gracza
+        if card_for_right_player != -1:
+            RoundGUI.display_card(card_for_right_player.sprites()[0], WIDTH - 200 - CARD_WIDTH, 250)
+
         self.all_sprites.draw(self.display)
 
     def waiting_for_dealing_cards_label(self):
         if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("CHOOSE CARDS FOR YOUR OPPONENTS", True, (255, 255, 255),
                                                              BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 50))
+            self.display.blit(message_waiting, (WIDTH / 2 - message_waiting.get_width() / 2, 50))
         else:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("WINNER CHOOSES CARDS...", True, (255, 255, 255),
                                                              BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 50))
+            self.display.blit(message_waiting, (WIDTH / 2 - message_waiting.get_width() / 2, 50))
 
     def initialize_buttons(self):
         # self.buttons.append(Button(self, (WIDTH / 2), 160, 150, 60,
@@ -115,31 +134,39 @@ class EndBiddingScreen:
         self.game.rounds[-1].used_bomb(self.game.id_player)
 
     def card_for_left_player(self):
-        if self.card_for_player_left == ():
+        card_for_player_left = self.game.rounds[-1].bidding.cards_for_other_players[0]
+        if card_for_player_left == ():
             if self.clicked_card.card is not None:
-                #     moving card
-                self.card_for_player_left = (self.clicked_card.card, self.game.rounds[-1].players_rounds[
-                    (self.game.id_player + 1) % 3])
+                bidding = self.game.rounds[-1].bidding
+                self.game.rounds[-1].bidding.cards_for_other_players[0] = (bidding.pop_card(self.clicked_card.card),
+                                                                           self.game.rounds[-1].players_rounds[
+                                                                               (self.game.id_player + 1) % 3])
             else:
                 print("Card hasn't been chosen")
-
         else:
-            self.card_for_player_left = ()
+            self.game.rounds[-1].players_rounds[self.game.id_player].add_card(card_for_player_left[0])
+            self.game.rounds[-1].bidding.cards_for_other_players[0] = ()
+        self.create_cards()
 
     def card_for_right_player(self):
-        if self.card_for_player_right == ():
+        card_for_player_right = self.game.rounds[-1].bidding.cards_for_other_players[1]
+        if card_for_player_right == ():
             if self.clicked_card.card is not None:
-                self.card_for_player_right = (self.clicked_card.card, self.game.rounds[-1].players_rounds[
-                    (self.game.id_player + 2) % 3])
-            #     moving card
+                bidding = self.game.rounds[-1].bidding
+                self.game.rounds[-1].bidding.cards_for_other_players[1] = (bidding.pop_card(self.clicked_card.card),
+                                                                           self.game.rounds[-1].players_rounds[
+                                                                               (self.game.id_player + 2) % 3])
             else:
                 print("Card hasn't been chosen")
         else:
-            self.card_for_player_right = ()
+            self.game.rounds[-1].players_rounds[self.game.id_player].add_card(card_for_player_right[0])
+            self.game.rounds[-1].bidding.cards_for_other_players[1] = ()
+        self.create_cards()
 
     def accept(self):
-        if self.card_for_player_left != () and self.card_for_player_right != ():
-            self.game.rounds[-1].bidding.give_away_card(self.card_for_player_left, self.card_for_player_right)
+        if self.game.rounds[-1].bidding.cards_for_other_players[0] != () and \
+                self.game.rounds[-1].bidding.cards_for_other_players[1] != ():
+            self.game.rounds[-1].bidding.give_away_cards()
             self.game.rounds[-1].send_dealing_to_database(game_id=self.game.id_game, round_id=self.game.rounds[-1].id_r)
         else:
             print("Cards for opponents haven't been chosen")

@@ -105,7 +105,7 @@ class GameScreen:
         self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 5, 30))
         RoundGUI.display_oponent_cards(oponent2_cards_gui, False)
 
-        RoundGUI.display_desk(desk_cards_gui, self.game.id_player, self.game.rounds[-1].initial_move_player_id)
+        RoundGUI.display_desk(desk_cards_gui, self.game.id_player)
 
         self.all_sprites.draw(self.display)
 
