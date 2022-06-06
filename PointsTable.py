@@ -10,7 +10,7 @@ class PointsTable(pygame.sprite.Sprite):
     __left: int
     __top: int
 
-    def __init__(self, game, control_panel, display):
+    def __init__(self, game, display, control_panel):
         super().__init__()
         self.surf = pygame.Surface((TABLE_WIDTH, TABLE_HEIGHT))
         self.__left = WIDTH/2 - TABLE_WIDTH/2
