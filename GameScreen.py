@@ -121,7 +121,7 @@ class GameScreen:
     def make_move(self):
         if self.clicked_card is not None:
             if self.game.rounds[-1].players_rounds[self.game.id_player].check_if_can_make_move\
-                        (self.clicked_card.card, self.game.rounds[-1].desk[0]):
+                    (self.clicked_card.card, self.game.rounds[-1].desk[self.game.rounds[-1].initial_move_player_id]):
                 color = self.clicked_card.card.color
                 value = self.clicked_card.card.value
                 # Na razie domyślnie fałsz
