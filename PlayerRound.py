@@ -12,7 +12,6 @@ class PlayerRound:
     __collected_cards: [Card]
     __points = 0
     __declared_points = 0
-    __pairs: [bool]
 
     def __init__(self, player):
         self.__cards = []
@@ -57,11 +56,6 @@ class PlayerRound:
     @declared_points.setter
     def declared_points(self, declared_points):
         self.__declared_points = declared_points
-
-    def check_pairs(self):
-        for color in range(SPADES, HEART + 1):
-            if Card(color, QUEEN) in self.__cards and Card(color, KING) in self.__cards:
-                self.__pairs[color-1] = True
 
     def check_if_pair(self, card):
         return card.value == QUEEN and Card(card.color, KING) in self.__cards or card.value == KING and \

@@ -150,11 +150,11 @@ class Round:
                 if self.bidding.bid <= pr.points:
                     pr.player.add_points(self.bidding.bid)
                 else:
-                    pr.player.add_points(self.bidding.bid)
+                    pr.player.add_points(-self.bidding.bid)
             else:
                 # Pozostali gracze
                 if pr.points % 10 > 5:
-                    pr.player.add_points(pr.points + pr.points % 10)
+                    pr.player.add_points(pr.points + (10-pr.points % 10))
                 else:
                     pr.player.add_points(pr.points - pr.points % 10)
             game.points_table[pr.player.id_player].append(pr.player.points)

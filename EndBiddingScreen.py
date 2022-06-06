@@ -53,7 +53,7 @@ class EndBiddingScreen:
         self.waiting_for_dealing_cards_label()
         if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
             for b in self.buttons:
-                b.render(False)
+                b.render(point_button_clicked=True)
         pygame.display.update()
 
     def create_cards(self):
@@ -110,23 +110,23 @@ class EndBiddingScreen:
         if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("CHOOSE CARDS FOR YOUR OPPONENTS", True, (255, 255, 255),
                                                              BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (WIDTH / 2 - message_waiting.get_width() / 2, 50))
+            self.display.blit(message_waiting, (WIDTH / 2 - message_waiting.get_width() / 2, 150))
         else:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("WINNER CHOOSES CARDS...", True, (255, 255, 255),
                                                              BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (WIDTH / 2 - message_waiting.get_width() / 2, 50))
+            self.display.blit(message_waiting, (WIDTH / 2 - message_waiting.get_width() / 2, 150))
 
     def initialize_buttons(self):
         # self.buttons.append(Button(self, (WIDTH / 2), 160, 150, 60,
         #                            FONT_BIDDING_PLAYERS.render("BOMB", True, (0, 0, 0)), self.use_bomb,
         #                            self.display))
-        self.buttons.append(Button(self, (WIDTH / 2 - 80), 230, 120, 60,
+        self.buttons.append(Button(self, (WIDTH / 2 - 80), 280, 120, 60,
                                    FONT_BIDDING_PLAYERS.render("Left player", True, (0, 0, 0)),
                                    self.card_for_left_player, self.display))
-        self.buttons.append(Button(self, (WIDTH / 2 + 80), 230, 120, 60,
+        self.buttons.append(Button(self, (WIDTH / 2 + 80), 280, 120, 60,
                                    FONT_BIDDING_PLAYERS.render("Right player", True, (0, 0, 0)),
                                    self.card_for_right_player, self.display))
-        self.buttons.append(Button(self, (WIDTH / 2), 300, 120, 60,
+        self.buttons.append(Button(self, (WIDTH / 2), 350, 170, 60,
                                    FONT_BIDDING_PLAYERS.render("Accept", True, (0, 0, 0)),
                                    self.accept, self.display))
 

@@ -28,13 +28,10 @@ class GameScreen:
         self.initialize_buttons()
 
     def main(self):
-        if not self.control_panel.end_round_phase:
-            if len(self.cards) == 0 or self.control_panel.made_move:
-                self.create_cards()
-                self.control_panel.made_move = False
-            self.manage_display()
-        else:
-            self.display_table()
+        if len(self.cards) == 0 or self.control_panel.made_move:
+            self.create_cards()
+            self.control_panel.made_move = False
+        self.manage_display()
         self.handle_clicks()
 
     def handle_clicks(self):
@@ -50,17 +47,20 @@ class GameScreen:
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
-        if self.cards:
-            self.display_cards()
+        if not self.control_panel.end_round_phase:
+            if self.cards:
+                self.display_cards()
+                self.display_labels()
 
-        if self.game.id_player == self.game.rounds[-1].current_id_player:
             if not self.control_panel.full_desk:
-                for button in self.buttons:
-                    button.render(False)
+                if self.game.id_player == self.game.rounds[-1].current_id_player:
+                    for button in self.buttons:
+                        button.render(point_button_clicked=True)
+                else:
+                    for button in self.buttons:
+                        button.set_clicked(False)
         else:
-            message_waiting = FONT_INFO_AFTER_BIDDING.render("PLAYER %i TURN" % self.game.rounds[-1].current_id_player
-                                                             , True, (255, 255, 255), BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 30))
+            self.display_table()
         pygame.display.update()
 
     def create_cards(self):
@@ -79,42 +79,45 @@ class GameScreen:
     def display_cards(self):
         player_cards_gui, oponent1_cards_gui, oponent2_cards_gui, desk_cards_gui = self.cards
         # rozkładamy karty
+        RoundGUI.display_player_cards(player_cards_gui)
+        RoundGUI.display_oponent_cards(oponent1_cards_gui, True)
+        RoundGUI.display_oponent_cards(oponent2_cards_gui, False)
+        RoundGUI.display_desk(desk_cards_gui, self.game.id_player)
+        self.all_sprites.draw(self.display)
+
+    def display_labels(self):
+
         # gracz
         id_p = self.game.id_player
-        collected_cards_p1 = len(self.game.rounds[-1].players_rounds[id_p].collected_cards)
-        message_waiting = FONT_COLLECTED_CARDS.render("Collected cards: [%i]" % collected_cards_p1, True,
-                                                      (255, 255, 255), BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (WIDTH - 200, HEIGHT - 40))
-        RoundGUI.display_player_cards(player_cards_gui)
+        points_p = self.game.rounds[-1].players_rounds[id_p].points
+        message_waiting = FONT_POINTS.render("Points: [%i]" % points_p, True, self.choose_color(id_p), BACKGROUND_COLOR)
+        self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 10, HEIGHT - 40))
 
         # przeciwnik 1
         id_op1 = (self.game.id_player + 1) % 3
-        collected_cards_p1 = len(self.game.rounds[-1].players_rounds[id_op1].collected_cards)
-        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op1, collected_cards_p1), True,
-                                                         (255, 255, 255),
-                                                         BACKGROUND_COLOR)
+        points_p1 = self.game.rounds[-1].players_rounds[id_op1].points
+        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op1, points_p1), True,
+                                                         self.choose_color(id_op1), BACKGROUND_COLOR)
         self.display.blit(message_waiting, (30, 30))
-        RoundGUI.display_oponent_cards(oponent1_cards_gui, True)
 
         # przeciwnik 2
         id_op2 = (self.game.id_player + 2) % 3
-        collected_cards_p2 = len(self.game.rounds[-1].players_rounds[id_op2].collected_cards)
-        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op2, collected_cards_p2), True,
-                                                         (255, 255, 255),
-                                                         BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 5, 30))
-        RoundGUI.display_oponent_cards(oponent2_cards_gui, False)
+        points_p2 = self.game.rounds[-1].players_rounds[id_op2].points
+        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op2, points_p2), True,
+                                                         self.choose_color(id_op2), BACKGROUND_COLOR)
+        self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 10, 30))
 
-        RoundGUI.display_desk(desk_cards_gui, self.game.id_player)
-
-        self.all_sprites.draw(self.display)
+    def choose_color(self, id_player):
+        if id_player == self.game.rounds[-1].current_id_player:
+            return 255, 0, 0
+        else:
+            return 255, 255, 255
 
     def display_table(self):
         self.points_table.render()
-        pygame.display.update()
 
     def initialize_buttons(self):
-        self.buttons.append(Button(self, (WIDTH / 2), 60, 150, 60,
+        self.buttons.append(Button(self, 100, HEIGHT - 60, 150, 60,
                                    FONT_BIDDING_PLAYERS.render("Make move", True, (0, 0, 0)), self.make_move,
                                    self.display))
 
