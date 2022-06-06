@@ -12,15 +12,15 @@ class ControlPanel:
     started_game_phase = False
     player_left_game_phase = False
 
-    waiting_for_players_phase = True
+    waiting_for_players_phase = False # True
     dealing_phase = False
     waiting_for_dealing_phase = False
 
     bidding_phase = False
     hidden_prikup = True
     end_bidding_phase = False
-    game_phase = False
-    end_round_phase = False
+    game_phase = True # False
+    end_round_phase = True # False
     end_game_phase = False
 
     full_desk = False
@@ -148,8 +148,9 @@ class ControlPanel:
                     self.full_desk = False
                     self.made_move = True
                     if current_round.check_if_end_round():
-                        self.end_round_phase = True
                         current_round.end_round(self.game)
+                        time.sleep(2)
+                        self.end_round_phase = True
                         time.sleep(10)
                         self.game_phase = False
                         self.start_new_round()

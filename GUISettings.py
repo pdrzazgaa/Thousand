@@ -50,10 +50,10 @@ PIVOT_RIGHT_CARDS = -90
 OPPONENT_CARD_OFFSET = -100
 
 # Tabela punktów
-TABLE_WIDTH = 400
-TABLE_HEIGHT = 400
+TABLE_WIDTH = 550
+TABLE_HEIGHT = 600
 POINTS_TABLE_COLOR = (222, 184, 135)
-FONT_POINTS = pygame.font.SysFont('Helvetica', 10)
+FONT_POINTS = pygame.font.SysFont('Helvetica', 16)
 POINT_OFFSET_HEIGHT = 13
 
 # Czasy dostępu do bazy

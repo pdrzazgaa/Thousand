@@ -33,7 +33,7 @@ class GameScreen:
                 self.create_cards()
                 self.control_panel.made_move = False
             self.manage_display()
-        if self.control_panel.end_round_phase:
+        else:
             self.displace_table()
         self.handle_clicks()
 

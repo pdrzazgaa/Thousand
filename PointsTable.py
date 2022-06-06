@@ -19,7 +19,7 @@ class PointsTable(pygame.sprite.Sprite):
         self.__is_shown = False
         self.hit_box = pygame.Rect(WIDTH / 2 - TABLE_WIDTH / 2, HEIGHT / 2 - TABLE_HEIGHT / 2,
                                    TABLE_WIDTH, TABLE_HEIGHT)
-        self.title = FONT_BIDDING.render("BIDDING", True, (255, 255, 255))
+        self.title = FONT_BIDDING.render("SCORE", True, (255, 255, 255))
         self.game = game
         self.control_panel = control_panel
         self.display = display
@@ -45,21 +45,21 @@ class PointsTable(pygame.sprite.Sprite):
             else:
                 text = "Player %i" % i
             players.append(FONT_BIDDING_PLAYERS.render(text, True, (255, 255, 255)))
-        self.display.blit(self.title, (WIDTH / 2 - 70, 40))
-        self.display.blit(players[0], (WIDTH / 2 - 240, 100))
-        self.display.blit(players[1], (WIDTH / 2 - 50, 100))
-        self.display.blit(players[2], (WIDTH / 2 - 140, 100))
+        self.display.blit(self.title, (WIDTH / 2 - 70, self.__top + 20))
+        self.display.blit(players[0], (WIDTH / 2 - players[0].get_width()/2 - 200, self.__top + 60))
+        self.display.blit(players[1], (WIDTH / 2 - players[1].get_width()/2, self.__top + 60))
+        self.display.blit(players[2], (WIDTH / 2 - players[2].get_width()/2 + 200, self.__top + 60))
 
     def display_points(self):
         players_points = self.game.points_table
-        left = WIDTH / 2 - 240
+        left = -200
         for player in players_points:
-            top = 130
+            top = 140
             for points in player:
-                points_display = FONT_POINTS.render(str(points), True, (255, 255, 255))
-                self.display.blit(points_display, (WIDTH / 2 - 70, 40))
+                points_display = FONT_POINTS.render(str(points) if points != -1 else "BOMB", True, (255, 255, 255))
+                self.display.blit(points_display, (WIDTH / 2 - points_display.get_width()/2 + left, top))
                 top += POINT_OFFSET_HEIGHT
-            left += 190
+            left += 200
 
     def click_table(self):
         if self.__is_shown:
