@@ -98,9 +98,9 @@ class EndBiddingScreen:
             self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 50))
 
     def initialize_buttons(self):
-        self.buttons.append(Button(self, (WIDTH / 2), 160, 150, 60,
-                                   FONT_BIDDING_PLAYERS.render("BOMB", True, (0, 0, 0)), self.use_bomb,
-                                   self.display))
+        # self.buttons.append(Button(self, (WIDTH / 2), 160, 150, 60,
+        #                            FONT_BIDDING_PLAYERS.render("BOMB", True, (0, 0, 0)), self.use_bomb,
+        #                            self.display))
         self.buttons.append(Button(self, (WIDTH / 2 - 80), 230, 120, 60,
                                    FONT_BIDDING_PLAYERS.render("Left player", True, (0, 0, 0)),
                                    self.card_for_left_player, self.display))
