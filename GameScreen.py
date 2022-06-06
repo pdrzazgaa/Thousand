@@ -28,13 +28,14 @@ class GameScreen:
         self.initialize_buttons()
 
     def main(self):
-        if len(self.cards) == 0 or self.control_panel.made_move:
-            self.create_cards()
-            self.control_panel.made_move = False
-        self.manage_display()
-        self.handle_clicks()
+        if not self.control_panel.end_round_phase:
+            if len(self.cards) == 0 or self.control_panel.made_move:
+                self.create_cards()
+                self.control_panel.made_move = False
+            self.manage_display()
         if self.control_panel.end_round_phase:
             self.displace_table()
+        self.handle_clicks()
 
     def handle_clicks(self):
         for event in pygame.event.get():
@@ -110,6 +111,7 @@ class GameScreen:
 
     def displace_table(self):
         self.points_table.render()
+        pygame.display.update()
 
     def initialize_buttons(self):
         self.buttons.append(Button(self, (WIDTH / 2), 60, 150, 60,

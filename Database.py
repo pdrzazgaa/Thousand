@@ -1,3 +1,4 @@
+import time
 from tkinter import messagebox
 
 import mysql.connector as db
@@ -68,7 +69,9 @@ class Database:
                 # print("You're connected to database: ", record)
         except Error as e:
             print("Error while connecting to MySQL", e)
-            return None
+            print("Another try in 3s")
+            time.sleep(3)
+            return Database.connect()
         finally:
             if connection.is_connected():
                 cursor.close()
@@ -88,6 +91,9 @@ class Database:
                 connection.commit()
         except Error as e:
             print("Error while connecting to MySQL or creating a table", e)
+            print("Another try in 3s")
+            time.sleep(3)
+            Database.execute_db(query)
             return False
         finally:
             if connection.is_connected():
@@ -109,6 +115,9 @@ class Database:
                 my_results = cursor.fetchall()
         except Error as e:
             print("Error while connecting to MySQL or creating a table", e)
+            print("Another try in 3s")
+            time.sleep(3)
+            return Database.select_db(query)
         finally:
             if connection.is_connected():
                 cursor.close()
