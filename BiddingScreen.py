@@ -129,7 +129,7 @@ class BiddingTable(pygame.sprite.Sprite):
                 self.players[i] = FONT_BIDDING_PLAYERS.render(text, True, (255, 0, 0))
             else:
                 self.players[i] = FONT_BIDDING_PLAYERS.render(text, True, (255, 255, 255))
-        self.display.blit(self.title, (WIDTH / 2 - 70, 40))
+        self.display.blit(self.title, (WIDTH/2 - self.title.get_width()/2, 40))
         self.display.blit(self.players[0], (WIDTH / 2 - 240, 100))
         self.display.blit(self.players[1], (WIDTH / 2 - 240, 130))
         self.display.blit(self.players[2], (WIDTH / 2 - 240, 160))

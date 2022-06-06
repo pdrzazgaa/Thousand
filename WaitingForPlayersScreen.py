@@ -40,13 +40,13 @@ class WaitingForPlayersScreen:
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
         message_waiting = FONT_WAITING.render("WAITING FOR OTHER PLAYERS", True, (255, 255, 255), BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (100, 150))
+        self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 150))
         if self.control_panel.currently_players_in_game != -1:
             message_players = FONT_CURRENT_PLAYERS.render("Currently in game: %i player(s)" %
                                                           self.control_panel.currently_players_in_game, True,
                                                           (255, 255, 255),
                                                           BACKGROUND_COLOR)
-            self.display.blit(message_players, (300, 350))
+            self.display.blit(message_players, (WIDTH/2 - message_players.get_width()/2, 350))
         for button in self.buttons:
             button.render(False)
         pygame.display.update()

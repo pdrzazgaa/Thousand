@@ -45,7 +45,7 @@ class PlayerLeftGameScreen:
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
         message_waiting = FONT_WAITING.render("YOUR OPPONENT LEFT THE GAME", True, (255, 255, 255), BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (50, 150))
+        self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 150))
         for button in self.buttons:
             button.render(False)
         pygame.display.update()

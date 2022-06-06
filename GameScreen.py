@@ -59,7 +59,7 @@ class GameScreen:
         else:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("PLAYER %i TURN" % self.game.rounds[-1].current_id_player
                                                              , True, (255, 255, 255), BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (WIDTH/2 - 170, 30))
+            self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 30))
         pygame.display.update()
 
     def create_cards(self):

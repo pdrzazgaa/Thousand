@@ -91,11 +91,11 @@ class EndBiddingScreen:
         if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("CHOOSE CARDS FOR YOUR OPPONENTS", True, (255, 255, 255),
                                                              BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (130, 50))
+            self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 50))
         else:
             message_waiting = FONT_INFO_AFTER_BIDDING.render("WINNER CHOOSES CARDS...", True, (255, 255, 255),
                                                              BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (280, 50))
+            self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 50))
 
     def initialize_buttons(self):
         self.buttons.append(Button(self, (WIDTH / 2), 160, 150, 60,

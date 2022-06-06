@@ -3,7 +3,6 @@ import pygame.event
 from Card import CardGUI
 from Database import Database
 from GUISettings import *
-from PlayerRound import PlayerRound
 from Round import Round, RoundGUI
 
 
@@ -42,7 +41,7 @@ class DealingCardsScreen:
         if self.control_panel.waiting_for_dealing_phase:
             self.display.fill(BACKGROUND_COLOR)
             message_waiting = FONT_WAITING.render("DEALING CARDS...", True, (255, 255, 255), BACKGROUND_COLOR)
-            self.display.blit(message_waiting, (300, 150))
+            self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 150))
         else:
             if self.control_panel.dealing_phase and not self.cards:
                 self.make_new_deal()
