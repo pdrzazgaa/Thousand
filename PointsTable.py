@@ -44,7 +44,7 @@ class PointsTable(pygame.sprite.Sprite):
                 text = "Me"
             else:
                 text = "Player %i" % i
-            players[i] = FONT_BIDDING_PLAYERS.render(text, True, (255, 255, 255))
+            players.append(FONT_BIDDING_PLAYERS.render(text, True, (255, 255, 255)))
         self.display.blit(self.title, (WIDTH / 2 - 70, 40))
         self.display.blit(players[0], (WIDTH / 2 - 240, 100))
         self.display.blit(players[1], (WIDTH / 2 - 50, 100))
