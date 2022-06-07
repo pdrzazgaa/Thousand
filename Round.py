@@ -4,7 +4,7 @@ import random
 from PlayerRound import PlayerRound
 from Database import Database
 from GUISettings import *
-from Settings import ACE, TEN, KING, QUEEN, JACK, NINE, HEART, DIAMONDS, CLUBS, SPADES
+from Settings import ACE, NINE, HEART, SPADES
 
 
 class Round:

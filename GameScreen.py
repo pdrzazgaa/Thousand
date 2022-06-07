@@ -89,22 +89,19 @@ class GameScreen:
 
         # gracz
         id_p = self.game.id_player
-        points_p = self.game.rounds[-1].players_rounds[id_p].points
-        message_waiting = FONT_POINTS_GAME.render("Points: [%i]" % points_p, True, self.choose_color(id_p),
+        message_waiting = FONT_POINTS_GAME.render(self.choose_text(id_p), True, self.choose_color(id_p),
                                                   BACKGROUND_COLOR)
         self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 10, HEIGHT - 40))
 
         # przeciwnik 1
         id_op1 = (self.game.id_player + 1) % 3
-        points_p1 = self.game.rounds[-1].players_rounds[id_op1].points
-        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op1, points_p1), True,
+        message_waiting = FONT_INFO_AFTER_BIDDING.render(self.choose_text(id_op1), True,
                                                          self.choose_color(id_op1), BACKGROUND_COLOR)
         self.display.blit(message_waiting, (10, 30))
 
         # przeciwnik 2
         id_op2 = (self.game.id_player + 2) % 3
-        points_p2 = self.game.rounds[-1].players_rounds[id_op2].points
-        message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op2, points_p2), True,
+        message_waiting = FONT_INFO_AFTER_BIDDING.render(self.choose_text(id_op2), True,
                                                          self.choose_color(id_op2), BACKGROUND_COLOR)
         self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 10, 30))
 
@@ -113,6 +110,19 @@ class GameScreen:
             return COLOR_ORANGE
         else:
             return COLOR_WHITE
+
+    def choose_text(self, id_p):
+        points = self.game.rounds[-1].players_rounds[id_p].points
+        if id_p == self.game.id_player:
+            if id_p == self.game.rounds[-1].bidding.bidding_player_round.player.id_player:
+                return "Points: [%i/%i]" % (points, self.game.rounds[-1].bidding.bid)
+            else:
+                return "Points: [%i]" % points
+        else:
+            if id_p == self.game.rounds[-1].bidding.bidding_player_round.player.id_player:
+                return "P%i: [%i/%i]" % (id_p, points, self.game.rounds[-1].bidding.bid)
+            else:
+                return "P%i: [%i]" % (id_p, points)
 
     def display_table(self):
         self.points_table.render()
@@ -126,13 +136,8 @@ class GameScreen:
         if self.clicked_card is not None:
             if self.game.rounds[-1].players_rounds[self.game.id_player].check_if_can_make_move\
                     (self.clicked_card.card, self.game.rounds[-1].desk[self.game.rounds[-1].initial_move_player_id]):
-                color = self.clicked_card.card.color
-                value = self.clicked_card.card.value
-                # Na razie domyślnie fałsz
-                if_queen_king_pair = self.game.rounds[-1].players_rounds[self.game.id_player].check_if_pair\
-                    (self.clicked_card.card) and self.game.id_player == self.game.rounds[-1].initial_move_player_id
-                Database.make_move(self.game.rounds[-1].id_r, self.game.id_player, color, value,
-                                   if_queen_king_pair)
+                self.game.rounds[-1].players_rounds[self.game.id_player].make_move\
+                    (self.clicked_card, self.game.rounds[-1].initial_move_player_id, self.game.rounds[-1].id_r)
                 self.clicked_card = None
             else:
                 print("You should play a card with the same color as the initial one")

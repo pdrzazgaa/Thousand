@@ -1,6 +1,5 @@
-import pygame
-
 from Card import Card
+from Database import Database
 from Player import Player
 from Settings import KING, QUEEN, NINE, HEART, DIAMONDS, CLUBS, SPADES, SPADES_POINTS, CLUBS_POINTS, DIAMONDS_POINTS, \
     HEART_POINTS
@@ -75,8 +74,18 @@ class PlayerRound:
                 nines += 1
         return nines == 4
 
+    def make_move(self, chosen_card, initial_move_player_id, id_r):
+        color = chosen_card.card.color
+        value = chosen_card.card.value
+        if_queen_king_pair = self.check_if_pair(chosen_card.card) and self.player.id_player == initial_move_player_id
+        Database.make_move(id_r, self.player.id_player, color, value, if_queen_king_pair)
+
     def play_card(self, desk, id_player, card, if_queen_king_pair):
-        desk[id_player] = self.__cards.pop(self.__cards.index(card))
+        try:
+            desk[id_player] = self.__cards.pop(self.__cards.index(card))
+        except:
+            ...
+
         if if_queen_king_pair:
             if card.color == SPADES:
                 self.__points += SPADES_POINTS
