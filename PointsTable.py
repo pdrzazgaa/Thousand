@@ -13,8 +13,8 @@ class PointsTable(pygame.sprite.Sprite):
     def __init__(self, game, display, control_panel):
         super().__init__()
         self.surf = pygame.Surface((TABLE_WIDTH, TABLE_HEIGHT))
-        self.__left = WIDTH/2 - TABLE_WIDTH/2
-        self.__top = HEIGHT/2 - TABLE_HEIGHT/2
+        self.__left = WIDTH / 2 - TABLE_WIDTH / 2
+        self.__top = HEIGHT / 2 - TABLE_HEIGHT / 2
         self.__is_clicked = False
         self.__is_shown = False
         self.hit_box = pygame.Rect(WIDTH / 2 - TABLE_WIDTH / 2, HEIGHT / 2 - TABLE_HEIGHT / 2,
@@ -33,9 +33,16 @@ class PointsTable(pygame.sprite.Sprite):
         self.__is_clicked = is_clicked
 
     def render(self):
-        pygame.draw.rect(self.display, POINTS_TABLE_COLOR, self.hit_box)
+        self.draw_rectangle()
         self.display_headers()
         self.display_points()
+
+    def draw_rectangle(self):
+        pygame.draw.rect(self.display, POINTS_TABLE_COLOR, self.hit_box, 0)
+        for i in range(4):
+            pygame.draw.rect(self.display, (0, 0, 0),
+                             (WIDTH / 2 - TABLE_WIDTH / 2 - i, HEIGHT / 2 - TABLE_HEIGHT / 2 - i,
+                              TABLE_WIDTH + 3, TABLE_HEIGHT + 3), 1)
 
     def display_headers(self):
         players = []
@@ -46,9 +53,9 @@ class PointsTable(pygame.sprite.Sprite):
                 text = "Player %i" % i
             players.append(FONT_BIDDING_PLAYERS.render(text, True, (255, 255, 255)))
         self.display.blit(self.title, (WIDTH / 2 - 70, self.__top + 20))
-        self.display.blit(players[0], (WIDTH / 2 - players[0].get_width()/2 - 200, self.__top + 60))
-        self.display.blit(players[1], (WIDTH / 2 - players[1].get_width()/2, self.__top + 60))
-        self.display.blit(players[2], (WIDTH / 2 - players[2].get_width()/2 + 200, self.__top + 60))
+        self.display.blit(players[0], (WIDTH / 2 - players[0].get_width() / 2 - 200, self.__top + 60))
+        self.display.blit(players[1], (WIDTH / 2 - players[1].get_width() / 2, self.__top + 60))
+        self.display.blit(players[2], (WIDTH / 2 - players[2].get_width() / 2 + 200, self.__top + 60))
 
     def display_points(self):
         players_points = self.game.points_table
@@ -57,7 +64,7 @@ class PointsTable(pygame.sprite.Sprite):
             top = 140
             for points in player:
                 points_display = FONT_POINTS.render(str(points) if points != -1 else "BOMB", True, (255, 255, 255))
-                self.display.blit(points_display, (WIDTH / 2 - points_display.get_width()/2 + left, top))
+                self.display.blit(points_display, (WIDTH / 2 - points_display.get_width() / 2 + left, top))
                 top += POINT_OFFSET_HEIGHT
             left += 200
 

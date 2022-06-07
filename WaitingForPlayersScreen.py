@@ -32,6 +32,7 @@ class WaitingForPlayersScreen:
                 if event.button == 1:
                     for button in self.buttons:
                         button.do_sth()
+                    self.info_label("Game created by: Paulina Drzazga")
 
             if event.type == pygame.QUIT:
                 self.quit()

@@ -30,7 +30,7 @@ class BiddingTable(pygame.sprite.Sprite):
         self.display_headers()
         self.display_biddings()
         for b in self.buttons:
-            b.render(disabled=(self.control_panel.bidding_phase and
+            b.render(disabled=(self.control_panel.end_bidding_phase or
                      self.game.rounds[-1].bidding.current_bidding_player_id != self.game.id_player))
 
     def display_headers(self):
