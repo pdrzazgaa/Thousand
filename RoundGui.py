@@ -1,5 +1,5 @@
 from GUISettings import *
-from Card import CardGUI
+from CardGUI import CardGUI
 
 
 class RoundGUI:

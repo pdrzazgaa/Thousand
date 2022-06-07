@@ -1,6 +1,6 @@
 import sys
 import pygame.event
-from Card import CardGUI
+from CardGUI import CardGUI
 from Database import Database
 from GUISettings import *
 from RoundGui import RoundGUI

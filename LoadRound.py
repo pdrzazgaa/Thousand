@@ -10,9 +10,9 @@ class LoadRound:
 
     def __init__(self, game, id_r, info_label):
         self.__game = game
+        self.info_label = info_label
         self.__round = self.get_last_round_from_db(id_r)
         self.get_all_moves_in_round_from_db(id_r)
-        self.info_label = info_label
 
     @property
     def round(self):

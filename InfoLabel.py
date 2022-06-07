@@ -46,7 +46,7 @@ class InfoLabel:
         self.display.blit(self.message, (WIDTH/2 - self.message.get_width()/2, self.height/2 - self.message.get_height()/2))
 
     def display_rectangle(self):
-        transparent_rect = pygame.Surface((self.message.get_width() + 30, self.height))
+        transparent_rect = pygame.Surface((self.message.get_width() + 50, self.height))
         transparent_rect.set_alpha(128)
         transparent_rect.fill(INFO_BACKGROUND_COLOR)
         self.display.blit(transparent_rect, (self.x, self.y))
