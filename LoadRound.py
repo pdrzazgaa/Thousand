@@ -12,6 +12,7 @@ class LoadRound:
         self.__game = game
         self.info_label = info_label
         self.__round = self.get_last_round_from_db(id_r)
+        self.get_all_bids_in_round_from_db(id_r)
         self.get_all_moves_in_round_from_db(id_r)
 
     @property
@@ -73,7 +74,7 @@ class LoadRound:
         if all_bids is not None and len(all_bids) != 0:
             for i in range(0, len(all_bids)):
                 bidding = all_bids[i]
-                IdB, IdR, IdP, Bid, BidDateTime = bidding[0]
+                IdB, IdR, IdP, Bid, BidDateTime = bidding
                 if self.__round.bidding.last_bidding_date != BidDateTime:
                     bidding = self.__round.bidding
                     player_round = self.__round.players_rounds[IdP]

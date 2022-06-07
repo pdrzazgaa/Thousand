@@ -8,10 +8,10 @@ from GUISettings import INFO_WIDTH, INFO_HEIGHT, INFO_LEFT, INFO_TOP, INFO_BACKG
 class InfoLabel:
 
     def __init__(self, display, width=INFO_WIDTH, height=INFO_HEIGHT):
-        self.x = INFO_LEFT
-        self.y = INFO_TOP
         self.height = height
         self.width = width
+        self.x = INFO_LEFT
+        self.y = INFO_TOP
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
         self.moved = False
         self.display = display
@@ -43,10 +43,11 @@ class InfoLabel:
 
     def display_label(self):
         self.message.set_alpha(240)
-        self.display.blit(self.message, (WIDTH/2 - self.message.get_width()/2, self.height/2 - self.message.get_height()/2))
+        self.display.blit(self.message, (WIDTH/2 - self.message.get_width()/2, self.height/2 -
+                                         self.message.get_height()/2))
 
     def display_rectangle(self):
-        transparent_rect = pygame.Surface((self.message.get_width() + 50, self.height))
+        transparent_rect = pygame.Surface((self.message.get_width() + 100, self.height))
         transparent_rect.set_alpha(128)
         transparent_rect.fill(INFO_BACKGROUND_COLOR)
         self.display.blit(transparent_rect, (self.x, self.y))
