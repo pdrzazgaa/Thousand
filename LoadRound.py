@@ -1,4 +1,3 @@
-from Bidding import Bidding
 from Card import Card
 from Database import Database
 from Game import Game
@@ -11,10 +10,11 @@ class LoadRound:
     __game: Game
     __round: Round
 
-    def __init__(self, game, id_r):
+    def __init__(self, game, id_r, info_label):
         self.__game = game
         self.__round = self.get_last_round_from_db(id_r)
         self.get_all_moves_in_round_from_db(id_r)
+        self.info_label = info_label
 
     @property
     def round(self):
@@ -23,7 +23,7 @@ class LoadRound:
     def get_last_round_from_db(self, id_r):
         new_round = None
         last_round_db = None if len(self.__game.rounds) == 0 else \
-            Database.check_round_by_id_r(id_r)
+            Database.check_round_by_id_r(id_r, self.info_label)
         if last_round_db is not None and len(last_round_db) != 0:
             IdR, IdG, DealingPlayer, \
             P0_1, P0_2, P0_3, P0_4, P0_5, P0_6, P0_7, P0_8, \
@@ -54,7 +54,7 @@ class LoadRound:
         return new_round
 
     def get_all_moves_in_round_from_db(self, id_r):
-        all_moves = Database.get_all_moves_from_current_round(id_r)
+        all_moves = Database.get_all_moves_from_current_round(id_r, self.info_label)
         if all_moves is not None and len(all_moves) != 0:
             for i in range(0, len(all_moves)):
                 IdM, IdR, IdP, Color, Value, IfQueenKingPair, MoveDateTime = all_moves[i]
@@ -71,7 +71,7 @@ class LoadRound:
                     current_round.end_move()
 
     def get_all_bids_in_round_from_db(self, id_r):
-        all_bids = Database.get_all_bids_from_current_round(id_r)
+        all_bids = Database.get_all_bids_from_current_round(id_r, self.info_label)
         if all_bids is not None and len(all_bids) != 0:
             for i in range(0, len(all_bids)):
                 bidding = all_bids[i]

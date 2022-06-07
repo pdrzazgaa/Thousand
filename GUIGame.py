@@ -4,6 +4,7 @@ from Database import Database
 from EndGameScreen import EndGameScreen
 from GUISettings import *
 from ControlPanel import ControlPanel
+from InfoLabel import InfoLabel
 from PlayerLeftGameScreen import PlayerLeftGameScreen
 from PointsTable import PointsTable
 from WaitingForPlayersScreen import WaitingForPlayersScreen
@@ -20,11 +21,14 @@ class Desk:
     def __init__(self, game):
         pygame.init()
         self.prepare_game()
-        self.panel_control = ControlPanel(game)
+        self.info_label = InfoLabel(self.display_surface)
+        self.panel_control = ControlPanel(game, self.info_label)
         self.points_table = PointsTable(game, self.display_surface, self.panel_control)
-        self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface, self.panel_control)
-        self.player_left_game_screen = PlayerLeftGameScreen(game, self.display_surface, self.panel_control)
-        self.end_game_screen = EndGameScreen(game, self.display_surface, self.panel_control, self.points_table)
+        self.waiting_screen = WaitingForPlayersScreen(game, self.display_surface, self.panel_control, self.info_label)
+        self.player_left_game_screen = PlayerLeftGameScreen(game, self.display_surface, self.panel_control,
+                                                            self.info_label)
+        self.end_game_screen = EndGameScreen(game, self.display_surface, self.panel_control, self.points_table,
+                                             self.info_label)
 
         self.dealing_screen = None
         self.bidding_screen = None
@@ -63,13 +67,8 @@ class Desk:
         pygame.display.set_caption("1000")
 
     def create_new_round(self, game):
-        self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control)
-        self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control)
-        self.end_bidding_screen = EndBiddingScreen(game, self.display_surface, self.panel_control)
-        self.game_screen = GameScreen(game, self.display_surface, self.panel_control, self.points_table)
+        self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control, self.info_label)
+        self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control, self.info_label)
+        self.end_bidding_screen = EndBiddingScreen(game, self.display_surface, self.panel_control, self.info_label)
+        self.game_screen = GameScreen(game, self.display_surface, self.panel_control, self.points_table, self.info_label)
 
-    @staticmethod
-    def quit(game):
-        Database.leave_game(game.id_game)
-        pygame.quit()
-        sys.exit()

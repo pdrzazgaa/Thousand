@@ -4,18 +4,19 @@ import pygame.mouse
 
 from Database import Database
 from GUISettings import *
-from ControlPanel import ControlPanel
 from Button import Button
+from InfoLabel import InfoLabel
 
 
 class PlayerLeftGameScreen:
     display: pygame.display
 
-    def __init__(self, game, display, control_panel):
+    def __init__(self, game, display, control_panel, info_label):
         self.game = game
         self.display = display
         self.control_panel = control_panel
         self.buttons = []
+        self.info_label = info_label
         self.initialize_buttons()
 
     def main(self):
@@ -44,6 +45,7 @@ class PlayerLeftGameScreen:
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
+        self.info_label.render()
         message_waiting = FONT_WAITING.render("YOUR OPPONENT LEFT THE GAME", True, (255, 255, 255), BACKGROUND_COLOR)
         self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 150))
         for button in self.buttons:
@@ -51,6 +53,6 @@ class PlayerLeftGameScreen:
         pygame.display.update()
 
     def quit(self):
-        Database.leave_game(self.game.id_game)
+        Database.leave_game(self.game.id_game, self.info_label)
         pygame.quit()
         sys.exit()

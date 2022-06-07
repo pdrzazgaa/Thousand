@@ -5,6 +5,7 @@ from Button import Button
 from Card import CardGUI
 from Database import Database
 from GUISettings import *
+from InfoLabel import InfoLabel
 from Round import RoundGUI
 
 
@@ -15,7 +16,7 @@ class GameScreen:
     event_list: []
     is_done: bool
 
-    def __init__(self, game, display, control_panel, points_table):
+    def __init__(self, game, display, control_panel, points_table, info_label):
         self.game = game
         self.display = display
         self.control_panel = control_panel
@@ -23,6 +24,7 @@ class GameScreen:
         self.all_sprites = pygame.sprite.Group()
         self.is_done = False
         self.clicked_card = None
+        self.info_label = info_label
         self.cards = []
         self.buttons = []
         self.initialize_buttons()
@@ -47,6 +49,7 @@ class GameScreen:
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
+        self.info_label.render()
         if not self.control_panel.end_round_phase:
             if self.cards:
                 self.display_cards()
@@ -137,12 +140,13 @@ class GameScreen:
             if self.game.rounds[-1].players_rounds[self.game.id_player].check_if_can_make_move\
                     (self.clicked_card.card, self.game.rounds[-1].desk[self.game.rounds[-1].initial_move_player_id]):
                 self.game.rounds[-1].players_rounds[self.game.id_player].make_move\
-                    (self.clicked_card, self.game.rounds[-1].initial_move_player_id, self.game.rounds[-1].id_r)
+                    (self.clicked_card, self.game.rounds[-1].initial_move_player_id, self.game.rounds[-1].id_r,
+                     self.info_label)
                 self.clicked_card = None
             else:
-                print("You should play a card with the same color as the initial one")
+                self.info_label.show_label("Play a card with the same color as the initial one")
         else:
-            print("Card hasn't been chosen")
+            self.info_label.show_label("No card has been chosen")
 
     def card_clicked(self):
         pos = pygame.mouse.get_pos()
@@ -154,7 +158,7 @@ class GameScreen:
             self.clicked_card = clicked_sprites[len(clicked_sprites) - 1]
 
     def quit(self):
-        Database.leave_game(self.game.id_game)
+        Database.leave_game(self.game.id_game, self.info_label)
         for timer in self.control_panel.timers:
             timer.cancel()
         pygame.quit()

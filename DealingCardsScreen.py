@@ -3,7 +3,8 @@ import pygame.event
 from Card import CardGUI
 from Database import Database
 from GUISettings import *
-from Round import Round, RoundGUI
+from InfoLabel import InfoLabel
+from Round import RoundGUI
 
 
 class DealingCardsScreen:
@@ -14,13 +15,14 @@ class DealingCardsScreen:
     event_list: []
     is_done: bool
 
-    def __init__(self, game, display, control_panel):
+    def __init__(self, game, display, control_panel, info_label):
         self.game = game
         self.display = display
         self.control_panel = control_panel
         self.all_sprites = pygame.sprite.Group()
         self.is_done = False
         self.cards = []
+        self.info_label = info_label
 
     def main(self):
         if not self.is_done and self.control_panel.waiting_for_dealing_phase and \
@@ -47,6 +49,7 @@ class DealingCardsScreen:
                 self.make_new_deal()
             if self.cards:
                 self.display_cards(not self.control_panel.end_bidding_phase, self.cards)
+        self.info_label.render()
         pygame.display.update()
 
     def make_new_deal(self):
@@ -55,7 +58,7 @@ class DealingCardsScreen:
             self.game.rounds[-1].deal_cards()
             for pr in self.game.rounds[-1].players_rounds:
                 pr.sort_cards()
-            self.game.rounds[-1].send_dealing_to_database(game_id=self.game.id_game)
+            self.game.rounds[-1].send_dealing_to_database(info_label=self.info_label, game_id=self.game.id_game)
             self.cards = self.create_cards()
         else:
             if self.control_panel.dealing_phase and not self.control_panel.waiting_for_dealing_phase:
@@ -102,7 +105,7 @@ class DealingCardsScreen:
             pygame.display.update()
 
     def quit(self):
-        Database.leave_game(self.game.id_game)
+        Database.leave_game(self.game.id_game, self.info_label)
         for timer in self.control_panel.timers:
             timer.cancel()
         pygame.quit()

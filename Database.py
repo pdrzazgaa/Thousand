@@ -1,5 +1,5 @@
 import time
-from tkinter import messagebox
+import tkinter as tk
 
 import mysql.connector as db
 from mysql.connector import Error
@@ -55,32 +55,30 @@ class Database:
                                      ")"
 
     @staticmethod
-    def connect():
+    def connect(info_label=None):
         try:
             connection = db.connect(host=DB_HOST,
                                     database=DB_DATABASE,
                                     user=DB_USER,
                                     password=DB_PASSWORD)
             if connection.is_connected():
-                # db_info = connection.get_server_info()
-                # print("Connected to MySQL Server version ", db_info)
                 cursor = connection.cursor()
                 return cursor
-                # record = cursor.fetchone()
-                # print("You're connected to database: ", record)
         except Error as e:
-            print("Error while connecting to MySQL", e)
-            print("Another try in 3s")
-            time.sleep(3)
-            return Database.connect()
+            if info_label is not None:
+                info_label.show_label("Error while connecting to MySQL", e)
+                info_label.show_label("Another try in 5s")
+            else:
+                tk.messagebox("Information", "Error while connecting to MySQL", e, "\nAnother try in 5s")
+            time.sleep(5)
+            return Database.connect(info_label)
         finally:
             if connection.is_connected():
                 cursor.close()
                 connection.close()
-                # print("MySQL connection is closed")
 
     @staticmethod
-    def execute_db(query):
+    def execute_db(query, info_label=None):
         try:
             connection = db.connect(host=DB_HOST,
                                     database=DB_DATABASE,
@@ -91,10 +89,13 @@ class Database:
                 cursor.execute(query)
                 connection.commit()
         except Error as e:
-            print("Error while connecting to MySQL or creating a table", e)
-            print("Another try in 3s")
-            time.sleep(3)
-            Database.execute_db(query)
+            if info_label is not None:
+                info_label.show_label("Error while connecting to MySQL", e)
+                info_label.show_label("Another try in 5s")
+            else:
+                tk.messagebox("Information", "Error while connecting to MySQL", e, "\nAnother try in 5s")
+            time.sleep(5)
+            Database.execute_db(query, info_label)
             return False
         finally:
             if connection.is_connected():
@@ -103,7 +104,7 @@ class Database:
                 return True
 
     @staticmethod
-    def select_db(query):
+    def select_db(query, info_label=None):
         my_results = None
         try:
             connection = db.connect(host=DB_HOST,
@@ -115,10 +116,13 @@ class Database:
                 cursor.execute(query)
                 my_results = cursor.fetchall()
         except Error as e:
-            print("Error while connecting to MySQL or creating a table", e)
-            print("Another try in 3s")
-            time.sleep(3)
-            return Database.select_db(query)
+            if info_label is not None:
+                info_label.show_label("Error while connecting to MySQL", e)
+                info_label.show_label("Another try in 5s")
+            else:
+                tk.messagebox("Information", "Error while connecting to MySQL", e, "\nAnother try in 5s")
+            time.sleep(5)
+            return Database.select_db(query, info_label)
         finally:
             if connection.is_connected():
                 cursor.close()
@@ -139,8 +143,7 @@ class Database:
                 cursor.execute(Database.__query_create_table_bids)
                 cursor.execute(Database.__query_create_table_movements)
         except Error as e:
-            messagebox("Information", "Error while connecting to MySQL")
-            print("Error while connecting to MySQL or creating a table", e)
+            tk.messagebox("Information", "Error while connecting to MySQL", e)
         finally:
             if connection.is_connected():
                 cursor.close()
@@ -171,12 +174,12 @@ class Database:
         return Database.execute_db(query_create_game)
 
     @staticmethod
-    def leave_game(id_game):
+    def leave_game(id_game, info_label):
         query_leave_game = "update GAMES_1000 set Players = Players - 1 where IdG like " + str(id_game)
-        return Database.execute_db(query_leave_game)
+        return Database.execute_db(query_leave_game, info_label)
 
     @staticmethod
-    def make_move(idr, idp, i_card_color, i_card_value, b_if_king_queen_pair):
+    def make_move(idr, idp, i_card_color, i_card_value, b_if_king_queen_pair, info_label):
         card_color = "null" if i_card_color is None else str(i_card_color)
         card_value = "null" if i_card_value is None else str(i_card_value)
         if_king_queen_pair = "1" if b_if_king_queen_pair else "0"
@@ -185,11 +188,11 @@ class Database:
                           ") values (" + str(idr) + ", " + str(idp) + ", " + str(card_color) + ", " + \
                           str(card_value) + ", " + str(if_king_queen_pair) + ")"
 
-        return Database.execute_db(query_make_move)
+        return Database.execute_db(query_make_move, info_label)
 
     @staticmethod
     def deal_cards(idg, dealing_p, p01, p02, p03, p04, p05, p06, p07, p08, p11, p12, p13, p14, p15, p16, p17, p18,
-                   p21, p22, p23, p24, p25, p26, p27, p28, pc1, pc2, pc3):
+                   p21, p22, p23, p24, p25, p26, p27, p28, pc1, pc2, pc3, info_label):
         query_deal_cards = "insert into ROUNDS_1000 " \
                            "(IdG, DealingPlayer, " \
                            "P0_1, P0_2, P0_3, P0_4, P0_5, P0_6, P0_7, P0_8," \
@@ -204,11 +207,11 @@ class Database:
                            ", " + p25 + ", " + p26 + ", " + p27 + ", " + p28 + \
                            ", " + pc1 + ", " + pc2 + ", " + pc3 + ")"
 
-        return Database.execute_db(query_deal_cards)
+        return Database.execute_db(query_deal_cards, info_label)
 
     @staticmethod
     def update_dealing(idr, p01, p02, p03, p04, p05, p06, p07, p08, p11, p12, p13, p14, p15, p16, p17, p18,
-                       p21, p22, p23, p24, p25, p26, p27, p28, b_if_bomb, b_if_again_dealing):
+                       p21, p22, p23, p24, p25, p26, p27, p28, b_if_bomb, b_if_again_dealing, info_label):
 
         if_bomb = "1" if b_if_bomb is None else "0"
         if_again_dealing = "1" if b_if_again_dealing is None else "0"
@@ -227,61 +230,62 @@ class Database:
                            "IfBomb = " + if_bomb + ", IfAgainDealing = " + if_again_dealing + \
                            " where IdR = "+idr
 
-        return Database.execute_db(query_deal_cards)
+        return Database.execute_db(query_deal_cards, info_label)
 
     @staticmethod
-    def make_bid(id_r, id_p, bid):
+    def make_bid(id_r, id_p, bid, info_label):
         query_create_game = "insert into BIDS_1000 (IdR, IdP, Bid) values (" + str(id_r) + ", " + str(id_p) + \
                             ", " + str(bid) + ")"
-        Database.execute_db(query_create_game)
+        Database.execute_db(query_create_game, info_label)
 
     @staticmethod
-    def check_players(id_game):
+    def check_players(id_game, info_label):
         query_check_game = "select Players from GAMES_1000 where IdG = " + str(id_game)
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, info_label)
         return results
 
     @staticmethod
-    def check_moves(id_round):
+    def check_moves(id_round, info_label):
         query_check_game = "select * from MOVEMENTS_1000 where IdR = " + str(id_round) + \
                            " order by MoveDateTime desc limit 1"
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, info_label)
         return results
 
     @staticmethod
-    def check_round(id_game):
+    def check_round(id_game, info_label):
         query_check_game = "select * from ROUNDS_1000 where IdG = " + str(id_game) + \
                            " order by RoundDateTime desc limit 1"
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, info_label)
         return results
 
     @staticmethod
-    def check_round_by_id_r(id_round):
+    def check_round_by_id_r(id_round, info_label):
         query_check_game = "select * from ROUNDS_1000 where IdR = " + str(id_round)
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, info_label)
         return results
 
+    # TUTAJ
     @staticmethod
-    def check_bidding(id_round):
+    def check_bidding(id_round, info_label):
         query_check_game = "select * from BIDS_1000 where IdR = " + str(id_round) + " order by BidDateTime desc limit 1"
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, info_label)
         return results
 
     @staticmethod
-    def get_all_moves_from_current_round(id_round):
+    def get_all_moves_from_current_round(id_round, info_label):
         query_check_game = "select * from MOVEMENTS_1000 where IdR = " + str(id_round) + \
                            " order by MoveDateTime"
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, info_label)
         return results
 
     @staticmethod
-    def get_all_bids_from_current_round(id_round):
+    def get_all_bids_from_current_round(id_round, info_label):
         query_check_game = "select * from BIDS_1000 where IdR = " + str(id_round) + " order by BidDateTime"
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, info_label)
         return results
 
     @staticmethod
-    def check_amount_of_moves_in_round(id_round):
+    def check_amount_of_moves_in_round(id_round, info_label):
         query_check_game = "select count(IdM) from MOVEMENTS_1000 where IdR = " + str(id_round)
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, info_label)
         return results

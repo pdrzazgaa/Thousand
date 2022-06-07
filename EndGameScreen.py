@@ -1,16 +1,17 @@
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 import pygame.mouse
 
 from Database import Database
 from GUISettings import *
 from Button import Button
+from InfoLabel import InfoLabel
 
 
 class EndGameScreen:
     display: pygame.display
 
-    def __init__(self, game, display, control_panel, points_table):
+    def __init__(self, game, display, control_panel, points_table, info_label):
         self.game = game
         self.display = display
         self.control_panel = control_panel
@@ -20,6 +21,7 @@ class EndGameScreen:
         self.if_display_text = True
         self.did_not_display_yet = True
         self.start_time = datetime.now()
+        self.info_label = info_label
 
     def main(self):
         self.manage_display()
@@ -42,6 +44,7 @@ class EndGameScreen:
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
+        self.info_label.render()
         self.display_table()
         self.display_text_in_time()
         for button in self.buttons:
@@ -56,7 +59,7 @@ class EndGameScreen:
             text = "YOU WON"
         else:
             text = "YOU LOST"
-        message_waiting = FONT_ENDING.render(text, True, (0, 0, 0))
+        message_waiting = FONT_ENDING.render(text, True, COLOR_WHITE)
         message_waiting.set_alpha(200)
         self.display.blit(message_waiting, (WIDTH / 2 - message_waiting.get_width() / 2,
                                             HEIGHT / 2 - message_waiting.get_height() / 2))
@@ -73,7 +76,7 @@ class EndGameScreen:
                 self.if_display_text = False
 
     def quit(self):
-        Database.leave_game(self.game.id_game)
+        Database.leave_game(self.game.id_game, self.info_label)
         for timer in self.control_panel.timers:
             timer.cancel()
         pygame.quit()

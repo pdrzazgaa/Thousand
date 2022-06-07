@@ -4,6 +4,7 @@ import pygame.event
 from Card import CardGUI
 from Database import Database
 from GUISettings import *
+from InfoLabel import InfoLabel
 from Round import RoundGUI
 from Game import Game
 from Button import Button
@@ -18,7 +19,7 @@ class EndBiddingScreen:
     card_for_player_left: ()
     card_for_player_right: ()
 
-    def __init__(self, game, display, control_panel):
+    def __init__(self, game, display, control_panel, info_label):
         self.game = game
         self.display = display
         self.control_panel = control_panel
@@ -26,6 +27,7 @@ class EndBiddingScreen:
         self.clicked_card = None
         self.cards = []
         self.is_dealt = False
+        self.info_label = info_label
         self.buttons = []
         self.initialize_buttons()
 
@@ -54,6 +56,7 @@ class EndBiddingScreen:
         if self.game.rounds[-1].bidding.bidding_player_round.player.id_player == self.game.id_player:
             for b in self.buttons:
                 b.render(point_button_clicked=True)
+        self.info_label.render()
         pygame.display.update()
 
     def create_cards(self):
@@ -142,7 +145,7 @@ class EndBiddingScreen:
                                                                            self.game.rounds[-1].players_rounds[
                                                                                (self.game.id_player + 1) % 3])
             else:
-                print("Card hasn't been chosen")
+                self.info_label.show_label("No card has been chosen")
         else:
             self.game.rounds[-1].players_rounds[self.game.id_player].add_card(card_for_player_left[0])
             self.game.rounds[-1].bidding.cards_for_other_players[0] = ()
@@ -157,7 +160,7 @@ class EndBiddingScreen:
                                                                            self.game.rounds[-1].players_rounds[
                                                                                (self.game.id_player + 2) % 3])
             else:
-                print("Card hasn't been chosen")
+                self.info_label.show_label("No card has been chosen")
         else:
             self.game.rounds[-1].players_rounds[self.game.id_player].add_card(card_for_player_right[0])
             self.game.rounds[-1].bidding.cards_for_other_players[1] = ()
@@ -167,9 +170,10 @@ class EndBiddingScreen:
         if self.game.rounds[-1].bidding.cards_for_other_players[0] != () and \
                 self.game.rounds[-1].bidding.cards_for_other_players[1] != ():
             self.game.rounds[-1].bidding.give_away_cards()
-            self.game.rounds[-1].send_dealing_to_database(game_id=self.game.id_game, round_id=self.game.rounds[-1].id_r)
+            self.game.rounds[-1].send_dealing_to_database(info_label=self.info_label, game_id=self.game.id_game,
+                                                          round_id=self.game.rounds[-1].id_r)
         else:
-            print("Cards for opponents haven't been chosen")
+            self.info_label.show_label("Cards for the opponents haven't been chosen")
 
     def card_clicked(self):
         pos = pygame.mouse.get_pos()
@@ -181,7 +185,7 @@ class EndBiddingScreen:
             self.clicked_card = clicked_sprites[len(clicked_sprites) - 1]
 
     def quit(self):
-        Database.leave_game(self.game.id_game)
+        Database.leave_game(self.game.id_game, self.info_label)
         for timer in self.control_panel.timers:
             timer.cancel()
         pygame.quit()
