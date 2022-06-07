@@ -1,6 +1,5 @@
 from Card import Card
 from Database import Database
-from LoadRound import LoadRound
 from Player import Player
 from Settings import KING, QUEEN, NINE, HEART, DIAMONDS, CLUBS, SPADES, SPADES_POINTS, CLUBS_POINTS, DIAMONDS_POINTS, \
     HEART_POINTS
@@ -85,9 +84,7 @@ class PlayerRound:
         try:
             desk[id_player] = self.__cards.pop(self.__cards.index(card))
         except:
-            reloaded_round = LoadRound(game, game.rounds[-1].id_r, info_label)
-            game.rounds[-1] = reloaded_round.round
-            info_label.show_label("The round has been reloaded")
+            game.reload_last_round(info_label)
 
         if if_queen_king_pair:
             if card.color == SPADES:

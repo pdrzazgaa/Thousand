@@ -1,13 +1,11 @@
 from Card import Card
 from Database import Database
-from Game import Game
 from PlayerRound import PlayerRound
 from Round import Round
 
 
 class LoadRound:
 
-    __game: Game
     __round: Round
 
     def __init__(self, game, id_r, info_label):
