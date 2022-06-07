@@ -62,11 +62,11 @@ COLOR_ORANGE = 255, 204, 0
 # Okienko informacyjne
 INFO_BACKGROUND_COLOR = 0, 0, 0, 200
 INFO_TEXT_COLOR = 255, 255, 255
-INFO_WIDTH = WIDTH - 500
-INFO_HEIGHT = 100
+INFO_WIDTH = 500
+INFO_HEIGHT = 80
 INFO_TOP = 0
 INFO_LEFT = WIDTH/2 - INFO_WIDTH/2
-FONT_INFO = pygame.font.SysFont('Helvetica', 50)
+FONT_INFO = pygame.font.SysFont('Helvetica', 40)
 
 
 # Tabela punktów

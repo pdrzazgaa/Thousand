@@ -3,6 +3,7 @@ from threading import Event
 
 from Card import Card
 from Database import Database
+from LoadRound import LoadRound
 from Timer import RepeatedTimer
 from GUISettings import TIME_CHECKING_PLAYERS, TIME_CHECKING_BIDDINGS, TIME_CHECKING_DEALINGS, TIME_CHECKING_MOVES
 
@@ -161,6 +162,13 @@ class ControlPanel:
                             self.timer_check_players.cancel()
                             self.timer_check_moves.cancel()
                             self.end_game_phase = True
+
+    def check_if_no_bug(self):
+        if self.game.rounds[-1].count_cards_in_round() % 3 != 0:
+            reloaded_round = LoadRound(self.game, self.game.rounds[-1].id_r, self.info_label)
+            self.game.rounds[-1] = reloaded_round.round
+            self.info_label.show_label("The round has been reloaded")
+            self.made_move = True
 
     def start_new_round(self):
         self.dealing_phase = True

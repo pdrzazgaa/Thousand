@@ -56,6 +56,7 @@ class Database:
 
     @staticmethod
     def connect(info_label=None):
+        connection = None
         try:
             connection = db.connect(host=DB_HOST,
                                     database=DB_DATABASE,
@@ -73,12 +74,13 @@ class Database:
             time.sleep(5)
             return Database.connect(info_label)
         finally:
-            if connection.is_connected():
+            if connection is not None and connection.is_connected():
                 cursor.close()
                 connection.close()
 
     @staticmethod
     def execute_db(query, info_label=None):
+        connection = None
         try:
             connection = db.connect(host=DB_HOST,
                                     database=DB_DATABASE,
@@ -98,7 +100,7 @@ class Database:
             Database.execute_db(query, info_label)
             return False
         finally:
-            if connection.is_connected():
+            if connection is not None and connection.is_connected():
                 cursor.close()
                 connection.close()
                 return True
@@ -106,6 +108,7 @@ class Database:
     @staticmethod
     def select_db(query, info_label=None):
         my_results = None
+        connection = None
         try:
             connection = db.connect(host=DB_HOST,
                                     database=DB_DATABASE,
@@ -124,7 +127,7 @@ class Database:
             time.sleep(5)
             return Database.select_db(query, info_label)
         finally:
-            if connection.is_connected():
+            if connection is not None and connection.is_connected():
                 cursor.close()
                 connection.close()
             return my_results
