@@ -50,6 +50,7 @@ class ControlPanel:
         self.timers.append(self.timer_check_dealing)
         self.timers.append(self.timer_check_bidding)
         self.timers.append(self.timer_check_moves)
+        self.timers.append(self.timer_check_bugs)
         self.info_label = info_label
 
     def check_players(self):
