@@ -80,6 +80,22 @@ class ControlPanel:
             P2_1, P2_2, P2_3, P2_4, P2_5, P2_6, P2_7, P2_8, \
             PickUp1, PickUp2, PickUp3, IfBomb, IfAgainDealing, RoundDateTime = last_dealing[0]
             if self.game.rounds[-1].last_round != RoundDateTime:
+                if IfBomb == 1:
+                    ...
+                    # self.game.rounds[-1].used_bomb(self.game.rounds[-1].bidding.last_bidding_player_id, self.game)
+                    # self.info_label.show_label("Player %i used bomb" %
+                    #                            self.game.rounds[-1].bidding.last_bidding_player_id)
+                    # self.timer_check_dealing.cancel()
+                    # time.sleep(5)
+                    # self.end_bidding_phase = False
+                    # self.game_phase = True
+                    # self.end_round_phase = True
+                    # time.sleep(15)
+                    # self.start_new_round()
+                    # return
+                elif IfAgainDealing == 1:
+                    ...
+
                 self.game.rounds[-1].players_rounds[0].cards = [Card.card_from_sql(P0_1), Card.card_from_sql(P0_2),
                                                                 Card.card_from_sql(P0_3), Card.card_from_sql(P0_4),
                                                                 Card.card_from_sql(P0_5), Card.card_from_sql(P0_6),
@@ -108,10 +124,6 @@ class ControlPanel:
                     self.game_phase = True
                     self.timer_check_bugs.start()
                     self.timer_check_moves.start()
-            elif IfAgainDealing == 1:
-                ...
-            elif IfBomb == 1:
-                ...
         else:
             self.waiting_for_dealing_phase = True
 

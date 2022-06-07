@@ -139,10 +139,11 @@ class Round:
         else:
             pass
 
-    def used_bomb(self, player_id):
+    def used_bomb(self, player_id, game):
         for pr in self.players_rounds:
             if pr.player.id_player != player_id:
                 pr.player.add_points(60)
+            game.points_table[pr.player.id_player].append(pr.player.points)
         self.players_rounds[player_id].player.use_bomb()
 
     def check_if_end_round(self):

@@ -29,6 +29,10 @@ class Player:
     def has_bombs(self):
         return self.__bombs > 0
 
+    @property
+    def bombs(self):
+        return self.__bombs
+
     def check_if_winner(self):
         return self.points >= 1000
 

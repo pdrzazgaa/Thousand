@@ -293,3 +293,9 @@ class Database:
         query_check_game = "select count(IdM) from MOVEMENTS_1000 where IdR = " + str(id_round)
         results = Database.select_db(query_check_game, info_label)
         return results
+
+    @staticmethod
+    def update_dealing_use_bomb(idr, info_label):
+        query_use_bomb = "UPDATE ROUNDS_1000 SET " \
+                         "IfBomb = 1 where IdR = "+str(idr)
+        return Database.execute_db(query_use_bomb, info_label)

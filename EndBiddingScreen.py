@@ -119,7 +119,8 @@ class EndBiddingScreen:
             self.display.blit(message_waiting, (WIDTH / 2 - message_waiting.get_width() / 2, 150))
 
     def initialize_buttons(self):
-        # self.buttons.append(Button(self, (WIDTH / 2), 160, 150, 60,
+        # W przyszłej wersji :)
+        # self.buttons.append(Button(self, (WIDTH / 2), 210, 150, 60,
         #                            FONT_BIDDING_PLAYERS.render("BOMB", True, (0, 0, 0)), self.use_bomb,
         #                            self.display))
         self.buttons.append(Button(self, (WIDTH / 2 - 80), 280, 120, 60,
@@ -133,7 +134,11 @@ class EndBiddingScreen:
                                    self.accept, self.display))
 
     def use_bomb(self):
-        self.game.rounds[-1].used_bomb(self.game.id_player)
+        if self.game.player_me().has_bombs():
+            Database.update_dealing_use_bomb(self.game.rounds[-1].id_r, self.info_label)
+            self.info_label.show_label("Used bomb. Left: %i" % self.game.player_me().bombs)
+        else:
+            self.info_label.show_label("You have no bombs")
 
     def card_for_left_player(self):
         card_for_player_left = self.game.rounds[-1].bidding.cards_for_other_players[0]
