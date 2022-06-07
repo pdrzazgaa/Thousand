@@ -14,6 +14,7 @@ class Database:
     __query_create_table_games = "CREATE TABLE IF NOT EXISTS GAMES_1000 " \
                                  "(IdG Integer not null primary key auto_increment, " \
                                  "Players Integer not null, " \
+                                 "Password Varchar(20) not null, " \
                                  "GameDateTime timestamp NOT NULL " \
                                  ")"
     __query_create_table_rounds = "CREATE TABLE IF NOT EXISTS ROUNDS_1000 " \
@@ -155,8 +156,8 @@ class Database:
                 connection.close()
 
     @staticmethod
-    def create_game():
-        query_create_game = "insert into GAMES_1000 (players) values (0)"
+    def create_game(password):
+        query_create_game = "insert into GAMES_1000 (Players, Password) values (0, '" + password + "')"
         Database.execute_db(query_create_game, again_try=False)
 
     @staticmethod
@@ -176,6 +177,11 @@ class Database:
     def join_game(id_game):
         query_create_game = "update GAMES_1000 set Players = Players + 1 where IdG like " + str(id_game)
         return Database.execute_db(query_create_game)
+
+    @staticmethod
+    def check_password(id_game):
+        query_check_password = "select Password from GAMES_1000 where IdG like " + str(id_game)
+        return Database.select_db(query_check_password)
 
     @staticmethod
     def leave_game(id_game, info_label):

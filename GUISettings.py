@@ -11,10 +11,10 @@ FPS = 10
 
 if sys.platform == "win32":
     START_WINDOWS_WIDTH = "320"
-    START_WINDOWS_HEIGHT = "300"
+    START_WINDOWS_HEIGHT = "350"
 elif sys.platform == "darwin":
     START_WINDOWS_WIDTH = "370"
-    START_WINDOWS_HEIGHT = "270"
+    START_WINDOWS_HEIGHT = "320"
 else:
     START_WINDOWS_WIDTH = "320"
     START_WINDOWS_HEIGHT = "320"
