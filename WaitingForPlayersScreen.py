@@ -34,8 +34,7 @@ class WaitingForPlayersScreen:
                         button.do_sth()
 
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                self.quit()
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)

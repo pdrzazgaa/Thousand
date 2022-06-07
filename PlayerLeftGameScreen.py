@@ -35,8 +35,7 @@ class PlayerLeftGameScreen:
                         button.do_sth()
 
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                self.quit()
 
     def turn_off_game(self):
         for timer in self.control_panel.timers:
@@ -44,11 +43,11 @@ class PlayerLeftGameScreen:
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
-        self.info_label.render()
         message_waiting = FONT_WAITING.render("YOUR OPPONENT LEFT THE GAME", True, (255, 255, 255), BACKGROUND_COLOR)
         self.display.blit(message_waiting, (WIDTH/2 - message_waiting.get_width()/2, 150))
         for button in self.buttons:
             button.render(False)
+        self.info_label.render()
         pygame.display.update()
 
     def quit(self):

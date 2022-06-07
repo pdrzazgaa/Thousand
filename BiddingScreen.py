@@ -16,12 +16,14 @@ class BiddingScreen:
     game: Game
     cards: [CardGUI]
 
-    def __init__(self, game, display, control_panel, info_label):
+    def __init__(self, game, display, control_panel, points_table, info_label):
         self.game = game
         self.display = display
         self.control_panel = control_panel
+        self.points_table = points_table
         self.all_sprites = pygame.sprite.Group()
         self.info_label = info_label
+        self.show_table = False
         self.bidding_table = BiddingTable(display, game, control_panel, self.info_label)
         self.cards = []
         self.is_dealt = False
@@ -35,6 +37,7 @@ class BiddingScreen:
         self.handle_clicks()
 
     def handle_clicks(self):
+        keys = pygame.key.get_pressed()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit()
@@ -44,12 +47,18 @@ class BiddingScreen:
                             self.game.rounds[-1].bidding.current_bidding_player_id == self.game.id_player:
                         for button in self.bidding_table.buttons:
                             button.do_sth()
+        if keys[pygame.K_p]:
+            self.show_table = True
+        else:
+            self.show_table = False
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
-        self.info_label.render()
         self.display_cards(self.control_panel.hidden_prikup)
         self.bidding_table.render()
+        if self.show_table:
+            self.points_table.render()
+        self.info_label.render()
         pygame.display.update()
 
     def create_cards(self):

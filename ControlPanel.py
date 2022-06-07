@@ -2,6 +2,7 @@ import time
 from threading import Event
 from datetime import datetime
 
+from RoundGui import RoundGUI
 from Card import Card
 from Database import Database
 from Settings import TIME_FOR_RELOAD_MOVE
@@ -170,6 +171,7 @@ class ControlPanel:
                     current_round.last_move = MoveDateTime
                     card = Card(Color, Value)
                     player_round.play_card(desk, IdP, card, IfQueenKingPair == 1, self.game, self.info_label)
+                    RoundGUI.if_queen_king_pair_info(card, IfQueenKingPair == 1, self.info_label)
                     current_round.last_move_player_id = IdP
                     if IfQueenKingPair == 1:
                         current_round.atut = Color

@@ -91,16 +91,12 @@ class PlayerRound:
         if if_queen_king_pair:
             if card.color == SPADES:
                 self.__points += SPADES_POINTS
-                info_label.show_label("Spades Queen-King Pair + 40")
             elif card.color == CLUBS:
                 self.__points += CLUBS_POINTS
-                info_label.show_label("Clubs Queen-King Pair + 60")
             elif card.color == DIAMONDS:
                 self.__points += DIAMONDS_POINTS
-                info_label.show_label("Diamonds Queen-King Pair + 80")
             else:
                 self.__points += HEART_POINTS
-                info_label.show_label("Heart Queen-King Pair + 100")
 
     def check_if_can_make_move(self, card, init_card):
         if init_card is not None:

@@ -1,5 +1,6 @@
 from GUISettings import *
 from CardGUI import CardGUI
+from Settings import SPADES, CLUBS, DIAMONDS
 
 
 class RoundGUI:
@@ -108,3 +109,27 @@ class RoundGUI:
             card.rect = card.image.get_rect(center=(card.left + CARD_WIDTH / 2, card.top +
                                                     CARD_HEIGHT / 2))
             card.card.is_reversed = False
+
+    @staticmethod
+    def if_queen_king_pair_info(card, if_queen_king_pair, info_label, reload=False):
+        if if_queen_king_pair:
+            if card.color == SPADES:
+                if not reload:
+                    info_label.show_label("Spades Queen-King Pair + 40")
+                else:
+                    info_label.show_label("Last Queen-King Pair: Spades + 40")
+            elif card.color == CLUBS:
+                if not reload:
+                    info_label.show_label("Clubs Queen-King Pair + 60")
+                else:
+                    info_label.show_label("Last Queen-King Pair: Clubs + 60")
+            elif card.color == DIAMONDS:
+                if not reload:
+                    info_label.show_label("Diamonds Queen-King Pair + 80")
+                else:
+                    info_label.show_label("Last Queen-King Pair: Diamonds + 80")
+            else:
+                if not reload:
+                    info_label.show_label("Heart Queen-King Pair + 100")
+                else:
+                    info_label.show_label("Last Queen-King Pair: Heart + 100")

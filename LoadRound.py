@@ -2,6 +2,7 @@ from Card import Card
 from Database import Database
 from PlayerRound import PlayerRound
 from Round import Round
+from RoundGui import RoundGUI
 
 
 class LoadRound:
@@ -63,6 +64,7 @@ class LoadRound:
                 current_round.last_move = MoveDateTime
                 card = Card(Color, Value)
                 player_round.play_card(desk, IdP, card, IfQueenKingPair == 1, self.__game, self.info_label)
+                RoundGUI.if_queen_king_pair_info(card, IfQueenKingPair == 1, self.info_label, reload=True)
                 current_round.last_move_player_id = IdP
                 if IfQueenKingPair == 1:
                     current_round.atut = Color

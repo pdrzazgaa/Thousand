@@ -1,6 +1,4 @@
-import sys
 import ControlPanel
-from Database import Database
 from EndGameScreen import EndGameScreen
 from GUISettings import *
 from ControlPanel import ControlPanel
@@ -68,7 +66,10 @@ class Desk:
 
     def create_new_round(self, game):
         self.dealing_screen = DealingCardsScreen(game, self.display_surface, self.panel_control, self.info_label)
-        self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control, self.info_label)
-        self.end_bidding_screen = EndBiddingScreen(game, self.display_surface, self.panel_control, self.info_label)
-        self.game_screen = GameScreen(game, self.display_surface, self.panel_control, self.points_table, self.info_label)
+        self.bidding_screen = BiddingScreen(game, self.display_surface, self.panel_control, self.points_table,
+                                            self.info_label)
+        self.end_bidding_screen = EndBiddingScreen(game, self.display_surface, self.panel_control, self.points_table,
+                                                   self.info_label)
+        self.game_screen = GameScreen(game, self.display_surface, self.panel_control, self.points_table,
+                                      self.info_label)
 

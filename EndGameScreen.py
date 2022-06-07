@@ -5,7 +5,6 @@ import pygame.mouse
 from Database import Database
 from GUISettings import *
 from Button import Button
-from InfoLabel import InfoLabel
 
 
 class EndGameScreen:
@@ -39,16 +38,15 @@ class EndGameScreen:
                         button.do_sth()
 
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                self.quit()
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
-        self.info_label.render()
         self.display_table()
         self.display_text_in_time()
         for button in self.buttons:
             button.render(False)
+        self.info_label.render()
         pygame.display.update()
 
     def display_table(self):

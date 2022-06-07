@@ -24,6 +24,7 @@ class GameScreen:
         self.is_done = False
         self.clicked_card = None
         self.info_label = info_label
+        self.show_table = False
         self.cards = []
         self.buttons = []
         self.initialize_buttons()
@@ -36,6 +37,7 @@ class GameScreen:
         self.handle_clicks()
 
     def handle_clicks(self):
+        keys = pygame.key.get_pressed()
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -45,10 +47,13 @@ class GameScreen:
                             button.do_sth()
             if event.type == pygame.QUIT:
                 self.quit()
+        if keys[pygame.K_p]:
+            self.show_table = True
+        else:
+            self.show_table = False
 
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
-        self.info_label.render()
         if not self.control_panel.end_round_phase:
             if self.cards:
                 self.display_cards()
@@ -62,8 +67,11 @@ class GameScreen:
                 for button in self.buttons:
                     button.clicked = False
 
+            if self.show_table:
+                self.display_table()
         else:
             self.display_table()
+        self.info_label.render()
         pygame.display.update()
 
     def create_cards(self):
