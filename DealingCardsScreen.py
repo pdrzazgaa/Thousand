@@ -3,8 +3,7 @@ import pygame.event
 from Card import CardGUI
 from Database import Database
 from GUISettings import *
-from InfoLabel import InfoLabel
-from Round import RoundGUI
+from RoundGui import RoundGUI
 
 
 class DealingCardsScreen:

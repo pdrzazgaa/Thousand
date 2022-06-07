@@ -5,7 +5,8 @@ from Card import Card
 from Database import Database
 from LoadRound import LoadRound
 from Timer import RepeatedTimer
-from GUISettings import TIME_CHECKING_PLAYERS, TIME_CHECKING_BIDDINGS, TIME_CHECKING_DEALINGS, TIME_CHECKING_MOVES
+from GUISettings import TIME_CHECKING_PLAYERS, TIME_CHECKING_BIDDINGS, TIME_CHECKING_DEALINGS, \
+    TIME_CHECKING_MOVES, TIME_CHECKING_BUGS
 
 
 class ControlPanel:
@@ -34,6 +35,7 @@ class ControlPanel:
     timer_check_players: RepeatedTimer
     timer_check_dealing: RepeatedTimer
     timer_check_bidding: RepeatedTimer
+    timer_check_bugs: RepeatedTimer
 
     def __init__(self, game, info_label):
         self.game = game
@@ -42,6 +44,7 @@ class ControlPanel:
         self.timer_check_dealing = RepeatedTimer(Event(), TIME_CHECKING_DEALINGS, self.check_dealing)
         self.timer_check_bidding = RepeatedTimer(Event(), TIME_CHECKING_BIDDINGS, self.check_bidding)
         self.timer_check_moves = RepeatedTimer(Event(), TIME_CHECKING_MOVES, self.check_moves)
+        self.timer_check_bugs = RepeatedTimer(Event(), TIME_CHECKING_BUGS, self.check_if_no_bug)
         self.timers = []
         self.timers.append(self.timer_check_players)
         self.timers.append(self.timer_check_dealing)
@@ -99,6 +102,7 @@ class ControlPanel:
                     self.end_bidding_phase = False
                     self.dealing_phase = False
                     self.game_phase = True
+                    self.timer_check_bugs.start()
                     self.timer_check_moves.start()
             elif IfAgainDealing == 1:
                 ...
@@ -187,10 +191,12 @@ class ControlPanel:
         self.end_game_phase = False
 
     def reset_timers(self):
+        self.timer_check_bugs.cancel()
         self.timer_check_dealing.cancel()
         self.timer_check_bidding.cancel()
         self.timer_check_moves.cancel()
         self.timer_check_dealing = RepeatedTimer(Event(), TIME_CHECKING_DEALINGS, self.check_dealing)
         self.timer_check_bidding = RepeatedTimer(Event(), TIME_CHECKING_BIDDINGS, self.check_bidding)
         self.timer_check_moves = RepeatedTimer(Event(), TIME_CHECKING_MOVES, self.check_moves)
+        self.timer_check_bugs = RepeatedTimer(Event(), TIME_CHECKING_MOVES, self.check_if_no_bug)
         self.timer_check_dealing.start()
