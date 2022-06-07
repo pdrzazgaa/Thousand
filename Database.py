@@ -119,7 +119,7 @@ class Database:
                 my_results = cursor.fetchall()
         except Error as e:
             if info_label is not None:
-                info_label.show_label("Connection lost - reconnection try in 5s")
+                info_label.show_label("Connection lost - reconnection in 5s")
             else:
                 messagebox.showinfo("Information", "Error while connecting to MySQL")
             if again_try:

@@ -121,15 +121,20 @@ class ControlPanel:
             Database.check_bidding(id_round, self.info_label)
         if last_bidding is not None and len(last_bidding) != 0:
             IdB, IdR, IdP, Bid, BidDateTime = last_bidding[0]
-            if self.game.rounds[-1].bidding.last_bidding_date != BidDateTime:
-                self.checking_time = BidDateTime
+            if self.game.rounds[-1].bidding.last_bidding_date != BidDateTime or \
+                    (datetime.now() - self.checking_time).total_seconds() > TIME_FOR_RELOAD_MOVE:
                 bidding = self.game.rounds[-1].bidding
                 player_round = self.game.rounds[-1].players_rounds[IdP]
-                bidding.last_bidding_date = BidDateTime
-                if Bid != -1:
-                    bidding.players_declaration_value(player_round, Bid)
+                if self.game.rounds[-1].bidding.last_bidding_date != BidDateTime:
+                    self.checking_time = BidDateTime
+                    bidding.last_bidding_date = BidDateTime
+                    if Bid != -1:
+                        bidding.players_declaration_value(player_round, Bid)
+                    else:
+                        bidding.pass_bid(player_round)
                 else:
-                    bidding.pass_bid(player_round)
+                    self.game.reload_last_round(self.info_label)
+                    self.checking_time = datetime.now()
                 if bidding.if_bidding_end():
                     self.hidden_prikup = False
                     self.timer_check_bidding.cancel()
@@ -137,27 +142,30 @@ class ControlPanel:
                     bidding.bidding_end()
                     self.bidding_phase = False
                     self.end_bidding_phase = True
-            # elif (datetime.now() - self.checking_time).total_seconds() > TIME_FOR_RELOAD_MOVE:
-            #     self.game.reload_last_round(self.info_label)
-            #     self.checking_time = datetime.now()
 
     def check_moves(self):
         id_round = self.game.rounds[-1].id_r
         last_move = Database.check_moves(id_round, self.info_label)
         if last_move is not None and len(last_move) != 0:
             IdM, IdR, IdP, Color, Value, IfQueenKingPair, MoveDateTime = last_move[0]
-            if self.game.rounds[-1].last_move != MoveDateTime:
-                self.checking_time = MoveDateTime
+            if self.game.rounds[-1].last_move != MoveDateTime or \
+                    (datetime.now() - self.checking_time).total_seconds() > TIME_FOR_RELOAD_MOVE:
                 desk = self.game.rounds[-1].desk
                 current_round = self.game.rounds[-1]
-                player_round = self.game.rounds[-1].players_rounds[IdP]
-                current_round.last_move = MoveDateTime
-                card = Card(Color, Value)
-                player_round.play_card(desk, IdP, card, IfQueenKingPair == 1, self.game, self.info_label)
-                current_round.last_move_player_id = IdP
-                if IfQueenKingPair == 1:
-                    current_round.atut = Color
-                self.made_move = True
+                if self.game.rounds[-1].last_move != MoveDateTime:
+                    self.checking_time = MoveDateTime
+                    player_round = self.game.rounds[-1].players_rounds[IdP]
+                    current_round.last_move = MoveDateTime
+                    card = Card(Color, Value)
+                    player_round.play_card(desk, IdP, card, IfQueenKingPair == 1, self.game, self.info_label)
+                    current_round.last_move_player_id = IdP
+                    if IfQueenKingPair == 1:
+                        current_round.atut = Color
+                    self.made_move = True
+                else:
+                    self.game.reload_last_round(self.info_label)
+                    self.checking_time = datetime.now()
+                    self.made_move = True
                 if None not in desk:
                     self.full_desk = True
                     time.sleep(4)
@@ -176,10 +184,6 @@ class ControlPanel:
                             time.sleep(15)
                             self.game_phase = False
                             self.start_new_round()
-            elif (datetime.now() - self.checking_time).total_seconds() > TIME_FOR_RELOAD_MOVE:
-                self.game.reload_last_round(self.info_label)
-                self.checking_time = datetime.now()
-                self.made_move = True
 
     def check_if_no_bug(self):
         if self.game.rounds[-1].count_cards_in_round() % 3 != 0:

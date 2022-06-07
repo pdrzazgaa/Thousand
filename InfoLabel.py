@@ -47,10 +47,11 @@ class InfoLabel:
                                          self.message.get_height()/2))
 
     def display_rectangle(self):
-        transparent_rect = pygame.Surface((self.message.get_width() + 100, self.height))
+        self.width = self.message.get_width() + 100
+        transparent_rect = pygame.Surface((self.width, self.height))
         transparent_rect.set_alpha(128)
         transparent_rect.fill(INFO_BACKGROUND_COLOR)
-        self.display.blit(transparent_rect, (self.x, self.y))
+        self.display.blit(transparent_rect, (WIDTH/2 - self.width/2, self.y))
 
     def check_if_disturbed(self):
         mouse = pygame.mouse.get_pos()
