@@ -58,7 +58,7 @@ class Game:
     def reload_last_round(self, info_label):
         reloaded_round = LoadRound(self, self.rounds[-1].id_r, info_label)
         self.rounds[-1] = reloaded_round.round
-        # info_label.show_label("The round has been reloaded")
+        info_label.show_label("The round has been reloaded")
 
     def add_round_to_game(self):
         # Tworzymy rundy graczy
