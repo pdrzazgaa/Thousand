@@ -58,9 +58,9 @@ class GameScreen:
                 if self.game.id_player == self.game.rounds[-1].current_id_player:
                     for button in self.buttons:
                         button.render(point_button_clicked=True)
-                else:
-                    for button in self.buttons:
-                        button.set_clicked(False)
+            else:
+                for button in self.buttons:
+                    button.set_clicked(False)
         else:
             self.display_table()
         pygame.display.update()

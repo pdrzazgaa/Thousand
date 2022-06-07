@@ -144,7 +144,7 @@ class ControlPanel:
                 player_round = self.game.rounds[-1].players_rounds[IdP]
                 current_round.last_move = MoveDateTime
                 card = Card(Color, Value)
-                player_round.play_card(desk, IdP, card, IfQueenKingPair == 1)
+                player_round.play_card(desk, IdP, card, IfQueenKingPair == 1, self.game, self.info_label)
                 current_round.last_move_player_id = IdP
                 if IfQueenKingPair == 1:
                     current_round.atut = Color

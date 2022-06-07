@@ -63,7 +63,7 @@ class LoadRound:
                 player_round = current_round.players_rounds[IdP]
                 current_round.last_move = MoveDateTime
                 card = Card(Color, Value)
-                player_round.play_card(desk, IdP, card, IfQueenKingPair == 1)
+                player_round.play_card(desk, IdP, card, IfQueenKingPair == 1, self.__game, self.info_label)
                 current_round.last_move_player_id = IdP
                 if IfQueenKingPair == 1:
                     current_round.atut = Color
