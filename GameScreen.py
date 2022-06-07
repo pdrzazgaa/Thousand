@@ -90,7 +90,8 @@ class GameScreen:
         # gracz
         id_p = self.game.id_player
         points_p = self.game.rounds[-1].players_rounds[id_p].points
-        message_waiting = FONT_POINTS.render("Points: [%i]" % points_p, True, self.choose_color(id_p), BACKGROUND_COLOR)
+        message_waiting = FONT_POINTS_GAME.render("Points: [%i]" % points_p, True, self.choose_color(id_p),
+                                                  BACKGROUND_COLOR)
         self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 10, HEIGHT - 40))
 
         # przeciwnik 1
@@ -98,7 +99,7 @@ class GameScreen:
         points_p1 = self.game.rounds[-1].players_rounds[id_op1].points
         message_waiting = FONT_INFO_AFTER_BIDDING.render("P%i [%i]" % (id_op1, points_p1), True,
                                                          self.choose_color(id_op1), BACKGROUND_COLOR)
-        self.display.blit(message_waiting, (30, 30))
+        self.display.blit(message_waiting, (10, 30))
 
         # przeciwnik 2
         id_op2 = (self.game.id_player + 2) % 3
@@ -109,9 +110,9 @@ class GameScreen:
 
     def choose_color(self, id_player):
         if id_player == self.game.rounds[-1].current_id_player:
-            return 255, 0, 0
+            return COLOR_ORANGE
         else:
-            return 255, 255, 255
+            return COLOR_WHITE
 
     def display_table(self):
         self.points_table.render()

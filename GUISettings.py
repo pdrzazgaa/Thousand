@@ -17,8 +17,8 @@ FONTSIZE_TITLE = "100"
 BACKGROUND_COLOR = (0, 74, 0)
 
 # Przyciski
-BUTTON_COLOR_CLICKED = (192, 192, 192)
-BUTTON_COLOR_DISTURBED = (225, 225, 225)
+BUTTON_COLOR_CLICKED = (150, 150, 150)
+BUTTON_COLOR_DISTURBED = (210, 210, 210)
 BUTTON_COLOR_ENABLED = (255, 255, 255)
 
 # Oczekiwanie na graczy
@@ -26,7 +26,7 @@ FONT_WAITING = pygame.font.SysFont('Helvetica', 60)
 FONT_BUTTON = pygame.font.SysFont('Helvetica', 40)
 FONT_BUTTON_SMALL = pygame.font.SysFont('Helvetica', 30)
 FONT_CURRENT_PLAYERS = pygame.font.SysFont('Helvetica', 40)
-FONT_POINTS = pygame.font.SysFont('Helvetica', 30)
+FONT_POINTS_GAME = pygame.font.SysFont('Helvetica', 30)
 
 # Licytacje
 WIDTH_BIDDING_TABLE = 600
@@ -54,6 +54,10 @@ CARD_OFFSET = -75
 PIVOT_LEFT_CARDS = 90
 PIVOT_RIGHT_CARDS = -90
 OPPONENT_CARD_OFFSET = -100
+
+# Gra
+COLOR_WHITE = 255, 255, 255
+COLOR_ORANGE = 255, 204, 0
 
 # Tabela punktów
 TABLE_WIDTH = 550
