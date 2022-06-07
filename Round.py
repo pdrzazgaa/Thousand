@@ -165,7 +165,6 @@ class Round:
                 else:
                     pr.player.add_points(pr.points - pr.points % 10)
             game.points_table[pr.player.id_player].append(pr.player.points)
-            game.players[pr.player.id_player] = pr.player.points
 
     @staticmethod
     def shuffle_cards():

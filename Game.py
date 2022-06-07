@@ -2,6 +2,7 @@ from LoadRound import LoadRound
 from Player import Player
 from PlayerRound import PlayerRound
 from Round import Round
+from Settings import END_GAME
 
 
 class Game:
@@ -70,6 +71,6 @@ class Game:
 
     def check_end(self):
         for player in self.__players:
-            if player.points >= 1000:
+            if player.points >= END_GAME:
                 return True
         return False
