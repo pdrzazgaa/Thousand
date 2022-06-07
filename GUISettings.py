@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 pygame.font.init()
 
@@ -8,8 +9,17 @@ ACC = 0.5
 FRIC = -0.12
 FPS = 10
 
-START_WINDOWS_WIDTH = "370"
-START_WINDOWS_HEIGHT = "270"
+if sys.platform == "win32":
+    START_WINDOWS_WIDTH = "320"
+    START_WINDOWS_HEIGHT = "300"
+elif sys.platform == "darwin":
+    START_WINDOWS_WIDTH = "370"
+    START_WINDOWS_HEIGHT = "270"
+else:
+    START_WINDOWS_WIDTH = "320"
+    START_WINDOWS_HEIGHT = "320"
+
+
 
 FONT = "Helvetica"
 FONTSIZE = "15"
