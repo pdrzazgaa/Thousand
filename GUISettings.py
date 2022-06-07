@@ -66,7 +66,7 @@ INFO_WIDTH = 500
 INFO_HEIGHT = 80
 INFO_TOP = 0
 INFO_LEFT = WIDTH/2 - INFO_WIDTH/2
-FONT_INFO = pygame.font.SysFont('Helvetica', 40)
+FONT_INFO = pygame.font.SysFont('Helvetica', 30)
 
 
 # Tabela punktów

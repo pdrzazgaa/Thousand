@@ -157,16 +157,17 @@ class ControlPanel:
                     self.full_desk = False
                     self.made_move = True
                     if current_round.check_if_end_round():
-                        current_round.end_round(self.game)
-                        time.sleep(2)
-                        self.end_round_phase = True
-                        time.sleep(15)
-                        self.game_phase = False
-                        self.start_new_round()
                         if self.game.check_end():
                             self.timer_check_players.cancel()
                             self.timer_check_moves.cancel()
                             self.end_game_phase = True
+                        else:
+                            current_round.end_round(self.game)
+                            time.sleep(2)
+                            self.end_round_phase = True
+                            time.sleep(15)
+                            self.game_phase = False
+                            self.start_new_round()
 
     def check_if_no_bug(self):
         if self.game.rounds[-1].count_cards_in_round() % 3 != 0:

@@ -5,7 +5,6 @@ import pygame.mouse
 from Database import Database
 from GUISettings import *
 from Button import Button
-from InfoLabel import InfoLabel
 
 
 class PlayerLeftGameScreen:
@@ -54,5 +53,7 @@ class PlayerLeftGameScreen:
 
     def quit(self):
         Database.leave_game(self.game.id_game, self.info_label)
+        for timer in self.control_panel.timers:
+            timer.cancel()
         pygame.quit()
         sys.exit()

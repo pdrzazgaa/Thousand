@@ -1,5 +1,5 @@
 import time
-import tkinter as tk
+from tkinter import messagebox
 
 import mysql.connector as db
 from mysql.connector import Error
@@ -55,7 +55,7 @@ class Database:
                                      ")"
 
     @staticmethod
-    def connect(info_label=None):
+    def connect(info_label=None, again_try=True):
         connection = None
         try:
             connection = db.connect(host=DB_HOST,
@@ -66,20 +66,18 @@ class Database:
                 cursor = connection.cursor()
                 return cursor
         except Error as e:
-            if info_label is not None:
-                info_label.show_label("Error while connecting to MySQL", e)
-                info_label.show_label("Another try in 5s")
+            if again_try:
+                time.sleep(5)
+                return Database.connect(info_label)
             else:
-                tk.messagebox("Information", "Error while connecting to MySQL", e, "\nAnother try in 5s")
-            time.sleep(5)
-            return Database.connect(info_label)
+                return None
         finally:
             if connection is not None and connection.is_connected():
                 cursor.close()
                 connection.close()
 
     @staticmethod
-    def execute_db(query, info_label=None):
+    def execute_db(query, info_label=None, again_try=True):
         connection = None
         try:
             connection = db.connect(host=DB_HOST,
@@ -92,13 +90,14 @@ class Database:
                 connection.commit()
         except Error as e:
             if info_label is not None:
-                info_label.show_label("Error while connecting to MySQL", e)
-                info_label.show_label("Another try in 5s")
+                info_label.show_label("Connection lost - reconnection try in 5s")
             else:
-                tk.messagebox("Information", "Error while connecting to MySQL", e, "\nAnother try in 5s")
-            time.sleep(5)
-            Database.execute_db(query, info_label)
-            return False
+                messagebox.showinfo("Information", "Error while connecting to MySQL")
+            if again_try:
+                time.sleep(5)
+                Database.execute_db(query, info_label)
+            else:
+                return False
         finally:
             if connection is not None and connection.is_connected():
                 cursor.close()
@@ -106,7 +105,7 @@ class Database:
                 return True
 
     @staticmethod
-    def select_db(query, info_label=None):
+    def select_db(query, info_label=None, again_try=True):
         my_results = None
         connection = None
         try:
@@ -120,12 +119,14 @@ class Database:
                 my_results = cursor.fetchall()
         except Error as e:
             if info_label is not None:
-                info_label.show_label("Error while connecting to MySQL", e)
-                info_label.show_label("Another try in 5s")
+                info_label.show_label("Connection lost - reconnection try in 5s")
             else:
-                tk.messagebox("Information", "Error while connecting to MySQL", e, "\nAnother try in 5s")
-            time.sleep(5)
-            return Database.select_db(query, info_label)
+                messagebox.showinfo("Information", "Error while connecting to MySQL")
+            if again_try:
+                time.sleep(5)
+                return Database.select_db(query, info_label)
+            else:
+                return None
         finally:
             if connection is not None and connection.is_connected():
                 cursor.close()
@@ -134,6 +135,7 @@ class Database:
 
     @staticmethod
     def create_tables():
+        connection = None
         try:
             connection = db.connect(host=DB_HOST,
                                     database=DB_DATABASE,
@@ -146,29 +148,28 @@ class Database:
                 cursor.execute(Database.__query_create_table_bids)
                 cursor.execute(Database.__query_create_table_movements)
         except Error as e:
-            tk.messagebox("Information", "Error while connecting to MySQL", e)
+            ...
         finally:
-            if connection.is_connected():
+            if connection is not None and connection.is_connected():
                 cursor.close()
                 connection.close()
-                print("MySQL connection is closed")
 
     @staticmethod
     def create_game():
         query_create_game = "insert into GAMES_1000 (players) values (0)"
-        Database.execute_db(query_create_game)
+        Database.execute_db(query_create_game, again_try=False)
 
     @staticmethod
     def get_game_id():
         query_create_game = "select IdG from GAMES_1000 order by GameDateTime desc limit 1"
-        id_game = Database.select_db(query_create_game)
+        id_game = Database.select_db(query_create_game, again_try=False)
         return id_game
 
     @staticmethod
     def check_game(id_game):
         query_check_game = "select Players, (select count(IdR) from ROUNDS_1000 where IdG = " + \
                            str(id_game) + ") from GAMES_1000 where IdG = " + str(id_game)
-        results = Database.select_db(query_check_game)
+        results = Database.select_db(query_check_game, again_try=False)
         return results
 
     @staticmethod

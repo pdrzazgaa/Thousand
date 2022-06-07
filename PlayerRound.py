@@ -74,6 +74,8 @@ class PlayerRound:
                 nines += 1
         return nines == 4
 
+    # -------------------------------
+
     def make_move(self, chosen_card, initial_move_player_id, id_r, info_label):
         color = chosen_card.card.color
         value = chosen_card.card.value

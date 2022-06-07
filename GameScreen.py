@@ -60,7 +60,8 @@ class GameScreen:
                         button.render(point_button_clicked=True)
             else:
                 for button in self.buttons:
-                    button.set_clicked(False)
+                    button.clicked = False
+
         else:
             self.display_table()
         pygame.display.update()
@@ -144,8 +145,12 @@ class GameScreen:
                 self.clicked_card = None
             else:
                 self.info_label.show_label("Play a card with the same color as the initial one")
+                for b in self.buttons:
+                    b.set_clicked = False
         else:
             self.info_label.show_label("No card has been chosen")
+            for b in self.buttons:
+                b.set_clicked = False
 
     def card_clicked(self):
         pos = pygame.mouse.get_pos()

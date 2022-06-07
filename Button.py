@@ -19,9 +19,6 @@ class Button:
         self.button_color = BUTTON_COLOR_ENABLED
         self.display = display
 
-    def set_clicked(self, clicked):
-        self.clicked = clicked
-
     def render(self, point_button_clicked=False, disabled=False):
         self.check_if_disturbed()
         if disabled:

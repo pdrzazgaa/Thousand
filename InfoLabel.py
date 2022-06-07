@@ -10,8 +10,8 @@ class InfoLabel:
     def __init__(self, display, width=INFO_WIDTH, height=INFO_HEIGHT):
         self.x = INFO_LEFT
         self.y = INFO_TOP
-        self.height = width
-        self.width = height
+        self.height = height
+        self.width = width
         self.hit_box = pygame.Rect(self.x, self.y, self.width, self.height)
         self.moved = False
         self.display = display
@@ -19,19 +19,17 @@ class InfoLabel:
         self.if_display_text = True
         self.start_time = datetime.now()
         self.visible = False
-        self.text = ""
+        self.message = None
 
-    def show_label(self, text, width=INFO_WIDTH, height=INFO_HEIGHT):
+    def show_label(self, text):
         self.visible = True
-        self.width = width
-        self.height = height
-        self.text = text
+        self.message = FONT_INFO.render(text, True, INFO_TEXT_COLOR)
 
     def render(self):
         self.display_label_in_time()
 
     def display_label_in_time(self):
-        # Napis wyświetlamy tylko przez 4 sekund
+        # Napis wyświetlamy tylko przez 5 sekund
         if self.visible:
             if not self.if_display_text:
                 self.if_display_text = True
@@ -44,12 +42,11 @@ class InfoLabel:
                     self.visible = False
 
     def display_label(self):
-        message = FONT_INFO.render(self.text, True, INFO_TEXT_COLOR)
-        message.set_alpha(240)
-        self.display.blit(message, (WIDTH/2 - message.get_width()/2, self.height/2 - message.get_height()/2))
+        self.message.set_alpha(240)
+        self.display.blit(self.message, (WIDTH/2 - self.message.get_width()/2, self.height/2 - self.message.get_height()/2))
 
     def display_rectangle(self):
-        transparent_rect = pygame.Surface((self.width, self.height))
+        transparent_rect = pygame.Surface((self.message.get_width() + 30, self.height))
         transparent_rect.set_alpha(128)
         transparent_rect.fill(INFO_BACKGROUND_COLOR)
         self.display.blit(transparent_rect, (self.x, self.y))

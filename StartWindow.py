@@ -51,8 +51,6 @@ class StartWindow(tk.Frame):
         id_game = Database.get_game_id()
         if id_game is not None and len(id_game) == 1:
             messagebox.showinfo('Information', "The game has been created. \nGame ID: %i" % id_game[0])
-        else:
-            messagebox.showerror('Error', "An error has occurred. The game cannot be created.")
 
     def join_game(self, id_game):
         if id_game == "":
@@ -73,8 +71,6 @@ class StartWindow(tk.Frame):
                     messagebox.showinfo("Information", "The game has alredy been started")
             else:
                 messagebox.showinfo("Information", "The game with ID = %s does not exists" % id_game)
-        else:
-            messagebox.showinfo("Information", "No Internet connection")
 
     def start_game(self, id_game, id_player):
         self.__game.id_game = id_game
