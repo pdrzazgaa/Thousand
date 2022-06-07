@@ -105,7 +105,7 @@ class Round:
 
     def count_cards_in_round(self):
         counter = 0
-        for i in range(0, len(self.__players_rounds[0])):
+        for i in range(0, len(self.__players_rounds)):
             counter += len(self.__players_rounds[i].cards)
         counter += len([card for card in self.__desk if card is not None])
         return counter
