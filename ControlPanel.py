@@ -137,10 +137,9 @@ class ControlPanel:
                     bidding.bidding_end()
                     self.bidding_phase = False
                     self.end_bidding_phase = True
-            elif (datetime.now() - self.checking_time).total_seconds() > TIME_FOR_RELOAD_MOVE:
-                self.game.reload_last_round(self.info_label)
-                self.checking_time = datetime.now()
-                self.made_move = True
+            # elif (datetime.now() - self.checking_time).total_seconds() > TIME_FOR_RELOAD_MOVE:
+            #     self.game.reload_last_round(self.info_label)
+            #     self.checking_time = datetime.now()
 
     def check_moves(self):
         id_round = self.game.rounds[-1].id_r
