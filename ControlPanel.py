@@ -65,7 +65,8 @@ class ControlPanel:
         last_dealing = None if len(self.game.rounds) == 0 else \
             Database.check_round(self.game.id_game)
         if last_dealing is not None and len(last_dealing) != 0:
-            IdR, IdG, P0_1, P0_2, P0_3, P0_4, P0_5, P0_6, P0_7, P0_8, \
+            IdR, IdG, DealingPlayer, \
+            P0_1, P0_2, P0_3, P0_4, P0_5, P0_6, P0_7, P0_8, \
             P1_1, P1_2, P1_3, P1_4, P1_5, P1_6, P1_7, P1_8, \
             P2_1, P2_2, P2_3, P2_4, P2_5, P2_6, P2_7, P2_8, \
             PickUp1, PickUp2, PickUp3, IfBomb, IfAgainDealing, RoundDateTime = last_dealing[0]
@@ -87,6 +88,7 @@ class ControlPanel:
                                                        Card.card_from_sql(PickUp3)]
                 self.game.rounds[-1].id_r = IdR
                 self.game.rounds[-1].last_round = RoundDateTime
+                self.game.rounds[-1].dealing_player = DealingPlayer
                 self.bidding_phase = True
                 if not self.timer_check_bidding.is_running and not self.timer_check_bidding.is_stopped:
                     self.timer_check_bidding.start()
