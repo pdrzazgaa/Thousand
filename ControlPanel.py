@@ -117,16 +117,18 @@ class ControlPanel:
                 self.game.rounds[-1].last_round = RoundDateTime
                 self.game.rounds[-1].dealing_player = DealingPlayer
                 self.waiting_for_dealing_phase = False
-                self.bidding_phase = True
                 if not self.timer_check_bidding.is_running and not self.timer_check_bidding.is_stopped:
                     self.timer_check_bidding.start()
                 if None in self.game.rounds[-1].bidding.prikup:
-                    self.timer_check_dealing.cancel()
+                    self.bidding_phase = False
                     self.end_bidding_phase = False
                     self.dealing_phase = False
                     self.game_phase = True
+                    self.timer_check_dealing.cancel()
                     self.timer_check_bugs.start()
                     self.timer_check_moves.start()
+                else:
+                    self.bidding_phase = True
         else:
             self.waiting_for_dealing_phase = True
 
@@ -193,6 +195,7 @@ class ControlPanel:
                             self.timer_check_players.cancel()
                             self.timer_check_moves.cancel()
                             self.end_game_phase = True
+                            self.game_phase = False
                         else:
                             current_round.end_round(self.game)
                             time.sleep(2)
