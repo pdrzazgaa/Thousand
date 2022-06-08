@@ -44,4 +44,5 @@ class Button:
     def do_sth(self):
         if self.moved:
             self.clicked = not self.clicked
-            self.function()
+            if self.clicked:
+                self.function()
