@@ -1,9 +1,7 @@
-import sys
 import pygame.event
 
 from Button import Button
 from CardGUI import CardGUI
-from Database import Database
 from GUISettings import *
 from RoundGui import RoundGUI
 from Screen import Screen
@@ -152,11 +150,11 @@ class GameScreen(Screen):
             else:
                 self.info_label.show_label("Play a card with the same color as the initial one")
                 for b in self.buttons:
-                    b.set_clicked = False
+                    b.clicked = False
         else:
             self.info_label.show_label("No card has been chosen")
             for b in self.buttons:
-                b.set_clicked = False
+                b.clicked = False
 
     def card_clicked(self):
         pos = pygame.mouse.get_pos()

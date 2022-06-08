@@ -22,4 +22,3 @@ class RepeatedTimer(Thread):
             self.stopped.set()
             self.is_running = False
             self.is_stopped = True
-

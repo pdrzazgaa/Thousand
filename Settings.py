@@ -25,4 +25,3 @@ HEART_POINTS = 100     #kier
 DIAMONDS_POINTS = 80   #karo
 CLUBS_POINTS = 60      #trefl
 SPADES_POINTS = 40     #pik
-

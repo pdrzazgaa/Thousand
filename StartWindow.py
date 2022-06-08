@@ -17,7 +17,7 @@ class StartWindow(tk.Frame):
         self.parent = parent
         self.parent.geometry(START_WINDOWS_WIDTH + "x" + START_WINDOWS_HEIGHT + "+500+250")
         self.__game = game
-        self.robocze = self.parent
+        self.working = self.parent
         self.create_start_window()
 
     def create_start_window(self):
@@ -38,8 +38,8 @@ class StartWindow(tk.Frame):
             self.create_game(entry_create_password.get())
             entry_create_password.delete(0, END)
 
-        window = self.robocze
-        self.robocze.title("Game: 1000")
+        window = self.working
+        self.working.title("Game: 1000")
 
         label_create_game = tk.Label(window, text="1000", font=(FONT, FONTSIZE_TITLE))
         label_create_game.grid(column=0, row=0)
@@ -68,7 +68,7 @@ class StartWindow(tk.Frame):
         button_join_game = tk.Button(window, text="Join", command=join_game_inner)
         button_join_game.grid(column=0, row=7)
 
-        self.robocze.mainloop()
+        self.working.mainloop()
 
     @staticmethod
     def create_game(password):
@@ -121,4 +121,4 @@ class StartWindow(tk.Frame):
         desk = Desk(self.__game)
 
     def close_start_window(self):
-        self.robocze.withdraw()
+        self.working.withdraw()

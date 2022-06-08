@@ -71,8 +71,3 @@ class PointsTable(pygame.sprite.Sprite):
     def click_table(self):
         if self.__is_shown:
             self.__is_shown = False
-
-    def update(self, event):
-        if event == pygame.MOUSEBUTTONDOWN:
-            ...
-            # tabela znika

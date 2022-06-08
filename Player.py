@@ -38,8 +38,3 @@ class Player:
 
     def __eq__(self, other):
         return self.__id_player == (Player(other)).__id_player
-
-
-class PlayerGUI:
-    ...
-

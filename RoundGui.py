@@ -68,8 +68,6 @@ class RoundGUI:
     @staticmethod
     def display_desk(desk_cards_gui: [CardGUI], self_player_id):
 
-        # gui_desk_cards = [None, None, None]
-
         try:
             card_gui_me = desk_cards_gui[self_player_id]
         except:

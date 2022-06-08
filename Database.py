@@ -274,7 +274,6 @@ class Database:
         results = Database.select_db(query_check_game, info_label)
         return results
 
-    # TUTAJ
     @staticmethod
     def check_bidding(id_round, info_label):
         query_check_game = "select * from BIDS_1000 where IdR = " + str(id_round) + " order by BidDateTime desc limit 1"
@@ -291,12 +290,6 @@ class Database:
     @staticmethod
     def get_all_bids_from_current_round(id_round, info_label):
         query_check_game = "select * from BIDS_1000 where IdR = " + str(id_round) + " order by BidDateTime"
-        results = Database.select_db(query_check_game, info_label)
-        return results
-
-    @staticmethod
-    def check_amount_of_moves_in_round(id_round, info_label):
-        query_check_game = "select count(IdM) from MOVEMENTS_1000 where IdR = " + str(id_round)
         results = Database.select_db(query_check_game, info_label)
         return results
 

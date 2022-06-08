@@ -1,7 +1,7 @@
 from Card import Card
 from Database import Database
 from Player import Player
-from Settings import KING, QUEEN, NINE, HEART, DIAMONDS, CLUBS, SPADES, SPADES_POINTS, CLUBS_POINTS, DIAMONDS_POINTS, \
+from Settings import KING, QUEEN, NINE, DIAMONDS, CLUBS, SPADES, SPADES_POINTS, CLUBS_POINTS, DIAMONDS_POINTS, \
     HEART_POINTS
 
 

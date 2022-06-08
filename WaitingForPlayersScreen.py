@@ -17,17 +17,13 @@ class WaitingForPlayersScreen(Screen):
         self.manage_display()
         self.handle_clicks()
 
-    def initialize_buttons(self):
-        self.buttons.append(Button(self, 550, 550, 400, 80,
-                                   FONT_BUTTON.render("QUIT", True, (0, 0, 0)), self.quit, self.display))
-
     def handle_clicks(self):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
+                    self.info_label.show_label("Game created by: Paulina Drzazga")
                     for button in self.buttons:
                         button.do_sth()
-                    self.info_label.show_label("Game created by: Paulina Drzazga")
 
             if event.type == pygame.QUIT:
                 self.quit()
@@ -46,3 +42,7 @@ class WaitingForPlayersScreen(Screen):
             button.render(False)
         self.info_label.render()
         pygame.display.update()
+
+    def initialize_buttons(self):
+        self.buttons.append(Button(self, 550, 550, 400, 80,
+                                   FONT_BUTTON.render("QUIT", True, (0, 0, 0)), self.quit, self.display))

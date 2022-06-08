@@ -26,12 +26,6 @@ class Card:
     def is_reversed(self, is_reversed):
         self.__is_reversed = is_reversed
 
-    def show_card(self):
-        self.__is_showed = True
-
-    def reverse_card(self):
-        self.__is_showed = not self.__is_showed
-
     def card_to_sql(self):
         return str(self.color) + str(self.value)
 

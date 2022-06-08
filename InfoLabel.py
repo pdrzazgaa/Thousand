@@ -32,8 +32,8 @@ class InfoLabel:
         # Napis wyświetlamy tylko przez 5 sekund
         if self.visible:
             if not self.if_display_text:
-                self.if_display_text = True
                 self.start_time = datetime.now()
+                self.if_display_text = True
             if self.if_display_text:
                 self.display_rectangle()
                 self.display_label()
