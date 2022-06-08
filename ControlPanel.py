@@ -234,4 +234,8 @@ class ControlPanel:
         self.timer_check_bidding = RepeatedTimer(Event(), TIME_CHECKING_BIDDINGS, self.check_bidding)
         self.timer_check_moves = RepeatedTimer(Event(), TIME_CHECKING_MOVES, self.check_moves)
         self.timer_check_bugs = RepeatedTimer(Event(), TIME_CHECKING_MOVES, self.check_if_no_bug)
+        self.timers.append(self.timer_check_dealing)
+        self.timers.append(self.timer_check_bidding)
+        self.timers.append(self.timer_check_moves)
+        self.timers.append(self.timer_check_bugs)
         self.timer_check_dealing.start()
