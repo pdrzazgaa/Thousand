@@ -1,31 +1,22 @@
-import sys
-
 import pygame.mouse
 
-from Database import Database
 from GUISettings import *
 from Button import Button
+from Screen import Screen
 
 
-class PlayerLeftGameScreen:
+class PlayerLeftGameScreen(Screen):
     display: pygame.display
 
     def __init__(self, game, display, control_panel, info_label):
-        self.game = game
-        self.display = display
-        self.control_panel = control_panel
+        super().__init__(display, control_panel, info_label, game)
         self.buttons = []
-        self.info_label = info_label
         self.initialize_buttons()
 
     def main(self):
         self.turn_off_game()
         self.manage_display()
         self.handle_clicks()
-
-    def initialize_buttons(self):
-        self.buttons.append(Button(self, 550, 550, 400, 80,
-                                   FONT_BUTTON.render("QUIT", True, (0, 0, 0)), self.quit, self.display))
 
     def handle_clicks(self):
         for event in pygame.event.get():
@@ -37,10 +28,6 @@ class PlayerLeftGameScreen:
             if event.type == pygame.QUIT:
                 self.quit()
 
-    def turn_off_game(self):
-        for timer in self.control_panel.timers:
-            timer.cancel()
-
     def manage_display(self):
         self.display.fill(BACKGROUND_COLOR)
         message_waiting = FONT_WAITING.render("YOUR OPPONENT LEFT THE GAME", True, (255, 255, 255), BACKGROUND_COLOR)
@@ -50,9 +37,10 @@ class PlayerLeftGameScreen:
         self.info_label.render()
         pygame.display.update()
 
-    def quit(self):
-        Database.leave_game(self.game.id_game, self.info_label)
+    def initialize_buttons(self):
+        self.buttons.append(Button(self, 550, 550, 400, 80,
+                                   FONT_BUTTON.render("QUIT", True, (0, 0, 0)), self.quit, self.display))
+
+    def turn_off_game(self):
         for timer in self.control_panel.timers:
             timer.cancel()
-        pygame.quit()
-        sys.exit()

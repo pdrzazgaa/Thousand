@@ -1,20 +1,15 @@
-import sys
-
 import pygame.mouse
 
-from Database import Database
 from GUISettings import *
 from Button import Button
+from Screen import Screen
 
 
-class WaitingForPlayersScreen:
+class WaitingForPlayersScreen(Screen):
     display: pygame.display
 
     def __init__(self, game, display, control_panel, info_label):
-        self.game = game
-        self.display = display
-        self.control_panel = control_panel
-        self.info_label = info_label
+        super().__init__(display, control_panel, info_label, game)
         self.buttons = []
         self.initialize_buttons()
 
@@ -51,10 +46,3 @@ class WaitingForPlayersScreen:
             button.render(False)
         self.info_label.render()
         pygame.display.update()
-
-    def quit(self):
-        Database.leave_game(self.game.id_game, self.info_label)
-        for timer in self.control_panel.timers:
-            timer.cancel()
-        pygame.quit()
-        sys.exit()

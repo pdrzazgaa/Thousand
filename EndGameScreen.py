@@ -1,34 +1,26 @@
-import sys
 from datetime import datetime
 import pygame.mouse
 
-from Database import Database
 from GUISettings import *
 from Button import Button
+from Screen import Screen
 
 
-class EndGameScreen:
+class EndGameScreen(Screen):
     display: pygame.display
 
     def __init__(self, game, display, control_panel, points_table, info_label):
-        self.game = game
-        self.display = display
-        self.control_panel = control_panel
+        super().__init__(display, control_panel, info_label, game)
         self.buttons = []
         self.points_table = points_table
         self.initialize_buttons()
         self.if_display_text = True
         self.did_not_display_yet = True
         self.start_time = datetime.now()
-        self.info_label = info_label
 
     def main(self):
         self.manage_display()
         self.handle_clicks()
-
-    def initialize_buttons(self):
-        self.buttons.append(Button(self, WIDTH - 140, 60, 150, 60,
-                                   FONT_BUTTON_SMALL.render("QUIT", True, (0, 0, 0)), self.quit, self.display))
 
     def handle_clicks(self):
         for event in pygame.event.get():
@@ -48,6 +40,10 @@ class EndGameScreen:
             button.render(False)
         self.info_label.render()
         pygame.display.update()
+
+    def initialize_buttons(self):
+        self.buttons.append(Button(self, WIDTH - 140, 60, 150, 60,
+                                   FONT_BUTTON_SMALL.render("QUIT", True, (0, 0, 0)), self.quit, self.display))
 
     def display_table(self):
         self.points_table.render()
@@ -72,10 +68,3 @@ class EndGameScreen:
             self.display_text()
             if (datetime.now() - self.start_time).total_seconds() > 5:
                 self.if_display_text = False
-
-    def quit(self):
-        Database.leave_game(self.game.id_game, self.info_label)
-        for timer in self.control_panel.timers:
-            timer.cancel()
-        pygame.quit()
-        sys.exit()

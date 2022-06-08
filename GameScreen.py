@@ -6,9 +6,10 @@ from CardGUI import CardGUI
 from Database import Database
 from GUISettings import *
 from RoundGui import RoundGUI
+from Screen import Screen
 
 
-class GameScreen:
+class GameScreen(Screen):
     display: pygame.display
     all_sprites: pygame.sprite.Group()
     cards: [CardGUI]
@@ -16,14 +17,11 @@ class GameScreen:
     is_done: bool
 
     def __init__(self, game, display, control_panel, points_table, info_label):
-        self.game = game
-        self.display = display
-        self.control_panel = control_panel
+        super().__init__(display, control_panel, info_label, game)
         self.points_table = points_table
         self.all_sprites = pygame.sprite.Group()
         self.is_done = False
         self.clicked_card = None
-        self.info_label = info_label
         self.show_table = False
         self.cards = []
         self.buttons = []
@@ -168,10 +166,3 @@ class GameScreen:
             if self.clicked_card:
                 self.clicked_card.update(pygame.MOUSEBUTTONDOWN)
             self.clicked_card = clicked_sprites[len(clicked_sprites) - 1]
-
-    def quit(self):
-        Database.leave_game(self.game.id_game, self.info_label)
-        for timer in self.control_panel.timers:
-            timer.cancel()
-        pygame.quit()
-        sys.exit()

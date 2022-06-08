@@ -58,18 +58,20 @@ class ControlPanel:
         self.info_label = info_label
 
     def check_players(self):
-        self.currently_players_in_game = Database.check_players(self.game.id_game, self.info_label)[0]
-        if self.currently_players_in_game == (3,):
-            self.waiting_for_players_phase = False
-            self.dealing_phase = True
-            self.started_game_phase = True
-            if not self.timer_check_dealing.is_running and not self.timer_check_dealing.is_stopped:
-                self.timer_check_dealing.start()
-        else:
-            if not self.started_game_phase:
-                self.waiting_for_players_phase = True
+        currently_players_sb = Database.check_players(self.game.id_game, self.info_label)
+        if currently_players_sb is not None:
+            self.currently_players_in_game = currently_players_sb[0][0]
+            if self.currently_players_in_game == 3:
+                self.waiting_for_players_phase = False
+                self.dealing_phase = True
+                self.started_game_phase = True
+                if not self.timer_check_dealing.is_running and not self.timer_check_dealing.is_stopped:
+                    self.timer_check_dealing.start()
             else:
-                self.player_left_game_phase = True
+                if not self.started_game_phase:
+                    self.waiting_for_players_phase = True
+                else:
+                    self.player_left_game_phase = True
 
     def check_dealing(self):
         last_dealing = None if len(self.game.rounds) == 0 else \

@@ -1,4 +1,3 @@
-import sys
 import pygame.event
 
 from CardGUI import CardGUI
@@ -7,9 +6,10 @@ from GUISettings import *
 from RoundGui import RoundGUI
 from Game import Game
 from Button import Button
+from Screen import Screen
 
 
-class EndBiddingScreen:
+class EndBiddingScreen(Screen):
     display: pygame.display
     all_sprites: pygame.sprite.Group()
     event_list: []
@@ -19,15 +19,12 @@ class EndBiddingScreen:
     card_for_player_right: ()
 
     def __init__(self, game, display, control_panel, points_table, info_label):
-        self.game = game
-        self.display = display
-        self.control_panel = control_panel
+        super().__init__(display, control_panel, info_label, game)
         self.points_table = points_table
         self.all_sprites = pygame.sprite.Group()
         self.clicked_card = None
         self.cards = []
         self.is_dealt = False
-        self.info_label = info_label
         self.buttons = []
         self.show_table = False
         self.initialize_buttons()
@@ -196,10 +193,3 @@ class EndBiddingScreen:
             if self.clicked_card:
                 self.clicked_card.update(pygame.MOUSEBUTTONDOWN)
             self.clicked_card = clicked_sprites[len(clicked_sprites) - 1]
-
-    def quit(self):
-        Database.leave_game(self.game.id_game, self.info_label)
-        for timer in self.control_panel.timers:
-            timer.cancel()
-        pygame.quit()
-        sys.exit()
