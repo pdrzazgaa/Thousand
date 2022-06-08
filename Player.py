@@ -29,13 +29,12 @@ class Player:
     def has_bombs(self):
         return self.__bombs > 0
 
+    @property
+    def bombs(self):
+        return self.__bombs
+
     def check_if_winner(self):
-        return self.points >= 1000
+        return self.points >= Settings.END_GAME
 
     def __eq__(self, other):
         return self.__id_player == (Player(other)).__id_player
-
-
-class PlayerGUI:
-    ...
-

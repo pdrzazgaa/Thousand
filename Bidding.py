@@ -10,6 +10,7 @@ class Bidding:
     __bidding_player_round: PlayerRound     #gracz, który licytował (domyślnie zaczynający licytacje)
     __last_bidding_player_id: int
     __last_bidding_date: str
+    __cards_for_other_players: [Card]
 
     def __init__(self, init_player):
         self.__prikup = []
@@ -18,8 +19,17 @@ class Bidding:
         self.__last_bidding_player_id = init_player.player.id_player
         self.__last_bidding_date = None
         self.__players_bidding = [0, 0, 0]
+        self.__cards_for_other_players = [(), ()]
         for i in range(0, 3):
             self.players_bidding[i] = Settings.DEFAULT_BID if i == init_player.player.id_player else 0
+
+    @property
+    def cards_for_other_players(self):
+        return self.__cards_for_other_players
+
+    @cards_for_other_players.setter
+    def cards_for_other_players(self, cards_for_other_players):
+        self.__cards_for_other_players = cards_for_other_players
 
     @property
     def prikup(self):
@@ -113,14 +123,16 @@ class Bidding:
             i_card += 1
         return None
 
-    def give_away_card(self, card_player1, card_player2):
-        card1, player_round1 = card_player1
-        card2, player_round2 = card_player2
+    def give_away_cards(self):
+        card1, player_round1 = self.__cards_for_other_players[0]
+        card2, player_round2 = self.__cards_for_other_players[1]
 
-        player_round1.add_card(self.pop_card(card1))
-        player_round2.add_card(self.pop_card(card2))
+        player_round1.add_card(card1)
+        player_round2.add_card(card2)
 
         player_round1.sort_cards()
         player_round2.sort_cards()
+
+        self.__cards_for_other_players = [(), ()]
 
 

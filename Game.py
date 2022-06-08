@@ -1,6 +1,8 @@
+from LoadRound import LoadRound
 from Player import Player
 from PlayerRound import PlayerRound
 from Round import Round
+from Settings import END_GAME
 
 
 class Game:
@@ -53,6 +55,11 @@ class Game:
         else:
             return False
 
+    def reload_last_round(self, info_label):
+        reloaded_round = LoadRound(self, self.rounds[-1].id_r, info_label)
+        self.rounds[-1] = reloaded_round.round
+        info_label.show_label("The round has been reloaded")
+
     def add_round_to_game(self):
         # Tworzymy rundy graczy
         player0_round = PlayerRound(self.players[0])
@@ -64,6 +71,6 @@ class Game:
 
     def check_end(self):
         for player in self.__players:
-            if player.points >= 1000:
+            if player.points >= END_GAME:
                 return True
         return False

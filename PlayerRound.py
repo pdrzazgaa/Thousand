@@ -1,8 +1,7 @@
-import pygame
-
 from Card import Card
+from Database import Database
 from Player import Player
-from Settings import KING, QUEEN, NINE, HEART, DIAMONDS, CLUBS, SPADES, SPADES_POINTS, CLUBS_POINTS, DIAMONDS_POINTS, \
+from Settings import KING, QUEEN, NINE, DIAMONDS, CLUBS, SPADES, SPADES_POINTS, CLUBS_POINTS, DIAMONDS_POINTS, \
     HEART_POINTS
 
 
@@ -12,7 +11,6 @@ class PlayerRound:
     __collected_cards: [Card]
     __points = 0
     __declared_points = 0
-    __pairs: [bool]
 
     def __init__(self, player):
         self.__cards = []
@@ -58,11 +56,6 @@ class PlayerRound:
     def declared_points(self, declared_points):
         self.__declared_points = declared_points
 
-    def check_pairs(self):
-        for color in range(SPADES, HEART + 1):
-            if Card(color, QUEEN) in self.__cards and Card(color, KING) in self.__cards:
-                self.__pairs[color-1] = True
-
     def check_if_pair(self, card):
         return card.value == QUEEN and Card(card.color, KING) in self.__cards or card.value == KING and \
                Card(card.color, QUEEN) in self.__cards
@@ -81,8 +74,20 @@ class PlayerRound:
                 nines += 1
         return nines == 4
 
-    def play_card(self, desk, id_player, card, if_queen_king_pair):
-        desk[id_player] = self.__cards.pop(self.__cards.index(card))
+    # -------------------------------
+
+    def make_move(self, chosen_card, initial_move_player_id, id_r, info_label):
+        color = chosen_card.card.color
+        value = chosen_card.card.value
+        if_queen_king_pair = self.check_if_pair(chosen_card.card) and self.player.id_player == initial_move_player_id
+        Database.make_move(id_r, self.player.id_player, color, value, if_queen_king_pair, info_label)
+
+    def play_card(self, desk, id_player, card, if_queen_king_pair, game, info_label):
+        try:
+            desk[id_player] = self.__cards.pop(self.__cards.index(card))
+        except:
+            game.reload_last_round(info_label)
+
         if if_queen_king_pair:
             if card.color == SPADES:
                 self.__points += SPADES_POINTS
