@@ -191,14 +191,14 @@ class ControlPanel:
                     self.full_desk = False
                     self.made_move = True
                     if current_round.check_if_end_round():
+                        current_round.end_round(self.game)
+                        time.sleep(2)
                         if self.game.check_end():
                             self.timer_check_players.cancel()
                             self.timer_check_moves.cancel()
                             self.end_game_phase = True
                             self.game_phase = False
                         else:
-                            current_round.end_round(self.game)
-                            time.sleep(2)
                             self.end_round_phase = True
                             time.sleep(15)
                             self.game_phase = False
