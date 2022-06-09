@@ -2,6 +2,8 @@ from GUISettings import *
 from CardGUI import CardGUI
 from Settings import SPADES, CLUBS, DIAMONDS
 
+# Klasa, która tworzy wszystkie karty w grze i je wyświetla (gracza, przeciwników, musku, stołu)
+
 
 class RoundGUI:
 
@@ -108,6 +110,8 @@ class RoundGUI:
                                                     CARD_HEIGHT / 2))
             card.card.is_reversed = False
 
+    # Metoda wyświetlająca informację o obecnym meldunku - jeżeli dane zostały wczytane,
+    # program przypomina jaki ostatni meldunek został zagrany
     @staticmethod
     def if_queen_king_pair_info(card, if_queen_king_pair, info_label, reload=False):
         if if_queen_king_pair:

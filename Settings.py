@@ -1,4 +1,6 @@
 
+# Ustawienia gry
+
 BOMBS = 3
 MIN_AMOUNT_OF_POINTS_TO_PLAY = 21
 END_GAME = 500

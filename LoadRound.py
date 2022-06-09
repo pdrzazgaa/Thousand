@@ -4,6 +4,9 @@ from PlayerRound import PlayerRound
 from Round import Round
 from RoundGui import RoundGUI
 
+# Klasa pozwalająca załadować rundę z bazy danych i wczytać ją do gry
+# Na rundę składają się tasowanie, licytacja i ruchy graczy
+
 
 class LoadRound:
 

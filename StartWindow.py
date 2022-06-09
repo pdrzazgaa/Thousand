@@ -7,6 +7,8 @@ from Desk import Desk
 from GUISettings import FONT, FONTSIZE, FONTSIZE_TITLE, START_WINDOWS_WIDTH, START_WINDOWS_HEIGHT
 from Game import Game
 
+# Klasa przedstawiająca okno startowe (dołączanie do gry, tworzenie gry)
+
 
 class StartWindow(tk.Frame):
 

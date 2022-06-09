@@ -1,5 +1,7 @@
 from threading import Thread
 
+# Klasa Timer pozwala co określony czas powtarzać daną czynność (w przypadku gry jest to sprawdzanie bazy)
+
 
 class RepeatedTimer(Thread):
     def __init__(self, event, interval, function, *args, **kwargs):

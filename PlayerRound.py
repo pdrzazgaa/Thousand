@@ -4,6 +4,9 @@ from Player import Player
 from Settings import KING, QUEEN, NINE, DIAMONDS, CLUBS, SPADES, SPADES_POINTS, CLUBS_POINTS, DIAMONDS_POINTS, \
     HEART_POINTS
 
+# Klasa odzwierciedla 'rękę' i sytuację gracza w danej rundzie.
+# Znajdują się w niej karty danego gracza, zebrane karty w danej rundzie czy zdobyte punkty
+
 
 class PlayerRound:
     __player: Player
@@ -56,11 +59,13 @@ class PlayerRound:
     def declared_points(self, declared_points):
         self.__declared_points = declared_points
 
+    # Sprawdzamy, czy na 'ręce' kartę, która jest parą (meldunkiem) do zagrywanej karty
     def check_if_pair(self, card):
         return card.value == QUEEN and Card(card.color, KING) in self.__cards or card.value == KING and \
                Card(card.color, QUEEN) in self.__cards
 
     # Będą używane w późniejszych etapach rozwoju gry
+    # ---------------------------
     def check_points(self):
         points = 0
         for card in self.__cards:
@@ -76,12 +81,15 @@ class PlayerRound:
 
     # -------------------------------
 
+    # wykonanie ruchu przez gracza - wybranie karty i wysłanie informacji do bazy danych
     def make_move(self, chosen_card, initial_move_player_id, id_r, info_label):
         color = chosen_card.card.color
         value = chosen_card.card.value
         if_queen_king_pair = self.check_if_pair(chosen_card.card) and self.player.id_player == initial_move_player_id
         Database.make_move(id_r, self.player.id_player, color, value, if_queen_king_pair, info_label)
 
+    # Metoda pozwalająca zagrać kartę i w przypadku meldunku dopisuje odpowiednią wartość punktową
+    # (odpalana po otrzymaniu informacji z bazy danych)
     def play_card(self, desk, id_player, card, if_queen_king_pair, game, info_label):
         try:
             desk[id_player] = self.__cards.pop(self.__cards.index(card))
@@ -98,6 +106,7 @@ class PlayerRound:
             else:
                 self.__points += HEART_POINTS
 
+    # Metoda sprawdzająca, czy można wykonać ruch po zagraniu innego gracza
     def check_if_can_make_move(self, card, init_card):
         if init_card is not None:
             if card.color == init_card.color:
@@ -109,6 +118,7 @@ class PlayerRound:
                 return True
         return True
 
+    # Metoda sortująca karty w kolejności od największych do najmniejszych (najpierw kolor, potem wartość)
     def sort_cards(self):
         if self is not None:
             self.__cards.sort(key=lambda card: (card.color, card.value), reverse=True)
