@@ -4,6 +4,8 @@ import pygame
 
 from Database import Database
 
+# Klasa nadrzędna dla wszystkich ekranów w grze
+
 
 class Screen:
 

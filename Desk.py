@@ -11,6 +11,9 @@ from BiddingScreen import BiddingScreen
 from EndBiddingScreen import EndBiddingScreen
 from GameScreen import GameScreen
 
+# Klasa główna kontrolująca grę, tutaj dzieje się cała akcja.
+# W zależności od stanu gry wyświetlają się odpowiednie ekrany
+
 
 class Desk:
     frame_per_sec: pygame.time.Clock()

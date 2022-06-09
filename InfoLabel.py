@@ -1,8 +1,10 @@
 from datetime import datetime
 
 import pygame
-from GUISettings import INFO_WIDTH, INFO_HEIGHT, INFO_LEFT, INFO_TOP, INFO_BACKGROUND_COLOR, INFO_TEXT_COLOR, FONT_INFO, \
-    WIDTH
+from GUISettings import INFO_WIDTH, INFO_HEIGHT, INFO_LEFT, INFO_TOP, INFO_BACKGROUND_COLOR, INFO_TEXT_COLOR, \
+    FONT_INFO, WIDTH
+
+# Klasa, która tworzy okienko z pojawiającą się informacją na temat stanu gry (np. meldunek, błędny ruch...)
 
 
 class InfoLabel:
@@ -52,14 +54,6 @@ class InfoLabel:
         transparent_rect.set_alpha(128)
         transparent_rect.fill(INFO_BACKGROUND_COLOR)
         self.display.blit(transparent_rect, (WIDTH/2 - self.width/2, self.y))
-
-    def check_if_disturbed(self):
-        mouse = pygame.mouse.get_pos()
-        if self.hit_box.x < mouse[0] < self.hit_box.x + self.hit_box.width and \
-           self.hit_box.y < mouse[1] < self.hit_box.y + self.hit_box.height:
-            self.moved = True
-        else:
-            self.moved = False
 
     def do_sth(self):
         if self.moved:

@@ -7,6 +7,9 @@ from Game import Game
 from BiddingTable import BiddingTable
 from Screen import Screen
 
+# Klasa przedstawiająca graficznie sytuację licytacji podczas rozgrywki
+# Dziedziczy po klasie Screen
+
 
 class BiddingScreen(Screen):
     display: pygame.display

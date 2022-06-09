@@ -2,10 +2,10 @@ from GUISettings import TABLE_WIDTH, TABLE_HEIGHT, WIDTH, HEIGHT, FONT_BIDDING, 
     POINTS_TABLE_COLOR, POINT_OFFSET_HEIGHT, FONT_POINTS
 import pygame
 
+# Klasa odzwierciedlająca tabelę punktów
+
 
 class PointsTable(pygame.sprite.Sprite):
-    __card_back_image: pygame.image
-    __card_image: pygame.image
     __is_shown: bool
     __left: int
     __top: int
@@ -44,6 +44,7 @@ class PointsTable(pygame.sprite.Sprite):
                              (WIDTH / 2 - TABLE_WIDTH / 2 - i, HEIGHT / 2 - TABLE_HEIGHT / 2 - i,
                               TABLE_WIDTH + 3, TABLE_HEIGHT + 3), 1)
 
+    # Wyświetlanie nagłówków
     def display_headers(self):
         players = []
         for i in range(0, 3):
@@ -57,6 +58,7 @@ class PointsTable(pygame.sprite.Sprite):
         self.display.blit(players[1], (WIDTH / 2 - players[1].get_width() / 2, self.__top + 60))
         self.display.blit(players[2], (WIDTH / 2 - players[2].get_width() / 2 + 200, self.__top + 60))
 
+    # Wyświetlanie punktów
     def display_points(self):
         players_points = self.game.points_table
         left = -200

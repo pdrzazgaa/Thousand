@@ -6,6 +6,10 @@ from PlayerRound import PlayerRound
 from Database import Database
 from Settings import ACE, NINE, HEART, SPADES
 
+# Klasa odzwierciedlająca rundę
+# Runda posiada między innymi 3 rundy graczy (PlayerRound), licytację, stół (wyłożone karty przez graczy),
+# kolor atutu (po meldunku), ostatni wykonany ruch (czas)
+
 
 class Round:
     __players_rounds: [PlayerRound]
@@ -104,6 +108,7 @@ class Round:
         else:
             return self.__initial_move_player_id
 
+    # Sprawdzamy ile kart pozostało w rundzie
     def count_cards_in_round(self):
         counter = 0
         for i in range(0, len(self.__players_rounds)):
@@ -111,6 +116,7 @@ class Round:
         counter += len([card for card in self.__desk if card is not None])
         return counter
 
+    # Zakończenie ruchu
     def end_move(self):
         if None not in self.__desk:
             strongest_player_index = self.__initial_move_player_id
@@ -139,6 +145,7 @@ class Round:
         else:
             pass
 
+    # Użycie bomby - do użycia w przyszłych wersjach
     def used_bomb(self, player_id, game):
         for pr in self.players_rounds:
             if pr.player.id_player != player_id:
@@ -146,11 +153,13 @@ class Round:
             game.points_table[pr.player.id_player].append(pr.player.points)
         self.players_rounds[player_id].player.use_bomb()
 
+    # Sprawdzenie, czy koniec rundy (Gracze nie mają już kart)
     def check_if_end_round(self):
         return len(self.__players_rounds[0].cards) == 0 and \
                len(self.__players_rounds[1].cards) == 0 and \
                len(self.__players_rounds[2].cards) == 0
 
+    # Metoda kończąca rundę - zlicza punkty i przypisuje je odpowiednim graczom
     def end_round(self, game):
         for pr in self.__players_rounds:
             if self.bidding.bidding_player_round == pr:
@@ -167,6 +176,7 @@ class Round:
                     pr.player.add_points(pr.points - pr.points % 10)
             game.points_table[pr.player.id_player].append(pr.player.points)
 
+    # Mieszanie kart
     @staticmethod
     def shuffle_cards():
         cards = []
@@ -176,6 +186,7 @@ class Round:
         random.shuffle(cards)
         return cards
 
+    # Rozdawanie kart
     def deal_cards(self):
         cards = self.shuffle_cards()
         for i_card in range(0, len(cards) - 3):
@@ -184,6 +195,7 @@ class Round:
         for i_card in range(len(cards) - 3, len(cards)):
             self.__bidding.add_card_to_prikup(cards[i_card])
 
+    # Wysłanie rozdania do bazy danych
     def send_dealing_to_database(self, game_id, info_label, round_id=None, if_bomb=False, if_again_dealing=False):
         dealing_player = self.dealing_player_id
         p01 = self.__players_rounds[0].cards[0].card_to_sql()

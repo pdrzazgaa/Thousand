@@ -10,6 +10,9 @@ from Timer import RepeatedTimer
 from GUISettings import TIME_CHECKING_PLAYERS, TIME_CHECKING_BIDDINGS, TIME_CHECKING_DEALINGS, \
     TIME_CHECKING_MOVES, TIME_CHECKING_BUGS
 
+# Klasa koordynująca całym przebiegiem gry.
+# Tutaj sprawdzany jest aktualny stan bazy oraz zadeklarowane są odpowiednie stany gry.
+
 
 class ControlPanel:
     # Etapy gry
@@ -190,25 +193,27 @@ class ControlPanel:
                     self.game.rounds[-1].end_move()
                     self.full_desk = False
                     self.made_move = True
-                    if current_round.check_if_end_round():
-                        current_round.end_round(self.game)
-                        time.sleep(2)
-                        if self.game.check_end():
-                            self.timer_check_players.cancel()
-                            self.timer_check_moves.cancel()
-                            self.end_game_phase = True
-                            self.game_phase = False
-                        else:
-                            self.end_round_phase = True
-                            time.sleep(15)
-                            self.game_phase = False
-                            self.start_new_round()
+                if current_round.check_if_end_round():
+                    current_round.end_round(self.game)
+                    time.sleep(2)
+                    if self.game.check_end():
+                        self.timer_check_players.cancel()
+                        self.timer_check_moves.cancel()
+                        self.end_game_phase = True
+                        self.game_phase = False
+                    else:
+                        self.end_round_phase = True
+                        time.sleep(15)
+                        self.game_phase = False
+                        self.start_new_round()
 
+    # Sprawdzamy, czy wszystko zostało dobrze wczytane
     def check_if_no_bug(self):
         if self.game.rounds[-1].count_cards_in_round() % 3 != 0:
             self.game.reload_last_round(self.info_label)
             self.made_move = True
 
+    # Rozpoczęcie nowej rundy
     def start_new_round(self):
         self.dealing_phase = True
         self.waiting_for_dealing_phase = False

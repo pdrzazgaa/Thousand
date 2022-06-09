@@ -8,6 +8,10 @@ from Game import Game
 from Button import Button
 from Screen import Screen
 
+# Klasa przedstawiająca graficznie sytuację po zakończeniu licytacji, kiedy gracz wygrywający
+# musi rozdać karty przeciwnikom
+# Dziedziczy po klasie Screen
+
 
 class EndBiddingScreen(Screen):
     display: pygame.display
@@ -139,6 +143,7 @@ class EndBiddingScreen(Screen):
                                    FONT_BIDDING_PLAYERS.render("Accept", True, (0, 0, 0)),
                                    self.accept, self.display))
 
+    # W przyszłej wesji
     def use_bomb(self):
         if self.game.player_me().has_bombs():
             Database.update_dealing_use_bomb(self.game.rounds[-1].id_r, self.info_label)
@@ -146,6 +151,7 @@ class EndBiddingScreen(Screen):
         else:
             self.info_label.show_label("You have no bombs")
 
+    # Przekazanie karty graczowi z lewej
     def card_for_left_player(self):
         card_for_player_left = self.game.rounds[-1].bidding.cards_for_other_players[0]
         if card_for_player_left == ():
@@ -161,6 +167,7 @@ class EndBiddingScreen(Screen):
             self.game.rounds[-1].bidding.cards_for_other_players[0] = ()
         self.create_cards()
 
+    # Przekazanie karty graczowi z prawej
     def card_for_right_player(self):
         card_for_player_right = self.game.rounds[-1].bidding.cards_for_other_players[1]
         if card_for_player_right == ():
@@ -176,6 +183,7 @@ class EndBiddingScreen(Screen):
             self.game.rounds[-1].bidding.cards_for_other_players[1] = ()
         self.create_cards()
 
+    # Zaakceptowanie przekazania kart
     def accept(self):
         if self.game.rounds[-1].bidding.cards_for_other_players[0] != () and \
                 self.game.rounds[-1].bidding.cards_for_other_players[1] != ():

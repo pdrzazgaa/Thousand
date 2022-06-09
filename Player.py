@@ -1,5 +1,7 @@
 import Settings
 
+# Klasa przedstawiająca gracza
+
 
 class Player:
 
@@ -36,5 +38,6 @@ class Player:
     def check_if_winner(self):
         return self.points >= Settings.END_GAME
 
+    # Gracze są sobie równi, jeżeli mają takie samo ID
     def __eq__(self, other):
         return self.__id_player == (Player(other)).__id_player

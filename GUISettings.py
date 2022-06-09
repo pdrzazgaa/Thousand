@@ -1,6 +1,8 @@
 import pygame
 import sys
 
+# Wszystkie ustawienia i stałe w grze dotyczące wyglądu aplikacji
+
 pygame.font.init()
 
 HEIGHT = 700
@@ -9,6 +11,7 @@ ACC = 0.5
 FRIC = -0.12
 FPS = 10
 
+# W zależności od systemu operacyjnego okno przybiera różne wielkości
 if sys.platform == "win32":
     START_WINDOWS_WIDTH = "320"
     START_WINDOWS_HEIGHT = "350"
@@ -18,7 +21,6 @@ elif sys.platform == "darwin":
 else:
     START_WINDOWS_WIDTH = "320"
     START_WINDOWS_HEIGHT = "320"
-
 
 
 FONT = "Helvetica"

@@ -4,6 +4,9 @@ from GUISettings import *
 from Button import Button
 from Screen import Screen
 
+# Klasa przedstawiająca graficznie sytuację w momencie opuszczenia przez przeciwnika gry
+# Dziedziczy po klasie Screen
+
 
 class PlayerLeftGameScreen(Screen):
     display: pygame.display
