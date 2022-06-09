@@ -1,4 +1,5 @@
 class Card:
+    # Punkty za dane karty
     points = {1: 0, 2: 2, 3: 3, 4: 4, 5: 10, 6: 11}
 
     __color: int
@@ -32,6 +33,8 @@ class Card:
     @staticmethod
     def card_from_sql(card_sql):
         return Card(int(card_sql / 10), (card_sql % 10)) if card_sql is not None else None
+
+    # Metody przeciążone, sprawdzające, czy dane karty są takie same - porównujemy wartości i kolory
 
     def __eq__(self, other):
         if isinstance(other, Card):

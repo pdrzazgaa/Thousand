@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 from Player import Player
 from Database import Database
-from GUIGame import Desk
+from Desk import Desk
 from GUISettings import FONT, FONTSIZE, FONTSIZE_TITLE, START_WINDOWS_WIDTH, START_WINDOWS_HEIGHT
 from Game import Game
 
@@ -91,9 +91,9 @@ class StartWindow(tk.Frame):
             return
         check_game_values = Database.check_game(id_game)
         password_value = Database.check_password(id_game)
-        if password_value is not None:
+        if password_value is not None and password_value != []:
             if password_value[0][0] == password:
-                if check_game_values is not None:
+                if check_game_values is not None and check_game_values != []:
                     if len(check_game_values) != 0:
                         players, rounds = check_game_values[0]
                         if rounds == 0:

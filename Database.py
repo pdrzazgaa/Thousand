@@ -4,6 +4,8 @@ from tkinter import messagebox
 import mysql.connector as db
 from mysql.connector import Error
 
+# Klasa służąca do łączenia się z bazą danych
+
 DB_USER = "db100061665"
 DB_HOST = "mysql-paulina.halpress.eu"
 DB_DATABASE = "db100061665"

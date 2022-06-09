@@ -1,6 +1,8 @@
 import pygame
 from GUISettings import BUTTON_COLOR_DISTURBED, BUTTON_COLOR_ENABLED, BUTTON_COLOR_CLICKED
 
+# Klasa przedstawiająca przycisk jako obiekt na ekranie
+
 
 class Button:
 
@@ -33,6 +35,7 @@ class Button:
         self.display.blit(self.name,
                           (self.x - self.name.get_width() / 2, self.y-self.name.get_height()/2))
 
+    # Sprawdzamy, czy myszka najechała na przycisk
     def check_if_disturbed(self):
         mouse = pygame.mouse.get_pos()
         if self.hit_box.x < mouse[0] < self.hit_box.x + self.hit_box.width and \
@@ -41,6 +44,7 @@ class Button:
         else:
             self.moved = False
 
+    # Wykonanie akcji na przycisku
     def do_sth(self):
         if self.moved:
             self.clicked = not self.clicked

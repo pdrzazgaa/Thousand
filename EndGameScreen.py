@@ -5,6 +5,10 @@ from GUISettings import *
 from Button import Button
 from Screen import Screen
 
+# Klasa przedstawiająca graficznie sytuację zakończenia gry,
+# Wyświetla się tabela z wynikami i informacja o wygranej
+# Dziedziczy po klasie Screen
+
 
 class EndGameScreen(Screen):
     display: pygame.display
@@ -48,6 +52,7 @@ class EndGameScreen(Screen):
     def display_table(self):
         self.points_table.render()
 
+    # Informacja o wygranej bądź przegranej
     def display_text(self):
         if self.game.player_me().check_if_winner():
             text = "YOU WON"

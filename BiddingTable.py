@@ -4,6 +4,8 @@ from Database import Database
 from GUISettings import *
 from Button import Button
 
+# Obiekt (Sprite), który przedstawia tablicę podczas licytacji
+
 
 class BiddingTable(pygame.sprite.Sprite):
 
@@ -33,6 +35,7 @@ class BiddingTable(pygame.sprite.Sprite):
             b.render(disabled=(self.game.rounds[-1].bidding.if_bidding_end() or
                      self.game.rounds[-1].bidding.current_bidding_player_id != self.game.id_player))
 
+    # Wyświetlanie nagłówków
     def display_headers(self):
         id_player = self.game.rounds[-1].bidding.current_bidding_player_id
         for i in range(0, 3):
@@ -49,6 +52,7 @@ class BiddingTable(pygame.sprite.Sprite):
         self.display.blit(self.players[1], (WIDTH / 2 - 240, 130))
         self.display.blit(self.players[2], (WIDTH / 2 - 240, 160))
 
+    # Wyświetlanie wartości licytowanych
     def display_biddings(self):
         bid_player0 = self.game.rounds[-1].bidding.players_bidding[0]
         bid_player1 = self.game.rounds[-1].bidding.players_bidding[1]
@@ -70,11 +74,13 @@ class BiddingTable(pygame.sprite.Sprite):
         self.buttons.append(Button(self, (WIDTH / 2 + 175), 175, 150, 30,
                                    FONT_BIDDING_PLAYERS.render("Pass", True, (0, 0, 0)), self.pass_bid, self.display))
 
+    # Metoda zwiększająca kwotę licytacji
     def increase_bid(self):
         self.game.rounds[-1].bidding.players_declaration(self.game.rounds[-1].players_rounds[self.game.id_player])
         Database.make_bid(self.game.rounds[-1].id_r, self.game.id_player, self.game.rounds[-1].bidding.bid,
                           self.info_label)
 
+    # Metoda pasująca licytaję
     def pass_bid(self):
         self.game.rounds[-1].bidding.pass_bid(self.game.rounds[-1].players_rounds[self.game.id_player])
         Database.make_bid(self.game.rounds[-1].id_r, self.game.id_player, -1, self.info_label)

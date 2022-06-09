@@ -20,7 +20,6 @@ else:
     START_WINDOWS_HEIGHT = "320"
 
 
-
 FONT = "Helvetica"
 FONTSIZE = "15"
 FONTSIZE_TITLE = "100"

@@ -6,6 +6,10 @@ from GUISettings import *
 from RoundGui import RoundGUI
 from Screen import Screen
 
+# Klasa przedstawiająca graficznie sytuację w trakcie rozgrywki
+# musi rozdać karty przeciwnikom
+# Dziedziczy po klasie Screen
+
 
 class GameScreen(Screen):
     display: pygame.display
@@ -112,12 +116,14 @@ class GameScreen(Screen):
                                                          self.choose_color(id_op2), BACKGROUND_COLOR)
         self.display.blit(message_waiting, (WIDTH - message_waiting.get_width() - 10, 30))
 
+    # Kolor napisu zależy od tego, jaki gracz teraz jedzie (gracz, który obecnie jedzie ma kolor pomarańczowy)
     def choose_color(self, id_player):
         if id_player == self.game.rounds[-1].current_id_player:
             return COLOR_ORANGE
         else:
             return COLOR_WHITE
 
+    # Jeżeli gracz wygrał licytację, to wyświetla mu się wynik do uzyskania
     def choose_text(self, id_p):
         points = self.game.rounds[-1].players_rounds[id_p].points
         if id_p == self.game.id_player:
@@ -139,6 +145,7 @@ class GameScreen(Screen):
                                    FONT_BIDDING_PLAYERS.render("Make move", True, (0, 0, 0)), self.make_move,
                                    self.display))
 
+    # Wykonanie ruchu przez gracza
     def make_move(self):
         if self.clicked_card is not None:
             if self.game.rounds[-1].players_rounds[self.game.id_player].check_if_can_make_move\

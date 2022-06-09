@@ -3,6 +3,8 @@ import pygame
 from GUISettings import CARD_HEIGHT, CARD_WIDTH, CARD_OFFSET_TOP
 from Card import Card
 
+# Klasa przedstawiająca graficznie karty na ekranie
+
 cards_images = [[pygame.image.load("CardsIMG/card11.png"),
                  pygame.image.load("CardsIMG/card12.png"),
                  pygame.image.load("CardsIMG/card13.png"),

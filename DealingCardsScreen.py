@@ -4,6 +4,9 @@ from GUISettings import *
 from RoundGui import RoundGUI
 from Screen import Screen
 
+# Klasa przedstawiająca graficznie sytuację podczas rozdawania kart w czasie rozgrywki
+# Dziedziczy po klasie Screen
+
 
 class DealingCardsScreen(Screen):
 
@@ -47,6 +50,7 @@ class DealingCardsScreen(Screen):
         self.info_label.render()
         pygame.display.update()
 
+    # Nowe rozdanie kart. Tasują kolejno gracze.
     def make_new_deal(self):
         self.game.add_round_to_game()
         if self.game.rounds[-1].dealing_player_id == self.game.id_player:

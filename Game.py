@@ -4,6 +4,8 @@ from PlayerRound import PlayerRound
 from Round import Round
 from Settings import END_GAME
 
+# Klasa przedstawiająca stan gry
+
 
 class Game:
     __id_game: int
@@ -55,6 +57,7 @@ class Game:
         else:
             return False
 
+    # Odświeżenie rundy
     def reload_last_round(self, info_label):
         reloaded_round = LoadRound(self, self.rounds[-1].id_r, info_label)
         self.rounds[-1] = reloaded_round.round

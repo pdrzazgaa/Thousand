@@ -2,6 +2,8 @@ import Settings
 from Card import Card
 from PlayerRound import PlayerRound
 
+# Klasa przedstawiająca przebieg licytacji
+
 
 class Bidding:
     __prikup: [Card]                        #musek (3 karty)
@@ -96,12 +98,14 @@ class Bidding:
         self.last_bidding_player_id = player_round.player.id_player
         self.players_bidding[player_round.player.id_player] = self.bid
 
+    # Sprawdzamy, czy licytacja się zakończyła
     def if_bidding_end(self):
         return self.__players_bidding.count(-1) == 2
 
     def pass_bid(self, player_round):
         self.__players_bidding[player_round.player.id_player] = -1
 
+    # Metoda kończąca licytację - karty z musku idą do ręki gracza
     def bidding_end(self):
         self.bidding_player_round.declared_points = self.__bid
         for i in range(len(self.prikup) - 1, -1, -1):
@@ -109,12 +113,14 @@ class Bidding:
                 self.bidding_player_round.add_card(self.prikup.pop(i))
         self.bidding_player_round.sort_cards()
 
+    # Do wykorzystania w przyszłości
     def use_bomb(self, players):
         self.__bidding_player_round.player.use_bomb()
         for player in players:
             if player != self.__bidding_player_round.player:
                 player.add_points(Settings.POINTS_FROM_BOMB)
 
+    # Metoda wyjmująca daną kartę z ręki
     def pop_card(self, popping_card):
         i_card = 0
         for card in self.bidding_player_round.cards:
@@ -123,6 +129,7 @@ class Bidding:
             i_card += 1
         return None
 
+    # Metoda oddająca po jednej karcie przeciwnikom
     def give_away_cards(self):
         card1, player_round1 = self.__cards_for_other_players[0]
         card2, player_round2 = self.__cards_for_other_players[1]
