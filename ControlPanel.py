@@ -193,19 +193,19 @@ class ControlPanel:
                     self.game.rounds[-1].end_move()
                     self.full_desk = False
                     self.made_move = True
-                    if current_round.check_if_end_round():
-                        current_round.end_round(self.game)
-                        time.sleep(2)
-                        if self.game.check_end():
-                            self.timer_check_players.cancel()
-                            self.timer_check_moves.cancel()
-                            self.end_game_phase = True
-                            self.game_phase = False
-                        else:
-                            self.end_round_phase = True
-                            time.sleep(15)
-                            self.game_phase = False
-                            self.start_new_round()
+                if current_round.check_if_end_round():
+                    current_round.end_round(self.game)
+                    time.sleep(2)
+                    if self.game.check_end():
+                        self.timer_check_players.cancel()
+                        self.timer_check_moves.cancel()
+                        self.end_game_phase = True
+                        self.game_phase = False
+                    else:
+                        self.end_round_phase = True
+                        time.sleep(15)
+                        self.game_phase = False
+                        self.start_new_round()
 
     # Sprawdzamy, czy wszystko zostało dobrze wczytane
     def check_if_no_bug(self):
